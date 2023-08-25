@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% include 'layout/meta.html' %}
+    {% block meta %}{% endblock %}
+    <meta data-n-head="ssr" data-hid="title" property="og:title" content="{% block og:title %}{% endblock %} - 시수">
+    <meta data-n-head="ssr" data-hid="description" property="og:description" content="{% block og:description %}{% endblock %}">
+    {% if thumbnail %}
+        <meta data-n-head="ssr" data-hid="image" property="og:image" content="{{thumbnail}}">
+    {% else%}
+        <meta data-n-head="ssr" data-hid="image" property="og:image" content="{% static 'images/og.png' %}">
+    {% endif%}
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+	{% include 'layout/header.html' %}
+    {% block content %}
+    {% endblock %}
+	{% include 'layout/footer.html' %}
+</body>
+</html>
