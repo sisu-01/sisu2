@@ -1,0 +1,55 @@
+{% extends 'layout/base.html' %}
+
+{% block meta %}
+{% endblock %}
+{% block og:title %}movie{% endblock %}
+{% block og:description %}description{% endblock %}
+{% block title %}movie{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Hello Movie!</h1>
+    movie : <input type="text" id="movieNm" value="nope"/>
+    <button onClick="search_movie();">search</button>
+    <div id="movieList"></div>
+</main>
+<script>
+    function search_movie(){
+        const url = "{% url 'movie:search'%}";
+        const options = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({
+                movieNm: document.getElementById("movieNm").value,
+            }),
+        }
+
+        fetch(url, options)
+        .then((response) => response.json())
+        .then(data => {
+            if(data.result){
+                if(data.movie_list.length > 0){
+                    console.log(data.movie_list);
+                    let movieList = document.getElementById('movieList');
+                    movieList.innerHTML = '';
+                    data.movie_list.forEach(el => {
+                        movieList.innerHTML += `
+                            <div>
+                                ${el.movieNm},${el.movieNmEn}
+                            </div>
+                        `
+                    });
+                }else{
+                    console.log('없어');
+                }
+            }else{
+                alert(data.mess)
+            }
+        })
+        .catch((error) => console.log("error:", error));
+    }
+</script>
+{% endblock %}
