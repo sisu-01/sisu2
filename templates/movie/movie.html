@@ -9,9 +9,38 @@
 {% block content %}
 <main>
     <h1>Hello Movie!</h1>
-    movie : <input type="text" id="movieNm" value="nope"/>
-    <button onClick="search_movie();">search</button>
+    <hr/>
+    <div>
+        <input type="text" id="movieNm" value="마블"/>
+        <button onClick="search_movie()">검색</button>
+    </div>
     <div id="movieList"></div>
+    <form id="form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mother">
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                <p>헬프:{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit">제출</button>
+    </form>
+    <hr/>
+    <div>
+    {% if movieList %}
+        {% for movie in movieList %}
+        <div>
+            {{movie.title}}/{{movie.title_en}}/{{movie.brand}}{{movie.location}}
+            <button onClick="select('{{movie.id}}')">수정</button>
+            <button onClick="delete_movie('{{movie.id}}')">삭제</button>
+        </div>
+        {% endfor %}
+    {% else %}없어요 ㅎ{% endif %}
+    </div>
 </main>
 <script>
     function search_movie(){
@@ -26,30 +55,80 @@
                 movieNm: document.getElementById("movieNm").value,
             }),
         }
-
         fetch(url, options)
         .then((response) => response.json())
         .then(data => {
-            if(data.result){
-                if(data.movie_list.length > 0){
-                    console.log(data.movie_list);
+            if(data.status){
+                if(data.data.length > 0){
                     let movieList = document.getElementById('movieList');
                     movieList.innerHTML = '';
-                    data.movie_list.forEach(el => {
+                    data.data.forEach(el => {
                         movieList.innerHTML += `
-                            <div>
-                                ${el.movieNm},${el.movieNmEn}
-                            </div>
-                        `
+                            <div id="${el.movieCd}">
+                                <button type="button" onClick="get_name('${el.movieCd}')">선택</button>
+                                <input type="text" value="${el.movieNm}"/>
+                                <input type="text" value="${el.movieNmEn}"/>
+                            </div>`
                     });
                 }else{
-                    console.log('없어');
+                    alert('없어');
                 }
             }else{
-                alert(data.mess)
+                alert(data.message)
             }
         })
         .catch((error) => console.log("error:", error));
+    }
+    function get_name(movieCd){
+        const children = document.getElementById(movieCd).children;
+        document.getElementById("{{form.title.id_for_label}}").value = children[1].value?children[1].value:'None';
+        document.getElementById("{{form.title_en.id_for_label}}").value = children[2].value?children[2].value:'None';
+    }
+
+    const form = document.getElementById("form");
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const url = "{% url 'movie:insert'%}";
+        const payload = new FormData(form);
+        const options = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: payload,
+        }
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch((error) => console.log("error:", error));
+    });
+
+    function select(id) {
+        const url = "{% url 'movie:select' %}";
+        const options = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                movie_id: id,
+            }),
+        }
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.data);
+            alert("form에 붙여넣어야지~ id는 어케 할까~");
+        })
+        .catch((error) => console.log("error:", error));
+    }
+    function delete_movie(id) {
+        console.log(id);
     }
 </script>
 {% endblock %}

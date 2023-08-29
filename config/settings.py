@@ -38,6 +38,7 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 # 애플리케이션 정의
 
 INSTALLED_APPS = [
+    'movie',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
