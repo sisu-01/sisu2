@@ -10,6 +10,7 @@ class Movie(models.Model):
     format  = models.CharField(max_length=20)#2d 3d imax screenx dolby colorium type->format
     location= models.CharField(max_length=20)#평촌, 코메, 수롯시, 양양영화, 집 place->location
     date    = models.DateField()
+    weekday = models.IntegerField()#0월1화2수...5토6일
     #user
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
