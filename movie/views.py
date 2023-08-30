@@ -68,7 +68,7 @@ def search(request):
 @require_http_methods("POST")
 def insert(request):
     """
-    movie 영화 등록
+    movie 등록&수정
     """
     try:
         movieId = request.POST.get('id')
@@ -99,7 +99,7 @@ def insert(request):
 @require_http_methods("POST")
 def select(request):
     """
-    movie 영화 불러오기
+    movie 불러오기
     """
     try:
         param = json.loads(request.body)
@@ -108,4 +108,3 @@ def select(request):
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
     return JsonResponse(asdict(res))
-
