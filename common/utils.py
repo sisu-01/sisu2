@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -5,3 +7,9 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+@dataclass
+class Response:
+    status: bool
+    message: str
+    data: dict

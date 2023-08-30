@@ -3,10 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
-from dataclasses import dataclass, asdict
+from dataclasses import asdict
 from .models import *
 from .forms import *
-from common.utils import get_client_ip
+from common.utils import get_client_ip, Response
 from pathlib import Path
 import urllib.request
 import json, os, environ
@@ -18,12 +18,6 @@ environ.Env.read_env(
     env_file=os.path.join(BASE_DIR, temp)
 )
 key = env('MOVIE')
-
-@dataclass
-class Response:
-    status: bool
-    message: str
-    data: dict
 
 # 여기에서 뷰를 생성하세요.
 def index(request):
@@ -80,15 +74,14 @@ def insert(request):
             form = MovieForm(request.POST, instance=instMovie)
         if form.is_valid():
             movie = form.save(commit=False)
+            movie.weekday = movie.date.weekday()
             if movieId == '':
                 #movie.user
                 movie.insert_date = timezone.now()
                 movie.insert_ip = get_client_ip(request)
-                #movie.insert_ip = '으아아아 IP 뜯기~!~'
             else:
                 movie.update_date = timezone.now()
                 movie.update_ip = get_client_ip(request)
-                #movie.update_ip = '으아아아 IP 뜯기~!~'
             movie.save()
             res = Response(status=True,message='성공',data=None)
         else:
