@@ -1,4 +1,5 @@
 {% extends 'layout/base.html' %}
+{% load filter %}
 
 {% block meta %}
 {% endblock %}
@@ -35,7 +36,13 @@
     {% if movieList %}
         {% for movie in movieList %}
         <div>
-            {{movie.title}}/{{movie.title_en}}/{{movie.brand}}{{movie.location}}
+            <div>{{movie.format}}</div>
+            <div>{{movie.title}}</div>
+            <div>{{movie.title_en}}</div>
+            <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
+            <div>{{movie.date|date:'Y.m.d'}}{{movie.weekday|weekday }}</div>
+        </div>
+        <div>
             <button onClick="select('{{movie.id}}')">수정</button>
             <button onClick="delete_movie('{{movie.id}}')">삭제</button>
         </div>
