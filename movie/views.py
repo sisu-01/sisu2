@@ -3,10 +3,11 @@ from django.shortcuts import render, get_object_or_404
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
+from dataclasses import dataclass, asdict
 from .models import *
 from .forms import *
+from common.utils import get_client_ip
 from pathlib import Path
-from dataclasses import dataclass, asdict
 import urllib.request
 import json, os, environ
 
@@ -82,11 +83,11 @@ def insert(request):
             if movieId == '':
                 #movie.user
                 movie.insert_date = timezone.now()
-                movie.insert_ip = '127.0.0.1'
+                movie.insert_ip = get_client_ip(request)
                 #movie.insert_ip = '으아아아 IP 뜯기~!~'
             else:
                 movie.update_date = timezone.now()
-                movie.update_ip = '127.0.0.1'
+                movie.update_ip = get_client_ip(request)
                 #movie.update_ip = '으아아아 IP 뜯기~!~'
             movie.save()
             res = Response(status=True,message='성공',data=None)
