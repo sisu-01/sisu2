@@ -17,8 +17,9 @@
     <div id="movieList"></div>
     <form id="form">
         {% csrf_token %}
+        <input type="hidden" name="id">
         {% for field in form %}
-            <div class="mother">
+            <div>
                 {{ field.errors }}
                 {{ field.label_tag }}
                 {{ field }}
@@ -122,8 +123,21 @@
         fetch(url, options)
         .then(response => response.json())
         .then(data => {
-            console.log(data.data);
-            alert("form에 붙여넣어야지~ id는 어케 할까~");
+            for(key in data.data){
+                const el = document.getElementsByName(key)[0];
+                if(el !== undefined){
+                    if(el.type =='radio'){
+                        const radio = document.querySelectorAll("input[name='"+key+"']");
+                        radio.forEach(r => {
+                            if (r.value === data.data[key]) {
+                                r.checked = true;
+                            }
+                        });
+                    }else{
+                        el.value = data.data[key];
+                    }
+                }
+            }
         })
         .catch((error) => console.log("error:", error));
     }

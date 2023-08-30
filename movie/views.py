@@ -1,5 +1,6 @@
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, get_object_or_404
+from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
 from .models import *
@@ -69,18 +70,30 @@ def insert(request):
     """
     movie 영화 등록
     """
-    form = MovieForm(request.POST)
-    if form.is_valid():
-        movie = form.save(commit=False)
-        #movie.user
-        movie.insert_date = timezone.now()
-        movie.insert_ip = '127.0.0.1'
-        #movie.insert_ip = '으아아아 IP 뜯기~!~'
-        movie.save()
-        res = Response(status=True,message='성공',data=None)
-    else:
-        res = Response(status=False,message='실패',data=dict(form.errors))
-
+    try:
+        movieId = request.POST.get('id')
+        if movieId == '':
+            form = MovieForm(request.POST)
+        else:
+            instMovie = Movie.objects.get(pk=movieId)
+            form = MovieForm(request.POST, instance=instMovie)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            if movieId == '':
+                #movie.user
+                movie.insert_date = timezone.now()
+                movie.insert_ip = '127.0.0.1'
+                #movie.insert_ip = '으아아아 IP 뜯기~!~'
+            else:
+                movie.update_date = timezone.now()
+                movie.update_ip = '127.0.0.1'
+                #movie.update_ip = '으아아아 IP 뜯기~!~'
+            movie.save()
+            res = Response(status=True,message='성공',data=None)
+        else:
+            res = Response(status=False,message='The form is invalid.',data=dict(form.errors))
+    except Exception as e:
+        res = Response(status=False,message=str(e),data=None)
     return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
@@ -91,8 +104,8 @@ def select(request):
     try:
         param = json.loads(request.body)
         movie = Movie.objects.get(pk=param['movie_id'])
-        from django.forms.models import model_to_dict
         res = Response(status=True,message='성공',data=model_to_dict(movie))
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
     return JsonResponse(asdict(res))
+

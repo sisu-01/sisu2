@@ -13,8 +13,8 @@ class Movie(models.Model):
     #user
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
-    modify_date = models.DateTimeField(blank=True, null=True)
-    modify_ip = models.CharField(max_length=40, blank=True, null=True)
+    update_date = models.DateTimeField(blank=True, null=True)
+    update_ip = models.CharField(max_length=40, blank=True, null=True)
     
     class Meta:
         managed = True
