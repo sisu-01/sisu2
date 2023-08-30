@@ -102,7 +102,11 @@
         fetch(url, options)
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            if(data.status){
+                alert(data.message);
+            }else{
+                alert(data.message);
+            }
         })
         .catch((error) => console.log("error:", error));
     });
@@ -123,26 +127,51 @@
         fetch(url, options)
         .then(response => response.json())
         .then(data => {
-            for(key in data.data){
-                const el = document.getElementsByName(key)[0];
-                if(el !== undefined){
-                    if(el.type =='radio'){
-                        const radio = document.querySelectorAll("input[name='"+key+"']");
-                        radio.forEach(r => {
-                            if (r.value === data.data[key]) {
-                                r.checked = true;
-                            }
-                        });
-                    }else{
-                        el.value = data.data[key];
+            if(data.status){
+                for(key in data.data){
+                    const el = document.getElementsByName(key)[0];
+                    if(el !== undefined){
+                        if(el.type =='radio'){
+                            const radio = document.querySelectorAll("input[name='"+key+"']");
+                            radio.forEach(r => {
+                                if (r.value === data.data[key]) {
+                                    r.checked = true;
+                                }
+                            });
+                        }else{
+                            el.value = data.data[key];
+                        }
                     }
                 }
+            }else{
+                alert(data.message);
             }
         })
         .catch((error) => console.log("error:", error));
     }
     function delete_movie(id) {
-        console.log(id);
+        const url = "{% url 'movie:delete' %}";
+        const options = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                movie_id: id,
+            }),
+        }
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                alert(data.message);
+            }else{
+                alert(data.message);
+            }
+        })
+        .catch((error) => console.log("error:", error));
     }
 </script>
 {% endblock %}

@@ -108,3 +108,17 @@ def select(request):
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
     return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def delete(request):
+    """
+    movie 삭제
+    """
+    try:
+        param = json.loads(request.body)
+        movie = get_object_or_404(Movie, pk=param['movie_id'])
+        movie.delete()
+        res = Response(status=True,message='삭제 성공',data=None)
+    except Exception as e:
+        res = Response(status=False,message=str(e),data=None)
+    return JsonResponse(asdict(res))
