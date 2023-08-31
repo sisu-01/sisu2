@@ -12,11 +12,11 @@
     <h1>Hello Movie!</h1>
     <hr/>
     <div>
-        <input type="text" id="movieNm" value="마블"/>
+        <input type="text" id="movieNm" value="오펜하이머"/>
         <button onClick="search_movie()">검색</button>
     </div>
     <div id="movieList"></div>
-    <form id="form">
+    <form id="form" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="id">
         {% for field in form %}
@@ -112,7 +112,11 @@
             if(data.status){
                 alert(data.message);
             }else{
-                alert(data.message);
+                let mess = "";
+                for(key in data.data){
+                    mess += key+": "+data.data[key]+"\n";
+                }
+                alert(data.message+"\n"+mess);
             }
         })
         .catch((error) => console.log("error:", error));
