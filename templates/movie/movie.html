@@ -36,6 +36,7 @@
     {% if movieList %}
         {% for movie in movieList %}
         <div>
+            <img src="{{movie.poster}}" alt="{{movie.title}}">
             <div>{{movie.format}}</div>
             <div>{{movie.title}}</div>
             <div>{{movie.title_en}}</div>

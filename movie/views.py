@@ -68,10 +68,10 @@ def insert(request):
     try:
         movieId = request.POST.get('id')
         if movieId == '':
-            form = MovieForm(request.POST)
+            form = MovieForm(request.POST, request.FILES)
         else:
             instMovie = Movie.objects.get(pk=movieId)
-            form = MovieForm(request.POST, instance=instMovie)
+            form = MovieForm(request.POST, request.FILES, instance=instMovie)
         if form.is_valid():
             movie = form.save(commit=False)
             movie.weekday = movie.date.weekday()

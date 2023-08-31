@@ -14,15 +14,15 @@ class DateInput(forms.DateInput):
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['id','title','title_en','brand','format','location','date']
+        fields = ['title','title_en','brand','format','location','date','poster']
         labels = {
-            'id': 'id',
             'title': '제목',
             'title_en': '영제',
             'brand': '브?랜!드',
             'format': '포맷',
             'location': '위?치',
             'date': '날?짜',
+            'poster': '포스터',
         }
         widgets = {
             'brand': forms.RadioSelect(choices=BRAND_CHOICES, attrs={"class": "special"}),
