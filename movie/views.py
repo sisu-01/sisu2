@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.utils import timezone
+from django.conf import settings
 from dataclasses import asdict
 from .models import *
 from .forms import *
@@ -111,6 +112,8 @@ def delete(request):
     try:
         param = json.loads(request.body)
         movie = get_object_or_404(Movie, pk=param['movie_id'])
+        if os.path.isfile(settings.MEDIA_ROOT / str(movie.poster)):
+            os.remove(settings.MEDIA_ROOT / str(movie.poster))
         movie.delete()
         res = Response(status=True,message='삭제 성공',data=None)
     except Exception as e:
