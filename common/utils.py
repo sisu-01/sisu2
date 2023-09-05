@@ -26,7 +26,6 @@ class Test(object):
         self.path = sub_path
     
     def __call__(self, wtf, filename):
-        print(self.path)
         format = filename.split('.')[1]
         result = '/'+self.path+'-'+str(datetime.utcnow().strftime('%Y%m%d-%H%M%S-%f')[:-3])+'.'+format
         return self.path+result
