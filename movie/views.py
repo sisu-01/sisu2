@@ -67,12 +67,14 @@ def insert(request):
     movie 등록&수정
     """
     try:
+        oldPoster = ''
         movieId = request.POST.get('id')
         if movieId == '':
             form = MovieForm(request.POST, request.FILES)
         else:
             instance = Movie.objects.get(pk=movieId)
             form = MovieForm(request.POST, request.FILES, instance=instance)
+            oldPoster = str(instance.poster)
         if form.is_valid():
             movie = form.save(commit=False)
             movie.weekday = movie.date.weekday()
@@ -84,6 +86,9 @@ def insert(request):
                 movie.update_date = timezone.now()
                 movie.update_ip = get_client_ip(request)
             movie.save()
+            if(oldPoster != str(movie.poster)):
+                if os.path.isfile(settings.MEDIA_ROOT / oldPoster):
+                    os.remove(settings.MEDIA_ROOT / oldPoster)
             data = Movie.objects.filter(pk=movie.id).values()[0]
             res = Response(status=True,message='성공',data=data)
         else:
@@ -99,7 +104,6 @@ def select(request):
     """
     try:
         param = json.loads(request.body)
-        #movie = Movie.objects.get(pk=param['movie_id'])
         movie = Movie.objects.filter(pk=param['movie_id']).values()[0]
         res = Response(status=True,message='성공',data=movie)
     except Exception as e:

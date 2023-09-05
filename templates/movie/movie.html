@@ -81,6 +81,12 @@
         e.preventDefault();
         const url = "{% url 'movie:insert'%}";
         const payload = new FormData(form);
+        if(payload.get("id") === ""){
+            if(payload.get("poster").size == 0 && payload.get("poster").name == ''){
+                alert("포스터 업로드 하쇼잉");
+                return false;
+            }
+        }
         const options = {
             method: "POST",
             mode: "same-origin",
