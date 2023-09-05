@@ -1,0 +1,55 @@
+<hr/>
+<div>
+    <input type="text" id="movieNm" value="오펜하이머"/>
+    <button onClick="search_movie()">검색</button>
+</div>
+<div id="movieList"></div>
+<form id="form" enctype="multipart/form-data">
+    <input type="text" name="id">
+        <div>
+            <label for="id_title">제목:</label>
+            <input type="text" name="title" maxlength="100" required="" id="id_title">
+        </div>
+        <div>
+            <label for="id_title_en">영제:</label>
+            <input type="text" name="title_en" maxlength="100" required="" id="id_title_en">
+        </div>
+        <div>
+            <label>브?랜!드:</label>
+            <div id="id_brand" class="special">
+                <div>
+                    <label for="id_brand_0"><input type="radio" name="brand" value="CGV" class="special" maxlength="20" required="" id="id_brand_0">CGV</label>
+                </div>
+                <div>
+                    <label for="id_brand_1"><input type="radio" name="brand" value="메가박스" class="special" maxlength="20" required="" id="id_brand_1">메가박스</label>
+                </div>
+                <div>
+                    <label for="id_brand_2"><input type="radio" name="brand" value="롯데시네마" class="special" maxlength="20" required="" id="id_brand_2">롯데시네마</label>
+                </div>
+                <div>
+                    <label for="id_brand_3"><input type="radio" name="brand" value="기타" class="special" maxlength="20" required="" id="id_brand_3">기타</label>
+                </div>
+                <div>
+                    <label for="id_brand_4"><input type="radio" name="brand" value="VOD" class="special" maxlength="20" required="" id="id_brand_4">VOD</label>
+                </div>
+            </div>   
+        </div>
+        <div>    
+            <label for="id_format">포맷:</label>
+            <input type="text" name="format" maxlength="20" required="" id="id_format">
+        </div>
+        <div>
+            <label for="id_location">위?치:</label>
+            <input type="text" name="location" maxlength="20" required="" id="id_location">
+        </div>
+        <div>
+            <label for="id_date">날?짜:</label>
+            <input type="date" name="date" required="" id="id_date">
+        </div>
+        <div>
+            <label for="id_poster">포스터:</label>
+            <input type="file" name="poster" id="id_poster">
+        </div>
+    <button type="submit">제출</button>
+</form>
+<hr/>

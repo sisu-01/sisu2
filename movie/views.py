@@ -25,7 +25,7 @@ def index(request):
     """
     movie 첫화면
     """
-    movieList = Movie.objects.all().order_by('-date')
+    movieList = Movie.objects.all().order_by('-date', '-id')
     form = MovieForm()
     context = {
         'form': form,
@@ -57,10 +57,9 @@ def search(request):
             message = 'Error Code : '+rescode
             movieList = None
         res = Response(status=status,message=message,data=movieList)
-        return JsonResponse(asdict(res))
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
-        return JsonResponse(asdict(res))
+    return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
 def insert(request):
@@ -72,8 +71,8 @@ def insert(request):
         if movieId == '':
             form = MovieForm(request.POST, request.FILES)
         else:
-            instMovie = Movie.objects.get(pk=movieId)
-            form = MovieForm(request.POST, request.FILES, instance=instMovie)
+            instance = Movie.objects.get(pk=movieId)
+            form = MovieForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             movie = form.save(commit=False)
             movie.weekday = movie.date.weekday()
@@ -85,13 +84,13 @@ def insert(request):
                 movie.update_date = timezone.now()
                 movie.update_ip = get_client_ip(request)
             movie.save()
-            res = Response(status=True,message='성공',data=None)
+            data = Movie.objects.filter(pk=movie.id).values()[0]
+            res = Response(status=True,message='성공',data=data)
         else:
             res = Response(status=False,message='The form is invalid.',data=dict(form.errors))
-        return JsonResponse(asdict(res))
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
-        return JsonResponse(asdict(res))
+    return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
 def select(request):
@@ -100,12 +99,12 @@ def select(request):
     """
     try:
         param = json.loads(request.body)
-        movie = Movie.objects.get(pk=param['movie_id'])
-        res = Response(status=True,message='성공',data=model_to_dict(movie))
-        return JsonResponse(asdict(res))
+        #movie = Movie.objects.get(pk=param['movie_id'])
+        movie = Movie.objects.filter(pk=param['movie_id']).values()[0]
+        res = Response(status=True,message='성공',data=movie)
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
-        return JsonResponse(asdict(res))
+    return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
 def delete(request):
@@ -119,7 +118,6 @@ def delete(request):
             os.remove(settings.MEDIA_ROOT / str(movie.poster))
         movie.delete()
         res = Response(status=True,message='삭제 성공',data=None)
-        return JsonResponse(asdict(res))
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
-        return JsonResponse(asdict(res))
+    return JsonResponse(asdict(res))
