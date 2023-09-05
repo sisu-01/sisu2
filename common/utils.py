@@ -1,5 +1,5 @@
 from typing import Any
-#from django.utils.deconstruct import deconstructible
+from django.utils.deconstruct import deconstructible
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -17,11 +17,13 @@ class Response:
     message: str
     data: dict
 
-#@deconstructible
-#이거 이해하고싶다.
-#deconstructible 안 써도 되는데 왜 써놓은건지..
+#deconstructible 안 쓰면 makemigrations 할 때
+#Cannot serialize
+#There are some values Django cannot serialize into migration files.
+#에러가 나..
 #__call__에 A에는 모델, B에는 파일명이 들어가는 이유는 뭔지..
-class Test(object):
+@deconstructible
+class ImageUpload(object):
     def __init__(self, sub_path):
         self.path = sub_path
     

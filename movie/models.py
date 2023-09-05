@@ -1,11 +1,11 @@
 from django.db import models
-from common.utils import Test
+from common.utils import ImageUpload
 
 # Create your models here.
 class Movie(models.Model):
     title   = models.CharField(max_length=100)#제목
     title_en= models.CharField(max_length=100)#영제
-    poster  = models.FileField(upload_to=Test('poster'))
+    poster  = models.ImageField(upload_to=ImageUpload('poster'))
     #thumbnail
     brand   = models.CharField(max_length=20)##CGV, 메박, 롯데, 기타, VOD brand new!
     format  = models.CharField(max_length=20)#2d 3d imax screenx dolby colorium type->format
