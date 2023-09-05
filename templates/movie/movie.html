@@ -121,8 +121,8 @@
                 if(payload.get("id") === ""){
                     document.getElementById('movies').insertAdjacentHTML('afterbegin',htmlString);
                 }else{
-                    alert("수정해서 갈아까기");
-                    //else 수정한거면 원래 있던 id의 div 지우고 거기에 쏘옥 집어넣기
+                    document.getElementById(movie.id).insertAdjacentHTML('afterend',htmlString);
+                    document.getElementById(movie.id).remove();
                 }
                 alert(data.message);
             }else{
@@ -164,7 +164,7 @@
                                 }
                             });
                         }else if(el.type == "file"){
-                            console.log('zz');
+                            //afterend
                         }else{
                             el.value = data.data[key];
                         }
