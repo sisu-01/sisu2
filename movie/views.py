@@ -26,9 +26,7 @@ def index(request):
     movie 첫화면
     """
     movieList = Movie.objects.all().order_by('-date', '-id')
-    form = MovieForm()
     context = {
-        'form': form,
         'movieList': movieList,
     }
     return render(request, 'movie/movie.html', context)
