@@ -17,8 +17,8 @@
         {% for movie in movieList %}
         <div id="{{movie.id}}">
             id:{{movie.id}}<br/>
-            {{movie.poster.url}}
-            <img src="{{movie.poster.url}}" alt="{{movie.title}}">
+            원본:<img src="{{movie.poster.url}}" alt="{{movie.title}}">
+            썸넬:<img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
             <div>{{movie.format}}</div>
             <div>{{movie.title}}</div>
             <div>{{movie.title_en}}</div>
@@ -105,8 +105,8 @@
                 const htmlString = `
                 <div id="${movie.id}">
                     id:${movie.id}<br/>
-                    {% get_media_prefix %}${movie.poster}
-                    <img src="{% get_media_prefix %}${movie.poster}" alt="${movie.title}">
+                    원본:<img src="{% get_media_prefix %}${movie.poster}" alt="${movie.title}">
+                    썸넬:<img src="{% get_media_prefix %}${movie.thumbnail}" alt="${movie.title}">
                     <div>${movie.format}</div>
                     <div>${movie.title}</div>
                     <div>${movie.title_en}</div>

@@ -6,7 +6,7 @@ class Movie(models.Model):
     title   = models.CharField(max_length=100)#제목
     title_en= models.CharField(max_length=100)#영제
     poster  = models.ImageField(upload_to=ImageUpload('poster'))
-    #thumbnail
+    thumbnail = models.ImageField(upload_to=ImageUpload('thumbnail'))
     brand   = models.CharField(max_length=20)##CGV, 메박, 롯데, 기타, VOD brand new!
     format  = models.CharField(max_length=20)#2d 3d imax screenx dolby colorium type->format
     location= models.CharField(max_length=20)#평촌, 코메, 수롯시, 양양영화, 집 place->location
