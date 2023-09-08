@@ -1,3 +1,17 @@
+{% load filter %}
 <header>
-    <h1>Header</h1>
+    <h1>
+        <span>Header</span>
+        <a href="/">index</a>
+    {% top_menu as context %}
+    {% for menu in context %}
+        <a href="/{{menu.url}}">{{menu}}</a>
+            {% comment %} {% if request.path|menu:1|contain:menu.id %}
+            <a class="nav-link p2 active" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
+            {% else %}
+            <a class="nav-link p2" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
+            {% endif %} {% endcomment %}
+        </li>
+    {% endfor %}
+    </h1>
 </header>
