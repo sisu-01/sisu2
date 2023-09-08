@@ -6,7 +6,7 @@ from .models import *
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['title','title_en','brand','format','location','date','poster']
+        fields = ['title','title_en','brand','location','format','date','poster']
 
     def __init__(self, *args, **kwargs):
         #MovieForm 선언 할 때 매개변수가 있는가?

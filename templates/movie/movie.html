@@ -11,20 +11,20 @@
 {% block content %}
 <main>
     <h1>Hello Movie!</h1>
+    <button type="button" onClick="insert()">추가</button>
     {% include 'movie/movie_form.html' %}
     <div id="movies">
     {% if movieList %}
         {% for movie in movieList %}
         <div id="{{movie.id}}">
-            id:{{movie.id}}<br/>
-            원본:<img src="{{movie.poster.url}}" alt="{{movie.title}}">
-            썸넬:<img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
+            <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
             <div>{{movie.format}}</div>
             <div>{{movie.title}}</div>
             <div>{{movie.title_en}}</div>
             <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
             <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
             <div>
+                <a href="{{movie.poster.url}}" target="_blank">원본</a>
                 <button onClick="select('{{movie.id}}')">수정</button>
                 <button onClick="delete_movie('{{movie.id}}')">삭제</button>
             </div>
@@ -34,6 +34,9 @@
     </div>
 </main>
 <script>
+    function insert(){
+        document.getElementsByName("id")[0].value = "";
+    }
     function search_movie(){
         const url = "{% url 'movie:search'%}";
         const options = {
@@ -104,15 +107,14 @@
                 const weekday = ["월","화","수","목","금","토","일"];
                 const htmlString = `
                 <div id="${movie.id}">
-                    id:${movie.id}<br/>
-                    원본:<img src="{% get_media_prefix %}${movie.poster}" alt="${movie.title}">
-                    썸넬:<img src="{% get_media_prefix %}${movie.thumbnail}" alt="${movie.title}">
+                    <img src="{% get_media_prefix %}${movie.thumbnail}" alt="${movie.title}">
                     <div>${movie.format}</div>
                     <div>${movie.title}</div>
                     <div>${movie.title_en}</div>
                     <div>${movie.brand}&nbsp;${movie.location}</div>
                     <div>${date}(${weekday[movie.weekday]})</div>
                     <div>
+                        <a href="{% get_media_prefix %}${movie.poster}" target="_blank">원본</a>
                         <button onClick="select('${movie.id}')">수정</button>
                         <button onClick="delete_movie('${movie.id}')">삭제</button>
                     </div>
