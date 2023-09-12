@@ -127,16 +127,31 @@ USE_I18N = True
 USE_TZ = True
 
 
+# 로그인/로그아웃
+# https://docs.djangoproject.com/en/4.2/ref/settings/#login-redirect-url
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = '/'
+
+
 # Static 파일 (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+
+# Media 파일 (Movie, Thumbnail, Blog)
+# https://docs.djangoproject.com/en/4.2/topics/files/
+
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # 기본 기본 키 필드 유형
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
