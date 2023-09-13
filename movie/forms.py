@@ -50,6 +50,6 @@ class MovieForm(forms.ModelForm):
         img = img.crop((left, upper, right, lower))
         img = img.resize((width,height), Image.LANCZOS)
         image_file = BytesIO()
-        img.save(image_file, format='JPEG')
+        img.convert('RGB').save(image_file, format='JPEG')
         data.file = image_file
         return data
