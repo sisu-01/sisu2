@@ -135,6 +135,13 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+# 세션 만료 시간
+# https://docs.djangoproject.com/en/4.2/ref/settings/#session-cookie-age
+
+#SESSION_COOKIE_AGE = 2주 1209600 기본
+# 1년 31536000 한달 2628000 일주일 604800
+
+
 # Static 파일 (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
