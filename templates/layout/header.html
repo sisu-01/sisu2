@@ -14,9 +14,9 @@
         </li>
     {% endfor %}
     {% if user.is_authenticated %}
-        <a href="{% url 'common:logout' %}">logout</a>
+        <a href="{% url 'common:logout' %}?next={{request.get_full_path|urlencode}}">logout</a>
     {% else %}
-        <a href="{% url 'common:login' %}">login</a>
+        <a href="{% url 'common:login' %}?next={{request.get_full_path|urlencode}}">login</a>
     {% endif %}
     </h1>
 </header>
