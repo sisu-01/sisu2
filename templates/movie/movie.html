@@ -11,6 +11,18 @@
 {% block content %}
 <main>
     <h1>Hello Movie!</h1>
+    <hr/>
+    <ul>
+    {% for key, value in temp.items %}
+        <li>{{key}}&nbsp;({{value|length}})</li>
+        <ul>
+            {% for i in value %}
+            <li><a href="#{{i.id}}">{{i.count}}.&nbsp;{{i.title}}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    </ul>
+    <hr/>
     {% if user.is_authenticated %}
         <button type="button" onClick="insert()">추가</button>
         {% include 'movie/movie_form.html' %}
@@ -19,6 +31,7 @@
     {% if movieList %}
         {% for movie in movieList %}
         <div id="{{movie.id}}">
+            id={{movie.id}}
             <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
             <div>{{movie.format}}</div>
             <div>{{movie.title}}</div>

@@ -25,11 +25,56 @@ def index(request):
     """
     movie 첫화면
     """
+    """
+    import math
+    import time
+    start1 = time.time()
+    cnt1 = 0
+    end1 = time.time()
+    result1 = (end1-start1)*100
+    from django.db.models.functions import ExtractYear
+    from django.db.models import Count
+    #구 로직
+    movieList1 = Movie.objects.all().order_by('-date', '-id')
+    dateList1 = Movie.objects.annotate(year=ExtractYear('date')).values('year').annotate(total=Count('*')).order_by('-year')
+    for i in dateList1:
+        print(i['year'], i['total'])
+        for j in movieList1:
+            if i['year'] == j.date.year:
+                print(j.title)
+    from django.db.models.functions import ExtractYear
+    #신 로직
+    movieList2 = Movie.objects.all().order_by('-date', '-id')
+    dateList2 = Movie.objects.annotate(year=ExtractYear('date')).values('year').order_by('-year')
+    temp = {}
+    for date in dateList2:
+        temp[date['year']] = []
+    for movie in movieList2:
+        temp[movie.date.year].append(movie.title)
+    for i in temp:
+        print(i, len(temp[i]))
+        for j in temp[i]:
+            print(j)
+    """
+    #황보 로직
     movieList = Movie.objects.all().order_by('-date', '-id')
+    temp = {}
+    total = len(movieList)
+    for movie in movieList:
+        year = movie.date.year
+        if (not year in temp):
+            temp[year] = []
+        temp[movie.date.year].append({
+            'id': movie.id,
+            'title': movie.title,
+            'count': total,
+        })
+        total -= 1
     form = MovieForm()
     context = {
         'form': form,
         'movieList': movieList,
+        'temp': temp,
     }
     return render(request, 'movie/movie.html', context)
 
