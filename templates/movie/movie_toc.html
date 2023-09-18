@@ -1,0 +1,12 @@
+<hr/>
+    <ul>
+    {% for key, value in temp.items %}
+        <li>{{key}}&nbsp;({{value|length}})</li>
+        <ul>
+            {% for i in value %}
+            <li><a href="#{{i.id}}">{{i.count}}.&nbsp;{{i.title}}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    </ul>
+<hr/>

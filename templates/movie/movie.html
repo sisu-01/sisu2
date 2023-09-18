@@ -11,20 +11,8 @@
 {% block content %}
 <main>
     <h1>Hello Movie!</h1>
-    <hr/>
-    <ul>
-    {% for key, value in temp.items %}
-        <li>{{key}}&nbsp;({{value|length}})</li>
-        <ul>
-            {% for i in value %}
-            <li><a href="#{{i.id}}">{{i.count}}.&nbsp;{{i.title}}</a></li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-    </ul>
-    <hr/>
+    {% include 'movie/movie_toc.html' %}
     {% if user.is_authenticated %}
-        <button type="button" onClick="insert()">추가</button>
         {% include 'movie/movie_form.html' %}
     {% endif %}
     <div id="movies">
@@ -222,5 +210,6 @@
         .catch((error) => console.log("error:", error));
     }
     {% endif %}
+    //현이에게 js 관리 어케 하는지 물어보기
 </script>
 {% endblock %}
