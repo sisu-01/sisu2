@@ -13,6 +13,7 @@
     <h1>Hello Movie!</h1>
     {% include 'movie/movie_toc.html' %}
     {% if user.is_authenticated %}
+        <button type="button" onClick="insert()">추가</button>
         {% include 'movie/movie_form.html' %}
     {% endif %}
     <div id="movies">
