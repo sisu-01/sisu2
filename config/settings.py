@@ -39,6 +39,7 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 INSTALLED_APPS = [
     'common',
+    'blog',
     'movie',
     'django.contrib.admin',
     'django.contrib.auth',

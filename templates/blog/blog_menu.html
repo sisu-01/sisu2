@@ -1,0 +1,14 @@
+<li>
+    {% if node.child %}
+    {{node.title}}📂
+        <ul>
+        {% for child_node in node.child %}
+            {% with node=child_node recursion_template='blog/blog_menu.html' %}
+                {% include recursion_template %}
+            {% endwith %}
+        {% endfor %}
+        </ul>
+    {% else %}
+    <a href="{{node.id}}">{{node.title}}📃</a>
+    {% endif %}
+</li>
