@@ -8,7 +8,7 @@
 
 {% block content %}
 <main>
-    <h1>Hello Blog!</h1>
+    <h1>Hello Post!</h1>
     <hr/>
         <ul>
         {% for node in menus %} 
@@ -16,9 +16,16 @@
         {% endfor %}
         </ul>
     <hr/>
-    {% if user.is_authenticated %}
-    <a href="{% url 'blog:list' %}">list</a>
+{% if user.is_authenticated %}
     <a href="{% url 'blog:create' %}">create</a>
-    {% endif %}
+    <a href="{% url 'blog:update' post.id %}">update</a>
+    <a href="{% url 'blog:delete' post.id %}">delete</a>
+{% endif %}
+    <div>
+        {{post.title}}
+    </div>
+    <div>
+        {{post.content}}
+    </div>
 </main>
 {% endblock %}

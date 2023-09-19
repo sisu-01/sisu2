@@ -16,6 +16,16 @@
 </head>
 <body>
 	{% include 'layout/header.html' %}
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div>
+            <b>[{{ message.tags }}]</b>&nbsp;{{ message.message }}
+            <button type="button">닫기?</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% block content %}
     {% endblock %}
 	{% include 'layout/footer.html' %}
