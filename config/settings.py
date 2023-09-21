@@ -158,7 +158,9 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_ROOT = BASE_DIR / 'media'
+#os path join 은 무슨 차이일까?
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # 기본 기본 키 필드 유형
