@@ -29,5 +29,6 @@ class ImageUpload(object):
     
     def __call__(self, model, file):
         format = file.split('.')[-1]
+        #os.path.splitext
         result = '/'+self.path+'-'+str(datetime.utcnow().strftime('%Y%m%d-%H%M%S-%f')[:-3])+'.'+format
         return self.path+result
