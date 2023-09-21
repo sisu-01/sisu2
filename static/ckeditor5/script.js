@@ -1,13 +1,20 @@
 ClassicEditor
-	.create( document.querySelector( '#editor' ), {
+	.create( document.querySelector("#editor"), {
 		simpleUpload: {
-			uploadUrl: "/upload/image",
-			withCredentials: true,
+			uploadUrl: upload_url,
+
+            // Enable the XMLHttpRequest.withCredentials property.
+            withCredentials: true,
+
+            // Headers sent along with the XMLHttpRequest to the upload server.
+            headers: {
+                "X-CSRFToken": csrf_token,
+                Authorization: "Bearer <JSON Web Token>"
+            }
 		}
 	} )
 	.then( editor => {
 		window.editor = editor;
-		console.log(window.editor);
 	} )
 	.catch( handleSampleError );
 

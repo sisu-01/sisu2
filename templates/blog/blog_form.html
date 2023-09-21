@@ -34,6 +34,10 @@
         </div>
         <button type="submit">submit</button>
     </form>
+    <script>
+        const upload_url = "{% url 'blog:upload' %}";
+        const csrf_token = "{{ csrf_token }}";
+    </script>
     <script src="{% static 'ckeditor5/build/ckeditor.js' %}"></script>
 	<script src="{% static 'ckeditor5/script.js' %}"></script>
 </body>
