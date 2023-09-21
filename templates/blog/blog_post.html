@@ -25,7 +25,9 @@
         {{post.title}}
     </div>
     <div>
+        {% autoescape off %}
         {{post.content}}
+        {% endautoescape %}
     </div>
 </main>
 {% endblock %}
