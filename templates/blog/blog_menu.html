@@ -9,6 +9,6 @@
         {% endfor %}
         </ul>
     {% else %}
-    <a href="{{node.id}}">{{node.title}}📃</a>
+    <a href="{% url 'blog:list' node.id %}">{{node.title}}📃</a>
     {% endif %}
 </li>

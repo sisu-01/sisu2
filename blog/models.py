@@ -19,8 +19,6 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     """
-    제목
-    내용
     조회수
     썸네일
     추천수
@@ -31,8 +29,8 @@ class Post(models.Model):
     수정일
     수정ip
     공개,비공개
-    메뉴
     """
+    menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, null=True)
     class Meta:
         managed = True
         db_table = 't_post'

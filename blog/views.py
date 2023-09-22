@@ -36,10 +36,10 @@ def get_menu_tree(menus, parent=None):
                 })
     return tree
 
-def list(request):
+def list(request, id):
     temp = Menu.objects.all().order_by('seq')
     result = get_menu_tree(temp)
-    postList = Post.objects.all().values('id','title')
+    postList = Post.objects.filter(menu=id).values('id','title')
     context = {
         'menus': result,
         'postList': postList

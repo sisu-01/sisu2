@@ -20,9 +20,13 @@
     <a href="{% url 'blog:create' %}">create</a>
 {% endif %}
     <div>
+{% if postList %}
     {% for post in postList %}
         <div><a href="{% url 'blog:post' post.id %}">{{post.title}}</a></div>
     {% endfor %}
+{% else %}
+        <div>엄서용</div>
+{% endif %}
     </div>
 </main>
 {% endblock %}
