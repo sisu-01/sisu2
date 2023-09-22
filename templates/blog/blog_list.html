@@ -1,34 +1,13 @@
-{% extends 'layout/base.html' %}
-{% load filter %}
-
-{% block meta %}
-<script>
-    console.log('blog_list');
-</script>
-{% endblock %}
-
-{% block content %}
-<main>
-    <h1>Hello List!</h1>
-    <hr/>
-        <ul>
-        {% getTree as menus %}
-        {% for node in menus %} 
-            {% include 'blog/blog_menu.html' %}
-        {% endfor %}
-        </ul>
-    <hr/>
+<h1>Hello List!</h1>
 {% if user.is_authenticated %}
-    <a href="{% url 'blog:create' %}">create</a>
+<a href="{% url 'blog:create' %}">create</a>
 {% endif %}
-    <div>
+<div>
 {% if postList %}
-    {% for post in postList %}
-        <div><a href="{% url 'blog:post' post.id %}">{{post.title}}</a></div>
-    {% endfor %}
+{% for post in postList %}
+    <div><a href="{% url 'blog:post' post.id %}">{{post.title}}</a></div>
+{% endfor %}
 {% else %}
-        <div>엄서용</div>
+    <div>엄서용</div>
 {% endif %}
-    </div>
-</main>
-{% endblock %}
+</div>

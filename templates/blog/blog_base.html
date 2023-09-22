@@ -3,13 +3,12 @@
 
 {% block meta %}
 <script>
-    console.log('blog');
+    console.log('blog_base');
 </script>
 {% endblock %}
 
 {% block content %}
 <main>
-    <h1>Hello Blog!</h1>
     <hr/>
         <ul>
         {% getTree as menus %}                        
@@ -18,8 +17,6 @@
         {% endfor %}
         </ul>
     <hr/>
-    {% if user.is_authenticated %}
-    <a href="{% url 'blog:create' %}">create</a>
-    {% endif %}
+    {% include template %}
 </main>
 {% endblock %}

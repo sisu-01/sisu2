@@ -4,30 +4,38 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from django.conf import settings
-from .models import Menu, Post
+from .models import Post
 from .forms import PostForm
 import os
 from datetime import datetime
 
-# Create your views here.
+base_template = 'blog/blog_base.html'
+
 def index(request):
     context = {
+        'ogTitle': 'ogTitle이다임마',
+        'ogDescription': 'ogDescriptionzzzzzzzz',
+        'ogImage': None,
+        'title': '제목인뒈용',
+        'template': 'blog/blog_index.html',
     }
-    return render(request, 'blog/blog.html', context)
+    return render(request, base_template, context)
 
 def list(request, id):
     postList = Post.objects.filter(menu=id).values('id','title')
     context = {
-        'postList': postList
+        'postList': postList,
+        'template': 'blog/blog_list.html',
     }
-    return render(request, 'blog/blog_list.html', context)
+    return render(request, base_template, context)
 
 def post(request, id):
     post = Post.objects.get(id=id)
     context = {
         'post': post,
+        'template': 'blog/blog_post.html',
     }
-    return render(request, 'blog/blog_post.html', context)
+    return render(request, base_template, context)
 
 @login_required(login_url='common:login')
 def create(request):
