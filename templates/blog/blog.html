@@ -1,4 +1,5 @@
 {% extends 'layout/base.html' %}
+{% load filter %}
 
 {% block meta %}
 {% endblock %}
@@ -11,6 +12,7 @@
     <h1>Hello Blog!</h1>
     <hr/>
         <ul>
+        {% getTree as menus %}                        
         {% for node in menus %} 
             {% include 'blog/blog_menu.html' %}
         {% endfor %}
