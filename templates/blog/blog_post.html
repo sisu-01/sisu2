@@ -3,9 +3,14 @@
 <a href="{% url 'blog:create' %}">create</a>
 <a href="{% url 'blog:update' post.id %}">update</a>
 <a href="{% url 'blog:delete' post.id %}">delete</a>
+공개여부:{{post.visible}}
 {% endif %}
 <div>
-    {{post.title}}
+    {% if post.visible or user.is_authenticated %}
+        {{post.title}}
+    {% else %}
+        응 비공개
+    {% endif %}
 </div>
 <div>
     {% autoescape off %}

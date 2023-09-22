@@ -18,9 +18,9 @@ class Menu(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    views = models.IntegerField()
     visible = models.BooleanField()
     menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, null=True)
+    #views = models.IntegerField()
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
     update_date = models.DateTimeField(blank=True, null=True)

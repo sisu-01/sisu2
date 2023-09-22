@@ -2,8 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.utils import timezone
 from django.http import JsonResponse
 from django.conf import settings
+from common.utils import get_client_ip
 from .models import Post
 from .forms import PostForm
 import os
@@ -22,7 +24,7 @@ def index(request):
     return render(request, base_template, context)
 
 def list(request, id):
-    postList = Post.objects.filter(menu=id).values('id','title')
+    postList = Post.objects.filter(menu=id).order_by('-insert_date')
     context = {
         'postList': postList,
         'template': 'blog/blog_list.html',
@@ -42,9 +44,12 @@ def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.insert_date = timezone.now()
+            post.insert_ip = get_client_ip(request)
+            post.save()
             messages.success(request, '등록 완료')
-            return redirect('blog:list')
+            return redirect('blog:post', id=post.id)
     context = {}
     return render(request, 'blog/blog_form.html', context)
 
@@ -71,9 +76,12 @@ def update(request, id):
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.update_date = timezone.now()
+            post.update_ip = get_client_ip(request)
+            post.save()
             messages.success(request, '수정 완료')
-            return redirect('blog:list')
+            return redirect('blog:list', id=post.menu)
     else:
         form = PostForm(instance=post)
     context = {
@@ -86,4 +94,4 @@ def delete(request, id):
     post = get_object_or_404(Post, pk=id)
     post.delete()
     messages.success(request, '삭제 완료')
-    return redirect('blog:list')
+    return redirect('blog:list', id=post.menu)
