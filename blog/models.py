@@ -18,19 +18,17 @@ class Menu(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    """
-    조회수
-    썸네일
-    추천수
-    댓글수
-    글쓴이
-    작성일
-    작성ip
-    수정일
-    수정ip
-    공개,비공개
-    """
+    views = models.IntegerField()
+    visible = models.BooleanField()
     menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, null=True)
+    insert_date = models.DateTimeField()
+    insert_ip = models.CharField(max_length=40)
+    update_date = models.DateTimeField(blank=True, null=True)
+    update_ip = models.CharField(max_length=40, blank=True, null=True)
+    """
+    썸네일
+    댓글수
+    """
     class Meta:
         managed = True
         db_table = 't_post'
