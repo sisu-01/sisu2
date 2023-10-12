@@ -11,4 +11,27 @@
 {% else %}
     <div>엄서용</div>
 {% endif %}
+    <div class="pagination">
+    {% if slicing >= 1 %}
+        <a href="?page=1"><button>맨처음</button></a>
+        <a href="?page={{ slicing }}"><button>&lt;</button></a>
+    {% else %}
+        맨처음
+        &lt;
+    {% endif %}
+    {% for page in paging %}
+        {% if postList.number == page %}
+        <button><h1><b>{{page}}</b></h1></button>
+        {% else %}
+        <a href="?page={{page}}"><button>{{page}}</button></a>
+        {% endif %}
+    {% endfor %}
+    {% if slicing|add:pagebtn|add:1 <= postList.paginator.num_pages %}
+        <a href="?page={{ slicing|add:pagebtn|add:1 }}"><button>&gt;</button></a>
+        <a href="?page={{ postList.paginator.num_pages }}"><button>마지막</button></a>
+    {% else %}
+        &gt;
+        마지막
+    {% endif %}
+    </div>
 </div>

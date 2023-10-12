@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from django.conf import settings
 from common.utils import get_client_ip, Response
 from .models import BlogTree, BlogPost
@@ -13,6 +14,8 @@ from datetime import datetime
 import os, json
 
 base_template = 'blog/blog_base.html'
+paginate_by = 1
+pagebtn = 3
 
 def index(request):
     context = {
@@ -25,6 +28,8 @@ def index(request):
     return render(request, base_template, context)
 
 def listz(request, id):
+    page = int(request.GET.get('page',1))
+
     if id == 'all':
         tree_title = '전체보기'
         postList = BlogPost.objects.all().order_by('-insert_date')
@@ -36,8 +41,17 @@ def listz(request, id):
         tree_title = trees.get(pk=id).title
         tree_list = find_child(trees, int(id))
         postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
+    p = Paginator(postList, paginate_by)
+    page_obj = p.get_page(page)
+
+    slicing = (page-1)//pagebtn*pagebtn
+    paging = [*p.page_range]
+
     context = {
-        'postList': postList,
+        'postList': page_obj,
+        'paging': paging[slicing:slicing+pagebtn],
+        'slicing': slicing,
+        'pagebtn': pagebtn,
         'tree_title': tree_title,
         'template': 'blog/blog_list.html',
     }
