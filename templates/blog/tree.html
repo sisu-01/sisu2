@@ -1,6 +1,6 @@
 <li>
     {% if node.child %}
-    {{node.title}}📂
+    <a href="{% url 'blog:list' node.id %}">{{node.title}}📂</a>
         <ul>
         {% for child_node in node.child %}
             {% with node=child_node recursion_template='blog/tree.html' %}

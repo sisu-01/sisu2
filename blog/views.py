@@ -25,12 +25,22 @@ def index(request):
     return render(request, base_template, context)
 
 def listz(request, id):
-    postList = BlogPost.objects.filter(tree=id).order_by('-insert_date')
+    trees = BlogTree.objects.all().order_by('seq')
+    tree_list = find_child(trees, id)
+    postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
     context = {
         'postList': postList,
         'template': 'blog/blog_list.html',
     }
     return render(request, base_template, context)
+
+def find_child(menus, parent):
+    id_list = []
+    id_list.append(parent)
+    for i in menus:
+        if i.parent_id == parent:
+            id_list.extend(find_child(menus,i.id))
+    return id_list
 
 def post(request, id):
     post = BlogPost.objects.get(id=id)
