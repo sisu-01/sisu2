@@ -5,8 +5,9 @@
 <div>
 {% if postList %}
 {% for post in postList %}
-    <div><a href="{% url 'blog:post' post.id %}">{{post.title}}<br/>{{post.insert_date}}</a></div>
+    <div><hr/><a href="{% url 'blog:post' post.id %}">{{post.title}}<br/>{{post.insert_date}}</a></div>
 {% endfor %}
+    <hr/>
 {% else %}
     <div>엄서용</div>
 {% endif %}
