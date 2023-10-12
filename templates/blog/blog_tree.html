@@ -1,0 +1,179 @@
+{% load blog_filter %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% include 'layout/meta.html' %}
+</head>
+<body>
+    <a href="{% url 'blog:index' %}">크크</a>
+    <div id="treeDiv">
+    </div>
+    <button type="button" onClick="tree_insert()">추가</button>
+    <hr/>
+    <form id="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="id"/>
+        <div>title: <input type="text" name="title"/></div>
+        <div>seq: <input type="number" name="seq"/></div>
+        <div>parent: <input type="text" id="parent" name="parent"/></div>
+        <button type="submit">submit</button>
+    </form>
+    <hr/>
+    {% if messages %}
+        {% include 'layout/message.html' %}
+    {% endif %}
+    <script>
+        function getTree(){
+            const url = "{% url 'blog:get_tree' %}"
+            const options = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json",
+                },
+            }
+            fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    let zz = make_tree(data.data);
+                    document.getElementById("treeDiv").innerHTML = zz;
+                    const id_buttons = document.querySelectorAll(".id_button");
+                    id_buttons.forEach(button => {
+                        button.addEventListener("click", () => {
+                            document.getElementById("parent").value = button.value;
+                        });
+                    });
+                    const delete_buttons = document.querySelectorAll(".delete_button");
+                    delete_buttons.forEach(button => {
+                        button.addEventListener("click", () => tree_delete(button.value));
+                    });
+                    const select_buttons = document.querySelectorAll(".select_button");
+                    select_buttons.forEach(button => {
+                        button.addEventListener("click", () => tree_select(button.value));
+                    });
+                }else{
+                    let mess = "";
+                    for(key in data.data){
+                        mess += key+": "+data.data[key]+"\n";
+                    }
+                    alert(data.message+"\n"+mess);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        }
+        function make_tree(menus, parent=null, depth=0){
+            let temp = ``;
+            menus.forEach(menu => {
+                if(menu.parent_id == parent){
+                    temp +=
+                    `<div style="margin-left:${depth*20}px;">
+                        <span><b>${menu.title}</b></span>
+                        <span>seq: ${menu.seq}</span>
+                        <button class="id_button" value="${menu.id}">id: ${menu.id}</button>
+                        <button class="select_button" value="${menu.id}">${menu.title} 선택(수정)</button>
+                        <button class="delete_button" value="${menu.id}">${menu.title} 삭제</button>
+                    </div>`;
+                    temp += make_tree(menus, menu.id, depth+1);
+                }
+            })
+            return temp;
+        }
+        getTree();
+
+        const form = document.getElementById("form");
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = "{% url 'blog:tree_create'%}";
+            const payload = new FormData(form);
+            const options = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{csrf_token}}",
+                },
+                body: payload,
+            }
+            fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    getTree();
+                    alert(data.message);
+                }else{
+                    let mess = "";
+                    for(key in data.data){
+                        mess += key+": "+data.data[key]+"\n";
+                    }
+                    alert(data.message+"\n"+mess);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        });
+
+        function tree_select(id) {
+            const url = "{% url 'blog:tree_select' %}";
+            const options = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: id,
+                }),
+            }
+            fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    console.log(data.data);
+                    for(key in data.data){
+                        const el = document.getElementsByName(key)[0];
+                        if(el !== undefined){
+                            el.value = data.data[key];
+                        }
+                    }
+                }else{
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        }
+
+        function tree_insert(){
+            //팝업창 등장~
+            document.getElementsByName("id")[0].value = "";
+        }
+
+        function tree_delete(id){
+            console.log(id)
+            const url = "{% url 'blog:tree_delete' %}";
+            const options = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: id,
+                }),
+            }
+            fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    getTree();
+                    alert(data.message);
+                }else{
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.log("error:", error));   
+        }
+    </script>
+</body>
+</html>

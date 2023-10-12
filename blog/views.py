@@ -5,11 +5,12 @@ from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
 from django.conf import settings
-from common.utils import get_client_ip
-from .models import Post
-from .forms import PostForm
-import os
+from common.utils import get_client_ip, Response
+from .models import BlogTree, BlogPost
+from .forms import PostForm, TreeForm
+from dataclasses import asdict
 from datetime import datetime
+import os, json
 
 base_template = 'blog/blog_base.html'
 
@@ -23,8 +24,8 @@ def index(request):
     }
     return render(request, base_template, context)
 
-def list(request, id):
-    postList = Post.objects.filter(menu=id).order_by('-insert_date')
+def listz(request, id):
+    postList = BlogPost.objects.filter(tree=id).order_by('-insert_date')
     context = {
         'postList': postList,
         'template': 'blog/blog_list.html',
@@ -32,7 +33,7 @@ def list(request, id):
     return render(request, base_template, context)
 
 def post(request, id):
-    post = Post.objects.get(id=id)
+    post = BlogPost.objects.get(id=id)
     context = {
         'post': post,
         'template': 'blog/blog_post.html',
@@ -72,7 +73,7 @@ def upload(request):
 
 @login_required(login_url='common:login')
 def update(request, id):
-    post = get_object_or_404(Post, pk=id)
+    post = get_object_or_404(BlogPost, pk=id)
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -81,7 +82,7 @@ def update(request, id):
             post.update_ip = get_client_ip(request)
             post.save()
             messages.success(request, '수정 완료')
-            return redirect('blog:list', id=post.menu)
+            return redirect('blog:list', id=post.tree)
     else:
         form = PostForm(instance=post)
     context = {
@@ -91,7 +92,61 @@ def update(request, id):
 
 @login_required(login_url='common:login')
 def delete(request, id):
-    post = get_object_or_404(Post, pk=id)
+    post = get_object_or_404(BlogPost, pk=id)
     post.delete()
     messages.success(request, '삭제 완료')
-    return redirect('blog:list', id=post.menu)
+    return redirect('blog:list', id=post.tree)
+
+@login_required(login_url='common:login')
+def tree(request):
+    context = {}
+    return render(request, 'blog/blog_tree.html', context)
+
+@require_http_methods("POST")
+def get_tree(request):
+    try:
+        menus = list(BlogTree.objects.all().order_by('seq').values())
+        res = Response(True,'',menus)
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def create_tree(request):
+    try:
+        id = request.POST.get('id')
+        if id == '':
+            form = TreeForm(request.POST)
+        else:
+            instance = BlogTree.objects.get(pk=id)
+            form = TreeForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            res = Response(True,'등록 성공',None)
+        else:
+            res = Response(False,'The form is invalid.',None)
+    except Exception as e:
+        res = Response(False,str(e),None)
+    return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def select_tree(request):
+    try:
+        param = json.loads(request.body)
+        movie = BlogTree.objects.filter(pk=param['id']).values('id','title','seq','parent')[0]
+        res = Response(True,'',movie)
+    except Exception as e:
+        res = Response(False,str(e),None)
+    return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def delete_tree(request):
+    try:
+        param = json.loads(request.body)
+        print(param)
+        tree = get_object_or_404(BlogTree, pk=param['id'])
+        tree.delete()
+        res = Response(True,'삭제 성공',None)
+    except Exception as e:
+        res = Response(False,str(e),None)
+    return JsonResponse(asdict(res))

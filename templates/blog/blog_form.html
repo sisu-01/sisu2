@@ -33,7 +33,7 @@
             공개: <input type="checkbox" name="visible" {% if form.visible.value|default_if_none:True %}checked{% endif %}/>
         </div>
         <div>
-            menu: <input type="text" name="menu" required="" value="{{form.menu.value|default_if_none:'없다'}}"/>
+            tree: <input type="text" name="tree" required="" value="{{form.tre.value|default_if_none:'없다'}}"/>
         </div>
         <div>
             content: <textarea name="content" id="editor">{{form.content.value|default_if_none:'없다'}}</textarea>
