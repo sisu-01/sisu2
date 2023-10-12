@@ -25,10 +25,17 @@ def index(request):
     return render(request, base_template, context)
 
 def listz(request, id):
-    trees = BlogTree.objects.all().order_by('seq')
-    tree_title = trees.get(pk=id).title
-    tree_list = find_child(trees, id)
-    postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
+    if id == 'all':
+        tree_title = '전체보기'
+        postList = BlogPost.objects.all().order_by('-insert_date')
+    elif id == 'null':
+        tree_title = '고아들'
+        postList = BlogPost.objects.filter(tree=None).order_by('-insert_date')
+    else:
+        trees = BlogTree.objects.all().order_by('seq')
+        tree_title = trees.get(pk=id).title
+        tree_list = find_child(trees, int(id))
+        postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
     context = {
         'postList': postList,
         'tree_title': tree_title,
