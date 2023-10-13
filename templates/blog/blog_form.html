@@ -1,4 +1,5 @@
 {% load static %}
+{% load blog_filter %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,7 +34,12 @@
             공개: <input type="checkbox" name="visible" {% if form.visible.value|default_if_none:True %}checked{% endif %}/>
         </div>
         <div>
-            tree: <input type="text" name="tree" required="" value="{{form.tre.value|default_if_none:'없다'}}"/>
+            tree: <select name="tree" required="">
+                {% getTree2 as menus %}
+                {% with parent=None depth=0 d='└' select=form.tree.value %}
+                {% include 'blog/blog_form_tree.html' %}
+                {% endwith %}
+            </select>
         </div>
         <div>
             content: <textarea name="content" id="editor">{{form.content.value|default_if_none:'없다'}}</textarea>

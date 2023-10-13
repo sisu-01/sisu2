@@ -1,0 +1,10 @@
+{% for menu in menus %}
+    {% if menu.parent_id == parent %}
+        <option style="" value="{{menu.id}}" {% if menu.id == select %}selected{% endif %}>
+            {{d}}{{menu.id}}:{{menu.title}}:{{depth}}
+        </option>
+        {% with parent=menu.id depth=depth|add:20 d=d|add:'──' %}
+            {% include 'blog/blog_form_tree.html' %}
+        {% endwith %}
+    {% endif %}
+{% endfor %}
