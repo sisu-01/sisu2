@@ -68,14 +68,14 @@
             menus.forEach(menu => {
                 if(menu.parent_id == parent){
                     temp +=
-                    `<div style="margin-left:${depth*20}px;">
+                    `<div style="margin-left:${depth}px;">
                         <span><b>${menu.title}</b></span>
                         <span>seq: ${menu.seq}</span>
                         <button class="id_button" value="${menu.id}">id: ${menu.id}</button>
                         <button class="select_button" value="${menu.id}">${menu.title} 선택(수정)</button>
                         <button class="delete_button" value="${menu.id}">${menu.title} 삭제</button>
                     </div>`;
-                    temp += make_tree(menus, menu.id, depth+1);
+                    temp += make_tree(menus, menu.id, depth+20);
                 }
             })
             return temp;
