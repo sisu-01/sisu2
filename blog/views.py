@@ -87,6 +87,25 @@ def create(request):
     context = {}
     return render(request, 'blog/blog_form.html', context)
 
+@login_required(login_url='common:login')
+def update(request, id):
+    post = get_object_or_404(BlogPost, pk=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.update_date = timezone.now()
+            post.update_ip = get_client_ip(request)
+            post.save()
+            messages.success(request, '수정 완료')
+            return redirect('blog:post', id=post.id)
+    else:
+        form = PostForm(instance=post)
+    context = {
+        'form': form,
+    }
+    return render(request, 'blog/blog_form.html', context)
+
 @require_http_methods("POST")
 def upload(request):
     if request.method == 'POST' and request.FILES['upload']:
@@ -103,25 +122,6 @@ def upload(request):
         return JsonResponse(res)
     else:
         return '실패 ㅋㅋ'
-
-@login_required(login_url='common:login')
-def update(request, id):
-    post = get_object_or_404(BlogPost, pk=id)
-    if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.update_date = timezone.now()
-            post.update_ip = get_client_ip(request)
-            post.save()
-            messages.success(request, '수정 완료')
-            return redirect('blog:list', id=post.tree)
-    else:
-        form = PostForm(instance=post)
-    context = {
-        'form': form,
-    }
-    return render(request, 'blog/blog_form.html', context)
 
 @login_required(login_url='common:login')
 def delete(request, id):
