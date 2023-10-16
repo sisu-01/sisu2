@@ -14,8 +14,8 @@ from datetime import datetime
 import os, json
 
 base_template = 'blog/blog_base.html'
-paginate_by = 1
-pagebtn = 3
+paginate_by = 10
+pagebtn = 5
 
 def index(request):
     context = {
@@ -41,6 +41,10 @@ def listz(request, id):
         tree_title = trees.get(pk=id).title
         tree_list = find_child(trees, int(id))
         postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
+    
+    if not request.user.is_authenticated:
+        postList = postList.filter(visible=1)
+
     p = Paginator(postList, paginate_by)
     page_obj = p.get_page(page)
 
@@ -67,11 +71,17 @@ def find_child(menus, parent):
 
 def post(request, id):
     post = BlogPost.objects.get(id=id)
-    context = {
-        'post': post,
-        'template': 'blog/blog_post.html',
-    }
-    return render(request, base_template, context)
+    if not request.user.is_authenticated and not post.visible:
+        context = {
+            'template': 'blog/blog_forbidden.html',
+        }
+        return render(request, base_template, context)
+    else:
+        context = {
+            'post': post,
+            'template': 'blog/blog_post.html',
+        }
+        return render(request, base_template, context)
 
 @login_required(login_url='common:login')
 def create(request):
