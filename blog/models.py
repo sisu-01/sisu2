@@ -18,7 +18,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     visible = models.BooleanField()
-    tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, null=True)
+    tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
     #related_name?
     #views = models.IntegerField()
     insert_date = models.DateTimeField()
