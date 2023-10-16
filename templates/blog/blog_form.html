@@ -13,6 +13,11 @@
     {% endif%}
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        .ck.ck-editor{
+            max-width: 1000px;
+        }
+    </style>
 </head>
 <body>
     {% if form.errors %}
