@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="{% static 'ckeditor5/content-styles.css' %}" type="text/css">
 <h1>Hello Post!</h1>
 {% if user.is_authenticated %}
-<a href="{% url 'blog:create' %}">create</a>
 <a href="{% url 'blog:update' post.id %}">update</a>
 <a href="{% url 'blog:delete' post.id %}">delete</a>
 공개여부:{{post.visible}}

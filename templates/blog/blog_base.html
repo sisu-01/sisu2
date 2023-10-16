@@ -22,6 +22,11 @@
             <li><a href="{% url 'blog:list' 'null' %}">고아들😢</a></li>
         </ul>
     <hr/>
+    <div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'blog:create' %}">create</a>
+        {% endif %}
+    </div>
     {% include template %}
 </main>
 {% endblock %}
