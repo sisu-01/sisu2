@@ -12,7 +12,6 @@ class Movie(models.Model):
     weekday = models.IntegerField()
     poster  = models.ImageField(upload_to=ImageUpload('poster'))
     thumbnail = models.ImageField(upload_to=ImageUpload('thumbnail'))
-    #user
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
     update_date = models.DateTimeField(blank=True, null=True)
