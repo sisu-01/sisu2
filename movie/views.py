@@ -134,11 +134,11 @@ def insert(request):
                 movie.update_ip = get_client_ip(request)
             movie.save()
             if(oldPoster != str(movie.poster)):
-                if os.path.isfile(settings.MEDIA_ROOT / oldPoster):
-                    os.remove(settings.MEDIA_ROOT / oldPoster)
+                if os.path.isfile(Path(settings.MEDIA_ROOT, oldPoster)):
+                    os.remove(Path(settings.MEDIA_ROOT, oldPoster))
             if(oldTHumb != str(movie.thumbnail)):
-                if os.path.isfile(settings.MEDIA_ROOT / oldTHumb):
-                    os.remove(settings.MEDIA_ROOT / oldTHumb)
+                if os.path.isfile(Path(settings.MEDIA_ROOT, oldTHumb)):
+                    os.remove(Path(settings.MEDIA_ROOT, oldTHumb))
             data = Movie.objects.filter(pk=movie.id).values()[0]
             res = Response(status=True,message='성공',data=data)
         else:
@@ -168,10 +168,10 @@ def delete(request):
     try:
         param = json.loads(request.body)
         movie = get_object_or_404(Movie, pk=param['movie_id'])
-        if os.path.isfile(settings.MEDIA_ROOT / str(movie.poster)):
-            os.remove(settings.MEDIA_ROOT / str(movie.poster))
-        if os.path.isfile(settings.MEDIA_ROOT / str(movie.thumbnail)):
-            os.remove(settings.MEDIA_ROOT / str(movie.thumbnail))
+        if os.path.isfile(Path(settings.MEDIA_ROOT, str(movie.poster))):
+            os.remove(Path(settings.MEDIA_ROOT, str(movie.poster)))
+        if os.path.isfile(Path(settings.MEDIA_ROOT, str(movie.thumbnail))):
+            os.remove(Path(settings.MEDIA_ROOT, str(movie.thumbnail)))
         movie.delete()
         res = Response(status=True,message='삭제 성공',data=None)
     except Exception as e:
