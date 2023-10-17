@@ -17,8 +17,8 @@
         {% include 'movie/movie_form.html' %}
     {% endif %}
     <div id="movie-wrapper">
-    {% if movieList %}
-        {% for movie in movieList %}
+    {% if movie_list %}
+        {% for movie in movie_list %}
         <div id="{{movie.id}}">
             id={{movie.id}}
             <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
@@ -30,7 +30,7 @@
             <div>
                 <a href="{{movie.poster.url}}" target="_blank">원본</a>
                 {% if user.is_authenticated %}
-                <button onClick="getMovieData('{{movie.id}}')">수정</button>
+                <button onClick="getMovie('{{movie.id}}')">수정</button>
                 <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
                 {% endif %}
             </div>
@@ -46,7 +46,7 @@
     }
 
     function callKobisApi(){
-        const URL = "{% url 'movie:search' %}";
+        const URL = "{% url 'movie:kobis' %}";
         const OPTIONS = {
             method: "POST",
             mode: "same-origin",
@@ -54,7 +54,7 @@
                 "X-CSRFToken": "{{ csrf_token }}",
             },
             body: JSON.stringify({
-                movieNm: document.getElementById("movie-name").value,
+                movieName: document.getElementById("movie-name").value,
             }),
         }
         fetch(URL, OPTIONS)
@@ -115,7 +115,7 @@
                 return false;
             }
         }
-        const URL = "{% url 'movie:insert'%}";
+        const URL = "{% url 'movie:save'%}";
         const OPTIONS = {
             method: "POST",
             mode: "same-origin",
@@ -141,7 +141,7 @@
                     <div>${DATE}(${WEEKDAY[MOVIE.weekday]})</div>
                     <div>
                         <a href="{% get_media_prefix %}${MOVIE.poster}" target="_blank">원본</a>
-                        <button onClick="getMovieData('${MOVIE.id}')">수정</button>
+                        <button onClick="getMovie('${MOVIE.id}')">수정</button>
                         <button onClick="deleteMovie('${MOVIE.id}')">삭제</button>
                     </div>
                 </div>
@@ -164,8 +164,8 @@
         .catch((error) => console.log("error:", error));
     }
 
-    function getMovieData(id) {
-        const URL = "{% url 'movie:select' %}";
+    function getMovie(id) {
+        const URL = "{% url 'movie:get' %}";
         const OPTIONS = {
             method: "POST",
             mode: "same-origin",
