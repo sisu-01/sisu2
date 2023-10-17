@@ -4,7 +4,7 @@
 
 {% block meta %}
 <script>
-    console.log('movie');
+    console.log('movie.html');
 </script>
 {% endblock %}
 
@@ -13,10 +13,10 @@
     <h1>Hello Movie!</h1>
     {% include 'movie/movie_toc.html' %}
     {% if user.is_authenticated %}
-        <button type="button" onClick="insert()">추가</button>
+        <button type="button" onClick="setMovieForm()">추가</button>
         {% include 'movie/movie_form.html' %}
     {% endif %}
-    <div id="movies">
+    <div id="movie-wrapper">
     {% if movieList %}
         {% for movie in movieList %}
         <div id="{{movie.id}}">
@@ -30,8 +30,8 @@
             <div>
                 <a href="{{movie.poster.url}}" target="_blank">원본</a>
                 {% if user.is_authenticated %}
-                <button onClick="select('{{movie.id}}')">수정</button>
-                <button onClick="delete_movie('{{movie.id}}')">삭제</button>
+                <button onClick="getMovieData('{{movie.id}}')">수정</button>
+                <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
                 {% endif %}
             </div>
         </div>
@@ -41,97 +41,116 @@
 </main>
 <script>
     {% if user.is_authenticated %}
-    function insert(){
+    function setMovieForm(){
         document.getElementsByName("id")[0].value = "";
     }
-    function search_movie(){
-        const url = "{% url 'movie:search'%}";
-        const options = {
+
+    function callKobisApi(){
+        const URL = "{% url 'movie:search' %}";
+        const OPTIONS = {
             method: "POST",
             mode: "same-origin",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}",
             },
             body: JSON.stringify({
-                movieNm: document.getElementById("movieNm").value,
+                movieNm: document.getElementById("movie-name").value,
             }),
         }
-        fetch(url, options)
+        fetch(URL, OPTIONS)
         .then((response) => response.json())
         .then(data => {
             if(data.status){
-                if(data.data.length > 0){
-                    let movieList = document.getElementById('movieList');
-                    movieList.innerHTML = '';
+                if(0 < data.data.length){
+                    let kobisList = document.getElementById("kobis-list");
+                    kobisList.innerHTML = "";
                     data.data.forEach(el => {
-                        movieList.innerHTML += `
-                            <div id="${el.movieCd}">
-                                <button type="button" onClick="get_name('${el.movieCd}')">선택</button>
-                                <input type="text" value="${el.movieNm}"/>
-                                <input type="text" value="${el.movieNmEn}"/>
+                        kobisList.innerHTML += `
+                            <div id="${el.movieCd}" title="${el.movieNm}" title-en="${el.movieNmEn}">
+                                <button type="button" onClick="selectKobisTitle('${el.movieCd}')">선택</button>
+                                <span>${el.movieNm}</span>
+                                <span>${el.movieNmEn}</span>
                             </div>`
                     });
                 }else{
-                    alert('없어');
+                    alert("없어");
                 }
             }else{
-                alert(data.message)
+                alert(data.message);
             }
         })
         .catch((error) => console.log("error:", error));
     }
-    function get_name(movieCd){
-        const children = document.getElementById(movieCd).children;
-        document.getElementById("{{form.title.id_for_label}}").value = children[1].value?children[1].value:'None';
-        document.getElementById("{{form.title_en.id_for_label}}").value = children[2].value?children[2].value:'None';
+
+    function selectKobisTitle(movieCd){
+        const KOBIS_DATA = document.getElementById(movieCd);
+        const KOBIS_TITLE = KOBIS_DATA.getAttribute("title");
+        const KOBIS_TITLE_EN = KOBIS_DATA.getAttribute("title-en");
+        document.getElementById("title").value = KOBIS_TITLE ? KOBIS_TITLE : "None";
+        document.getElementById("title_en").value = KOBIS_TITLE_EN ? KOBIS_TITLE_EN : "None";
     }
 
-    const form = document.getElementById("form");
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const url = "{% url 'movie:insert'%}";
-        const payload = new FormData(form);
-        if(payload.get("id") === ""){
-            if(payload.get("poster").size == 0 && payload.get("poster").name == ''){
+    function test(input) {
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              document.getElementById("poster-image").src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }else{
+            document.getElementById("poster-image").src = "";
+        }
+    }
+    const MOVIE_FORM = document.getElementById("movie-form");
+    MOVIE_FORM.addEventListener("submit", (e) => {
+        e.preventDefault();//submit 멈춰!
+        createMovie();
+    });
+
+    function createMovie() {
+        const PAYLOAD = new FormData(MOVIE_FORM);
+        if(PAYLOAD.get("id") === ""){//id가 빈칸이면 신규 등록을 의미
+            if(PAYLOAD.get("poster").size === 0 && PAYLOAD.get("poster").name === ""){
                 alert("포스터 업로드 하쇼잉");
                 return false;
             }
         }
-        const options = {
+        const URL = "{% url 'movie:insert'%}";
+        const OPTIONS = {
             method: "POST",
             mode: "same-origin",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}",
             },
-            body: payload,
+            body: PAYLOAD,
         }
-        fetch(url, options)
+        fetch(URL, OPTIONS)
         .then(response => response.json())
         .then(data => {
             if(data.status){
-                const movie = data.data;
-                const date = data.data.date.replaceAll("-",".");
-                const weekday = ["월","화","수","목","금","토","일"];
-                const htmlString = `
-                <div id="${movie.id}">
-                    <img src="{% get_media_prefix %}${movie.thumbnail}" alt="${movie.title}">
-                    <div>${movie.format}</div>
-                    <div>${movie.title}</div>
-                    <div>${movie.title_en}</div>
-                    <div>${movie.brand}&nbsp;${movie.location}</div>
-                    <div>${date}(${weekday[movie.weekday]})</div>
+                const MOVIE = data.data;
+                const DATE = data.data.date.replaceAll("-",".");
+                const WEEKDAY = ["월","화","수","목","금","토","일"];
+                const MOVIE_HTML = `
+                <div id="${MOVIE.id}">
+                    <img src="{% get_media_prefix %}${MOVIE.thumbnail}" alt="${MOVIE.title}">
+                    <div>${MOVIE.format}</div>
+                    <div>${MOVIE.title}</div>
+                    <div>${MOVIE.title_en}</div>
+                    <div>${MOVIE.brand}&nbsp;${MOVIE.location}</div>
+                    <div>${DATE}(${WEEKDAY[MOVIE.weekday]})</div>
                     <div>
-                        <a href="{% get_media_prefix %}${movie.poster}" target="_blank">원본</a>
-                        <button onClick="select('${movie.id}')">수정</button>
-                        <button onClick="delete_movie('${movie.id}')">삭제</button>
+                        <a href="{% get_media_prefix %}${MOVIE.poster}" target="_blank">원본</a>
+                        <button onClick="getMovieData('${MOVIE.id}')">수정</button>
+                        <button onClick="deleteMovie('${MOVIE.id}')">삭제</button>
                     </div>
                 </div>
                 `;
-                if(payload.get("id") === ""){
-                    document.getElementById('movies').insertAdjacentHTML('afterbegin',htmlString);
-                }else{
-                    document.getElementById(movie.id).insertAdjacentHTML('afterend',htmlString);
-                    document.getElementById(movie.id).remove();
+                if(PAYLOAD.get("id") === ""){//신규등록이면 맨 앞에 두기
+                    document.getElementById("movie-wrapper").insertAdjacentHTML("afterbegin", MOVIE_HTML);
+                }else{//기존것은 원래의 것과 교체
+                    document.getElementById(MOVIE.id).insertAdjacentHTML("afterend", MOVIE_HTML);
+                    document.getElementById(MOVIE.id).remove();
                 }
                 alert(data.message);
             }else{
@@ -143,11 +162,11 @@
             }
         })
         .catch((error) => console.log("error:", error));
-    });
+    }
 
-    function select(id) {
-        const url = "{% url 'movie:select' %}";
-        const options = {
+    function getMovieData(id) {
+        const URL = "{% url 'movie:select' %}";
+        const OPTIONS = {
             method: "POST",
             mode: "same-origin",
             headers: {
@@ -155,27 +174,28 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                movie_id: id,
+                id: id,
             }),
         }
-        fetch(url, options)
+        fetch(URL, OPTIONS)
         .then(response => response.json())
         .then(data => {
             if(data.status){
                 for(key in data.data){
-                    const el = document.getElementsByName(key)[0];
-                    if(el !== undefined){
-                        if(el.type =='radio'){
-                            const radio = document.querySelectorAll("input[name='"+key+"']");
-                            radio.forEach(r => {
+                    //수정 언젠가 getElementById로 바꾸고 말거야
+                    const INPUT = document.getElementsByName(key)[0];
+                    if(INPUT !== undefined){
+                        if(INPUT.type === "radio"){
+                            const RADIO = document.querySelectorAll("input[name='"+key+"']");
+                            RADIO.forEach(r => {
                                 if (r.value === data.data[key]) {
                                     r.checked = true;
                                 }
                             });
-                        }else if(el.type == "file"){
-                            //afterend
+                        }else if(INPUT.type == "file"){
+                            document.getElementById("poster-image").src = "/media/"+data.data[key];
                         }else{
-                            el.value = data.data[key];
+                            INPUT.value = data.data[key];
                         }
                     }
                 }
@@ -185,9 +205,10 @@
         })
         .catch((error) => console.log("error:", error));
     }
-    function delete_movie(id) {
-        const url = "{% url 'movie:delete' %}";
-        const options = {
+
+    function deleteMovie(id) {
+        const URL = "{% url 'movie:delete' %}";
+        const OPTIONS = {
             method: "POST",
             mode: "same-origin",
             headers: {
@@ -195,10 +216,10 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                movie_id: id,
+                id: id,
             }),
         }
-        fetch(url, options)
+        fetch(URL, OPTIONS)
         .then(response => response.json())
         .then(data => {
             if(data.status){
@@ -211,6 +232,6 @@
         .catch((error) => console.log("error:", error));
     }
     {% endif %}
-    //현이에게 js 관리 어케 하는지 물어보기
+    //수정 현이에게 js 관리 어케 하는지 물어보기
 </script>
 {% endblock %}

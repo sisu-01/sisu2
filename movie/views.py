@@ -154,7 +154,7 @@ def select(request):
     """
     try:
         param = json.loads(request.body)
-        movie = Movie.objects.filter(pk=param['movie_id']).values()[0]
+        movie = Movie.objects.filter(pk=param['id']).values()[0]
         res = Response(status=True,message='성공',data=movie)
     except Exception as e:
         res = Response(status=False,message=str(e),data=None)
@@ -167,7 +167,7 @@ def delete(request):
     """
     try:
         param = json.loads(request.body)
-        movie = get_object_or_404(Movie, pk=param['movie_id'])
+        movie = get_object_or_404(Movie, pk=param['id'])
         if os.path.isfile(Path(settings.MEDIA_ROOT, str(movie.poster))):
             os.remove(Path(settings.MEDIA_ROOT, str(movie.poster)))
         if os.path.isfile(Path(settings.MEDIA_ROOT, str(movie.thumbnail))):

@@ -1,54 +1,57 @@
 <hr/>
 <div>
-    <input type="text" id="movieNm" value="오펜하이머"/>
-    <button onClick="search_movie()">검색</button>
+    <input type="text" id="movie-name" value="오펜하이머"/>
+    <button onClick="callKobisApi()">검색</button>
 </div>
-<div id="movieList"></div>
-<form id="form" enctype="multipart/form-data">
+<div id="kobis-list"></div>
+<form id="movie-form" enctype="multipart/form-data">
     <input type="hidden" name="id">
         <div>
-            <label for="id_title">제목:</label>
-            <input type="text" name="title" maxlength="100" required="" id="id_title">
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" maxlength="100" required="">
         </div>
         <div>
-            <label for="id_title_en">영제:</label>
-            <input type="text" name="title_en" maxlength="100" required="" id="id_title_en">
+            <label for="title_en">영제:</label>
+            <input type="text" id="title_en" name="title_en" maxlength="100" required="">
         </div>
         <div>
             <label>브랜드:</label>
             <div id="id_brand" class="special">
                 <div>
-                    <label for="id_brand_0"><input type="radio" name="brand" value="CGV" class="special" maxlength="20" required="" id="id_brand_0">CGV</label>
+                    <label for="brand_0"><input type="radio" id="brand_0" name="brand" value="CGV" required="">CGV</label>
                 </div>
                 <div>
-                    <label for="id_brand_1"><input type="radio" name="brand" value="롯데시네마" class="special" maxlength="20" required="" id="id_brand_1">롯데시네마</label>
+                    <label for="brand_1"><input type="radio" id="brand_1" name="brand" value="롯데시네마" required="">롯데시네마</label>
                 </div>
                 <div>
-                    <label for="id_brand_2"><input type="radio" name="brand" value="메가박스" class="special" maxlength="20" required="" id="id_brand_2">메가박스</label>
+                    <label for="brand_2"><input type="radio" id="brand_2" name="brand" value="메가박스" required="">메가박스</label>
                 </div>
                 <div>
-                    <label for="id_brand_3"><input type="radio" name="brand" value="기타" class="special" maxlength="20" required="" id="id_brand_3">기타</label>
+                    <label for="brand_3"><input type="radio" id="brand_3" name="brand" value="기타" required="">기타</label>
                 </div>
                 <div>
-                    <label for="id_brand_4"><input type="radio" name="brand" value="VOD" class="special" maxlength="20" required="" id="id_brand_4">VOD</label>
+                    <label for="brand_4"><input type="radio" id="brand_4" name="brand" value="VOD" required="">VOD</label>
                 </div>
             </div>   
         </div>
         <div>
-            <label for="id_location">장소:</label>
-            <input type="text" name="location" maxlength="20" required="" id="id_location">
+            <label for="location">장소:</label>
+            <input type="text" id="location" name="location" maxlength="20" required="">
         </div>
         <div>    
-            <label for="id_format">포맷:</label>
-            <input type="text" name="format" maxlength="20" required="" id="id_format">
+            <label for="format">포맷:</label>
+            <input type="text" id="format" name="format" maxlength="20" required="">
         </div>
         <div>
-            <label for="id_date">날?짜:</label>
-            <input type="date" name="date" required="" id="id_date">
+            <label for="date">날?짜:</label>
+            <input type="date" id="date" name="date" required="">
         </div>
         <div>
-            <label for="id_poster">포스터:</label>
-            <input type="file" name="poster" id="id_poster">
+            <label for="poster">포스터:</label>
+            <input type="file" id="poster" name="poster" onchange="test(this)">
+        </div>
+        <div>
+            <img id="poster-image" src="">
         </div>
     <button type="submit">제출</button>
 </form>
