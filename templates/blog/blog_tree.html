@@ -6,11 +6,11 @@
 </head>
 <body>
     <a href="{% url 'blog:index' %}">크크</a>
-    <div id="treeDiv">
+    <div id="tree-wrapper">
     </div>
-    <button type="button" onClick="tree_insert()">추가</button>
+    <button type="button" onClick="insertTree()">추가</button>
     <hr/>
-    <form id="form" enctype="multipart/form-data">
+    <form id="tree-form" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="id"/>
         <div>title: <input type="text" name="title"/></div>
@@ -24,8 +24,8 @@
     {% endif %}
     <script>
         function getTree(){
-            const url = "{% url 'blog:get_tree' %}"
-            const options = {
+            const URL = "{% url 'blog:get_tree' %}"
+            const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
                 headers: {
@@ -33,25 +33,30 @@
                     "Content-Type": "application/json",
                 },
             }
-            fetch(url, options)
+            fetch(URL, OPTIONS)
             .then(response => response.json())
             .then(data => {
                 if(data.status){
-                    let zz = make_tree(data.data);
-                    document.getElementById("treeDiv").innerHTML = zz;
-                    const id_buttons = document.querySelectorAll(".id_button");
-                    id_buttons.forEach(button => {
-                        button.addEventListener("click", () => {
-                            document.getElementById("parent").value = button.value;
+                    document.getElementById("tree-wrapper").innerHTML = makeTree(data.data);
+
+                    //생성된 부모 id 선택 버튼들에 id 할당.
+                    const ID_BUTTONS = document.querySelectorAll(".id-button");
+                    ID_BUTTONS.forEach(btn => {
+                        btn.addEventListener("click", () => {
+                            document.getElementById("parent").value = btn.getAttribute("menu-id");
                         });
                     });
-                    const delete_buttons = document.querySelectorAll(".delete_button");
-                    delete_buttons.forEach(button => {
-                        button.addEventListener("click", () => tree_delete(button.value));
+
+                    //생성된 트리 삭제 버튼들에 함수 할당.
+                    const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+                    DELETE_BUTTONS.forEach(btn => {
+                        btn.addEventListener("click", () => deleteTree(btn.value));
                     });
-                    const select_buttons = document.querySelectorAll(".select_button");
-                    select_buttons.forEach(button => {
-                        button.addEventListener("click", () => tree_select(button.value));
+
+                    //생성된 트리 선택 버튼들에 함수 할당.
+                    const SELECT_BUTTONS = document.querySelectorAll(".select-button");
+                    SELECT_BUTTONS.forEach(btn => {
+                        btn.addEventListener("click", () => selectTree(btn.value));
                     });
                 }else{
                     let mess = "";
@@ -63,31 +68,37 @@
             })
             .catch((error) => console.log("error:", error));
         }
-        function make_tree(menus, parent=null, depth=0){
-            let temp = ``;
-            menus.forEach(menu => {
-                if(menu.parent_id == parent){
-                    temp +=
+
+        function makeTree(MENUS, parent=null, depth=0){
+            let tree = ``;
+            MENUS.forEach(menu => {
+                if(menu.parent_id === parent){
+                    tree +=
                     `<div style="margin-left:${depth}px;">
                         <span><b>${menu.title}</b></span>
                         <span>seq: ${menu.seq}</span>
-                        <button class="id_button" value="${menu.id}">id: ${menu.id}</button>
-                        <button class="select_button" value="${menu.id}">${menu.title} 선택(수정)</button>
-                        <button class="delete_button" value="${menu.id}">${menu.title} 삭제</button>
+                        <button class="id-button" menu-id="${menu.id}">id: ${menu.id}</button>
+                        <button class="select-button" value="${menu.id}">${menu.title} 선택(수정)</button>
+                        <button class="delete-button" value="${menu.id}">${menu.title} 삭제</button>
                     </div>`;
-                    temp += make_tree(menus, menu.id, depth+20);
+                    tree += makeTree(MENUS, menu.id, depth+20);
                 }
             })
-            return temp;
+            return tree;
         }
+
         getTree();
 
-        const form = document.getElementById("form");
-        form.addEventListener('submit', (e) => {
+        const TREE_FORM = document.getElementById("tree-form");
+        TREE_FORM.addEventListener("submit", (e) => {
             e.preventDefault();
-            const url = "{% url 'blog:tree_create'%}";
-            const payload = new FormData(form);
-            const options = {
+            saveTree();
+        });
+
+        function saveTree() {
+            const payload = new FormData(TREE_FORM);
+            const URL = "{% url 'blog:tree_create'%}";
+            const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
                 headers: {
@@ -95,7 +106,7 @@
                 },
                 body: payload,
             }
-            fetch(url, options)
+            fetch(URL, OPTIONS)
             .then(response => response.json())
             .then(data => {
                 if(data.status){
@@ -110,11 +121,11 @@
                 }
             })
             .catch((error) => console.log("error:", error));
-        });
+        }
 
-        function tree_select(id) {
-            const url = "{% url 'blog:tree_select' %}";
-            const options = {
+        function selectTree(id) {
+            const URL = "{% url 'blog:tree_select' %}";
+            const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
                 headers: {
@@ -125,11 +136,10 @@
                     id: id,
                 }),
             }
-            fetch(url, options)
+            fetch(URL, OPTIONS)
             .then(response => response.json())
             .then(data => {
                 if(data.status){
-                    console.log(data.data);
                     for(key in data.data){
                         const el = document.getElementsByName(key)[0];
                         if(el !== undefined){
@@ -143,15 +153,14 @@
             .catch((error) => console.log("error:", error));
         }
 
-        function tree_insert(){
-            //팝업창 등장~
+        function insertTree(){
+            //수정 팝업창 등장~
             document.getElementsByName("id")[0].value = "";
         }
 
-        function tree_delete(id){
-            console.log(id)
-            const url = "{% url 'blog:tree_delete' %}";
-            const options = {
+        function deleteTree(id){
+            const URL = "{% url 'blog:tree_delete' %}";
+            const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
                 headers: {
@@ -162,7 +171,7 @@
                     id: id,
                 }),
             }
-            fetch(url, options)
+            fetch(URL, OPTIONS)
             .then(response => response.json())
             .then(data => {
                 if(data.status){

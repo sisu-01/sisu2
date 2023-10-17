@@ -19,14 +19,14 @@ watchdog.on( 'error', handleSampleError );
 watchdog
 .create( document.querySelector("#editor"), {
 	simpleUpload: {
-		uploadUrl: upload_url,
+		uploadUrl: UPLOAD_URL,
 
 		// Enable the XMLHttpRequest.withCredentials property.
 		withCredentials: true,
 
 		// Headers sent along with the XMLHttpRequest to the upload server.
 		headers: {
-			"X-CSRFToken": csrf_token,
+			"X-CSRFToken": CSRF_TOKEN,
 			Authorization: "Bearer <JSON Web Token>"
 		}
 	}

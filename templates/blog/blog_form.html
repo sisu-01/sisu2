@@ -6,11 +6,7 @@
     {% include 'layout/meta.html' %}
     <meta data-n-head="ssr" data-hid="title" property="og:title" content="title - 시수">
     <meta data-n-head="ssr" data-hid="description" property="og:description" content="설명">
-    {% if thumbnail %}
-        <meta data-n-head="ssr" data-hid="image" property="og:image" content="{{thumbnail}}">
-    {% else%}
-        <meta data-n-head="ssr" data-hid="image" property="og:image" content="{% static 'images/og.png' %}">
-    {% endif%}
+    <meta data-n-head="ssr" data-hid="image" property="og:image" content="{% static 'images/og.png' %}">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <title>{% block title %}{% endblock %}</title>
     <style>
@@ -33,7 +29,7 @@
     <form method="POST">
         {% csrf_token %}
         <div>
-            title: <input type="text" name="title" required="" value="{{form.title.value|default_if_none:'없다'}}"/>
+            title: <input type="text" name="title" required="" value="{{form.title.value|default_if_none:''}}"/>
         </div>
         <div>
             공개: <input type="checkbox" name="visible" {% if form.visible.value|default_if_none:True %}checked{% endif %}/>
@@ -47,13 +43,13 @@
             </select>
         </div>
         <div>
-            content: <textarea name="content" id="editor">{{form.content.value|default_if_none:'없다'}}</textarea>
+            content: <textarea id="editor" name="content">{{form.content.value|default_if_none:''}}</textarea>
         </div>
         <button type="submit">submit</button>
     </form>
     <script>
-        const upload_url = "{% url 'blog:upload' %}";
-        const csrf_token = "{{ csrf_token }}";
+        const UPLOAD_URL = "{% url 'blog:upload' %}";
+        const CSRF_TOKEN = "{{ csrf_token }}";
     </script>
     <script src="{% static 'ckeditor5/build/ckeditor.js' %}"></script>
 	<script src="{% static 'ckeditor5/script.js' %}"></script>
