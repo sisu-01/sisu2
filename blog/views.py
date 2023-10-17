@@ -15,7 +15,7 @@ import os, json
 
 base_template = 'blog/blog_base.html'
 paginate_by = 10
-pagebtn = 5
+page_btn = 5
 
 def index(request):
     context = {
@@ -27,35 +27,35 @@ def index(request):
     }
     return render(request, base_template, context)
 
-def listz(request, id):
+def get_post_list(request, id):
     page = int(request.GET.get('page',1))
 
     if id == 'all':
         tree_title = '전체보기'
-        postList = BlogPost.objects.all().order_by('-insert_date')
+        post_list = BlogPost.objects.all().order_by('-insert_date')
     elif id == 'null':
         tree_title = '고아들'
-        postList = BlogPost.objects.filter(tree=None).order_by('-insert_date')
+        post_list = BlogPost.objects.filter(tree=None).order_by('-insert_date')
     else:
         trees = BlogTree.objects.all().order_by('seq')
         tree_title = trees.get(pk=id).title
         tree_list = find_child(trees, int(id))
-        postList = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
+        post_list = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
     
     if not request.user.is_authenticated:
-        postList = postList.filter(visible=1)
+        post_list = post_list.filter(visible=1)
 
-    p = Paginator(postList, paginate_by)
+    p = Paginator(post_list, paginate_by)
     page_obj = p.get_page(page)
 
-    slicing = (page-1)//pagebtn*pagebtn
+    slicing = (page-1)//page_btn*page_btn
     paging = [*p.page_range]
 
     context = {
-        'postList': page_obj,
-        'paging': paging[slicing:slicing+pagebtn],
+        'post_list': page_obj,
+        'paging': paging[slicing:slicing+page_btn],
         'slicing': slicing,
-        'pagebtn': pagebtn,
+        'page_btn': page_btn,
         'tree_title': tree_title,
         'template': 'blog/blog_list.html',
     }
@@ -69,7 +69,7 @@ def find_child(menus, parent):
             id_list.extend(find_child(menus,i.id))
     return id_list
 
-def post(request, id):
+def get_post(request, id):
     post = BlogPost.objects.get(id=id)
     if not request.user.is_authenticated and not post.visible:
         context = {
@@ -84,7 +84,7 @@ def post(request, id):
         return render(request, base_template, context)
 
 @login_required(login_url='common:login')
-def create(request):
+def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -98,7 +98,7 @@ def create(request):
     return render(request, 'blog/blog_form.html', context)
 
 @login_required(login_url='common:login')
-def update(request, id):
+def update_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
@@ -117,7 +117,7 @@ def update(request, id):
     return render(request, 'blog/blog_form.html', context)
 
 @require_http_methods("POST")
-def upload(request):
+def ckeditor_upload_image(request):
     if request.method == 'POST' and request.FILES['upload']:
         upload_file = request.FILES['upload']
         date_path = datetime.now().strftime("%Y/%m/%d")
@@ -129,12 +129,13 @@ def upload(request):
                 destination.write(chunk)
         relative_path = os.path.relpath(full_path, settings.BASE_DIR)
         res = {"url": '/'+relative_path, "uploaded": "1", "fileName": '구화아악'}
+        #//수정 구와아악 fileName이 뭐하는 건지 파악해 uploaded 랑 ㅇㅋ?
         return JsonResponse(res)
     else:
-        return '실패 ㅋㅋ'
+        return '실패'
 
 @login_required(login_url='common:login')
-def delete(request, id):
+def delete_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     post.delete()
     messages.success(request, '삭제 완료')
@@ -155,7 +156,7 @@ def get_tree(request):
     return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
-def create_tree(request):
+def save_tree(request):
     try:
         id = request.POST.get('id')
         if id == '':
@@ -165,11 +166,11 @@ def create_tree(request):
             form = TreeForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            res = Response(True,'등록 성공',None)
+            res = Response(True, '등록 성공', None)
         else:
-            res = Response(False,'The form is invalid.',None)
+            res = Response(False, 'The form is invalid.', None)
     except Exception as e:
-        res = Response(False,str(e),None)
+        res = Response(False, str(e), None)
     return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
@@ -177,19 +178,18 @@ def select_tree(request):
     try:
         param = json.loads(request.body)
         movie = BlogTree.objects.filter(pk=param['id']).values('id','title','seq','parent')[0]
-        res = Response(True,'',movie)
+        res = Response(True, '', movie)
     except Exception as e:
-        res = Response(False,str(e),None)
+        res = Response(False, str(e), None)
     return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
 def delete_tree(request):
     try:
         param = json.loads(request.body)
-        print(param)
         tree = get_object_or_404(BlogTree, pk=param['id'])
         tree.delete()
-        res = Response(True,'삭제 성공',None)
+        res = Response(True, '삭제 성공', None)
     except Exception as e:
-        res = Response(False,str(e),None)
+        res = Response(False, str(e), None)
     return JsonResponse(asdict(res))

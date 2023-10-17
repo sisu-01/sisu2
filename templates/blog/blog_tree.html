@@ -97,7 +97,7 @@
 
         function saveTree() {
             const payload = new FormData(TREE_FORM);
-            const URL = "{% url 'blog:tree_create'%}";
+            const URL = "{% url 'blog:save_tree'%}";
             const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
@@ -124,7 +124,7 @@
         }
 
         function selectTree(id) {
-            const URL = "{% url 'blog:tree_select' %}";
+            const URL = "{% url 'blog:select_tree' %}";
             const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
@@ -159,7 +159,7 @@
         }
 
         function deleteTree(id){
-            const URL = "{% url 'blog:tree_delete' %}";
+            const URL = "{% url 'blog:delet_tree' %}";
             const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
