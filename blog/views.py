@@ -77,6 +77,8 @@ def get_post(request, id):
         }
         return render(request, base_template, context)
     else:
+        post.view_count += 1
+        post.save()
         context = {
             'post': post,
             'template': 'blog/blog_post.html',
