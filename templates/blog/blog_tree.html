@@ -9,7 +9,7 @@
     <div id="tree-wrapper">
     </div>
     <button type="button" onClick="insertTree()">추가</button>
-    <hr/>
+    <hr>
     <form id="tree-form" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="id"/>
@@ -18,7 +18,7 @@
         <div>parent: <input type="text" id="parent" name="parent"/></div>
         <button type="submit">submit</button>
     </form>
-    <hr/>
+    <hr>
     {% if messages %}
         {% include 'layout/message.html' %}
     {% endif %}
