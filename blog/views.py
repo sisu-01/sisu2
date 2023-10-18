@@ -91,6 +91,7 @@ def create_post(request):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
+            post.thumbnail = check_thumbnail(post.content)
             post.insert_date = timezone.now()
             post.insert_ip = get_client_ip(request)
             post.save()
@@ -106,6 +107,7 @@ def update_post(request, id):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
+            post.thumbnail = check_thumbnail(post.content)
             post.update_date = timezone.now()
             post.update_ip = get_client_ip(request)
             post.save()
@@ -117,6 +119,15 @@ def update_post(request, id):
         'form': form,
     }
     return render(request, 'blog/blog_form.html', context)
+
+def check_thumbnail(content):
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(content, 'html.parser')
+    first_image = soup.find('img')  # 첫 번째 <p> 엘리먼트를 찾음
+    if first_image:
+        return first_image['src']
+    else:
+        return None
 
 @require_http_methods("POST")
 def ckeditor_upload_image(request):

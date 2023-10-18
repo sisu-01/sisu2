@@ -2,7 +2,13 @@
 <div>
 {% if post_list %}
 {% for post in post_list %}
-    <div><hr/><a href="{% url 'blog:get_post' post.id %}">{{post.title}}<br/>{{post.insert_date}}</a></div>
+    <div>
+        <hr/><a href="{% url 'blog:get_post' post.id %}">{{post.title}}<br/>{{post.insert_date}}
+            {% if post.thumbnail %}
+            <img src="{{post.thumbnail}}" alt="썸네일 종범 ㅋ;;;" height="120">
+            {% endif %}
+        </a>
+    </div>
 {% endfor %}
     <hr/>
     <div class="pagination">
