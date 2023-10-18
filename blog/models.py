@@ -19,12 +19,12 @@ class BlogPost(models.Model):
     content = models.TextField()
     thumbnail = models.CharField(max_length=100, null=True)
     is_public = models.BooleanField()
-    tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
-    view_count = models.IntegerField(default=0)
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
     update_date = models.DateTimeField(blank=True, null=True)
     update_ip = models.CharField(max_length=40, blank=True, null=True)
+    tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
+    view_count = models.IntegerField(default=0)
     #//수정 댓글 추가하기
 
     class Meta:
