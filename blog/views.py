@@ -153,7 +153,7 @@ def delete_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     post.delete()
     messages.success(request, '삭제 완료')
-    return redirect('blog:post_list', id=post.tree)
+    return redirect('blog:post_list', id=post.id)
 
 @login_required(login_url='common:login')
 def tree(request):
