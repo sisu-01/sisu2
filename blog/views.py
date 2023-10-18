@@ -93,7 +93,7 @@ def create_post(request):
             post.insert_ip = get_client_ip(request)
             post.save()
             messages.success(request, '등록 완료')
-            return redirect('blog:post', id=post.id)
+            return redirect('blog:get_post', id=post.id)
     context = {}
     return render(request, 'blog/blog_form.html', context)
 
@@ -108,7 +108,7 @@ def update_post(request, id):
             post.update_ip = get_client_ip(request)
             post.save()
             messages.success(request, '수정 완료')
-            return redirect('blog:post', id=post.id)
+            return redirect('blog:get_post', id=post.id)
     else:
         form = PostForm(instance=post)
     context = {
@@ -139,7 +139,7 @@ def delete_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     post.delete()
     messages.success(request, '삭제 완료')
-    return redirect('blog:list', id=post.tree)
+    return redirect('blog:post_list', id=post.tree)
 
 @login_required(login_url='common:login')
 def tree(request):
