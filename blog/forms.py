@@ -11,6 +11,7 @@ class TreeForm(forms.ModelForm):
         model = BlogTree
         fields = ['title','seq','parent']
     
-    def __init__(self, *args, **kwargs):
-        super(TreeForm, self).__init__(*args, **kwargs)
-        self.fields['parent'].required = False
+    # 이거 있으면 model에서 blank=True 안 해도 form_valid required 없앨 수 있음
+    # def __init__(self, *args, **kwargs):
+    #     super(TreeForm, self).__init__(*args, **kwargs)
+    #     self.fields['parent'].required = False

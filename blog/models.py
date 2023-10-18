@@ -3,8 +3,7 @@ from django.db import models
 # Create your models here.
 class BlogTree(models.Model):
     title = models.CharField(max_length=20)
-    parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='tree', null=True)
-    #//수정 parent에 blank=True 추가한 뒤 Form 에 required 제거해
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='tree', null=True, blank=True)
     seq = models.IntegerField()
 
     class Meta:
@@ -22,7 +21,6 @@ class BlogPost(models.Model):
     is_public = models.BooleanField()
     tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
     view_count = models.IntegerField(default=0)
-    #//기본값 0
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
     update_date = models.DateTimeField(blank=True, null=True)
