@@ -19,3 +19,21 @@
     {{post.content}}
     {% endautoescape %}
 </div>
+<div id="comment-wrapper">
+    {% if comment_list %}
+        {% for comment in comment_list %}
+            <div id="{{comment.id}}" class="comment">
+                {{comment.content}}
+            </div>
+            <hr/>
+        {% endfor %}
+    {% endif %}
+</div>
+<hr/>
+<div class="comment_form">
+    이름: <input type="text">
+    비밀번호: <input type="text">
+    캡챠: <input type="text">
+    <button>등록</button>
+</div>
+<hr/>
