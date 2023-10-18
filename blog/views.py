@@ -141,6 +141,7 @@ def ckeditor_upload_image(request):
             for chunk in upload_file.chunks():
                 destination.write(chunk)
         relative_path = os.path.relpath(full_path, settings.BASE_DIR)
+        #//수정 os가 윈도우에서는 /를 \로 바꾸거든? 리눅스에서도 그러는지 보자고.
         res = {"url": '/'+relative_path, "uploaded": "1", "fileName": '구화아악'}
         #//수정 구와아악 fileName이 뭐하는 건지 파악해 uploaded 랑 ㅇㅋ?
         return JsonResponse(res)
