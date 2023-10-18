@@ -38,10 +38,16 @@ def index(request):
         })
         total -= 1
     form = MovieForm()
+    og = {
+        'title': '포토티켓일지도?',
+        'desc': '영화들 ㅋㅋㅋㅋㅋㅋ',
+        'image': movie_list[0].thumbnail,
+    }
     context = {
         'form': form,
         'movie_list': movie_list,
         'toc': toc,
+        'og': og,
     }
     return render(request, 'movie/movie.html', context)
 
