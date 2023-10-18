@@ -9,7 +9,7 @@ from django.conf import settings
 from common.utils import get_client_ip, Response
 from .models import BlogTree, BlogPost
 from .forms import PostForm, TreeForm
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 import os, json
 
@@ -17,13 +17,16 @@ base_template = 'blog/blog_base.html'
 paginate_by = 10
 page_btn = 5
 
+@dataclass
+class OpenGraph():
+    title: str
+    desc: str
+    image: str
+
 def index(request):
     context = {
-        'ogTitle': 'ogTitle이다임마',
-        'ogDescription': 'ogDescriptionzzzzzzzz',
-        'ogImage': None,
-        'title': '제목인뒈용',
         'template': 'blog/blog_index.html',
+        'og': asdict(OpenGraph('블로그', '블로그임둥~ 엌~!', None)),
     }
     return render(request, base_template, context)
 
@@ -58,6 +61,7 @@ def get_post_list(request, id):
         'page_btn': page_btn,
         'tree_title': tree_title,
         'template': 'blog/blog_list.html',
+        'og': asdict(OpenGraph('블로그 목록', '무슨 글을 봐야하지;;', None)),
     }
     return render(request, base_template, context)
 
@@ -74,14 +78,27 @@ def get_post(request, id):
     if not request.user.is_authenticated and not post.is_public:
         context = {
             'template': 'blog/blog_forbidden.html',
+            'og': asdict(OpenGraph('접.근.금.지', '비공개 처리된 글입니다..ㅠ', None)),
         }
         return render(request, base_template, context)
     else:
         post.view_count += 1
         post.save()
+
+        print(post.content[:60])
+        """
+        from django.utils.html import strip_tags
+        
+        print(strip_tags(post.content[:100]))
+        temp = strip_tags(post.content[:100])
+        temp = temp.replace(chr(13),'')
+        temp = temp.replace(chr(10),'')
+        //수정 나중에 os description 확인해보셈
+        """
         context = {
             'post': post,
             'template': 'blog/blog_post.html',
+            'og': asdict(OpenGraph(post.title, post.content[:60], post.thumbnail)),
         }
         return render(request, base_template, context)
 

@@ -5,12 +5,12 @@
 <meta data-n-head="ssr" property="og:type" content="website">
 <meta data-n-head="ssr" property="og:site_name" content="sisu2">
 <meta data-n-head="ssr" data-hid="url" property="og:url" content="{{request.scheme}}://{{request.get_host}}{{request.get_full_path}}">
-<meta data-n-head="ssr" data-hid="title" property="og:title" content="{{ogTitle}} - 시수">
-<meta data-n-head="ssr" data-hid="description" property="og:description" content="{{ogDescription}}">
-{% if ogImage %}
-    <meta data-n-head="ssr" data-hid="image" property="og:image" content="{{ogImage}}">
+<meta data-n-head="ssr" data-hid="title" property="og:title" content="{{og.title}} - 시수">
+<meta data-n-head="ssr" data-hid="description" property="og:description" content="{{og.desc}}">
+{% if og.image %}
+    <meta data-n-head="ssr" data-hid="image" property="og:image" content="{{og.image}}">
 {% else %}
     <meta data-n-head="ssr" data-hid="image" property="og:image" content="{% static 'images/og.png' %}">
 {% endif %}
 <link rel="icon" href="{% static 'images/favicon.ico' %}">
-<title>{{title}}</title>
+<title>{{og.title}}</title>
