@@ -26,9 +26,9 @@
             <a href="?page={{page}}"><button>{{page}}</button></a>
             {% endif %}
         {% endfor %}
-        {% if slicing|add:pagebtn|add:1 <= postList.paginator.num_pages %}
-            <a href="?page={{ slicing|add:pagebtn|add:1 }}"><button>&gt;</button></a>
-            <a href="?page={{ postList.paginator.num_pages }}"><button>마지막</button></a>
+        {% if slicing|add:page_btn|add:1 <= post_list.paginator.num_pages %}
+            <a href="?page={{ slicing|add:page_btn|add:1 }}"><button>&gt;</button></a>
+            <a href="?page={{ post_list.paginator.num_pages }}"><button>마지막</button></a>
         {% else %}
             &gt;
             마지막
