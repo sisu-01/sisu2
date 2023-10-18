@@ -43,7 +43,7 @@ def get_post_list(request, id):
         post_list = BlogPost.objects.filter(tree__in=tree_list).order_by('-insert_date')
     
     if not request.user.is_authenticated:
-        post_list = post_list.filter(visible=1)
+        post_list = post_list.filter(is_public=1)
 
     p = Paginator(post_list, paginate_by)
     page_obj = p.get_page(page)
@@ -71,7 +71,7 @@ def find_child(menus, parent):
 
 def get_post(request, id):
     post = BlogPost.objects.get(id=id)
-    if not request.user.is_authenticated and not post.visible:
+    if not request.user.is_authenticated and not post.is_public:
         context = {
             'template': 'blog/blog_forbidden.html',
         }

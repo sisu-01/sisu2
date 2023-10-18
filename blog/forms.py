@@ -4,7 +4,7 @@ from .models import *
 class PostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = ['title','content','visible','tree']
+        fields = ['title','content','is_public','tree']
 
 class TreeForm(forms.ModelForm):
     class Meta:

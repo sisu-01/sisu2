@@ -32,7 +32,7 @@
             title: <input type="text" name="title" required="" value="{{form.title.value|default_if_none:''}}"/>
         </div>
         <div>
-            공개: <input type="checkbox" name="visible" {% if form.visible.value|default_if_none:True %}checked{% endif %}/>
+            공개: <input type="checkbox" name="is_public" {% if form.is_public.value|default_if_none:True %}checked{% endif %}/>
         </div>
         <div>
             tree: <select name="tree" required="">

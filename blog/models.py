@@ -4,6 +4,7 @@ from django.db import models
 class BlogTree(models.Model):
     title = models.CharField(max_length=20)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='tree', null=True)
+    #//수정 parent에 blank=True 추가한 뒤 Form 에 required 제거해
     seq = models.IntegerField()
 
     class Meta:
@@ -17,18 +18,17 @@ class BlogTree(models.Model):
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    visible = models.BooleanField()
+    thumbnail = models.CharField(max_length=100, null=True)
+    is_public = models.BooleanField()
     tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
-    #related_name?
-    #views = models.IntegerField()
+    view_count = models.IntegerField(default=0)
+    #//기본값 0
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
     update_date = models.DateTimeField(blank=True, null=True)
     update_ip = models.CharField(max_length=40, blank=True, null=True)
-    """
-    썸네일
-    댓글수
-    """
+    #//수정 댓글 추가하기
+
     class Meta:
         managed = True
         db_table = 't_blog_post'

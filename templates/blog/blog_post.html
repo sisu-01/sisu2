@@ -4,10 +4,10 @@
 {% if user.is_authenticated %}
 <a href="{% url 'blog:update_post' post.id %}">update</a>
 <a href="{% url 'blog:delete_post' post.id %}">delete</a>
-공개여부:{{post.visible}}
+공개여부:{{post.is_public}}
 {% endif %}
 <div>
-    {% if post.visible or user.is_authenticated %}
+    {% if post.is_public or user.is_authenticated %}
         {{post.title}}
     {% else %}
         응 비공개
