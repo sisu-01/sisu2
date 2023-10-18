@@ -14,7 +14,7 @@
             &lt;
         {% endif %}
         {% for page in paging %}
-            {% if postList.number == page %}
+            {% if post_list.number == page %}
             <button><h1><b>{{page}}</b></h1></button>
             {% else %}
             <a href="?page={{page}}"><button>{{page}}</button></a>
