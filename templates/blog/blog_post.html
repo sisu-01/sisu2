@@ -30,10 +30,48 @@
     {% endif %}
 </div>
 <hr>
-<div class="comment_form">
-    이름: <input type="text">
-    비밀번호: <input type="text">
-    캡챠: <input type="text">
-    <button>등록</button>
+<div>
+    <form id="comment-form">
+        post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
+        이름: <input type="text" name="nickname" required="">
+        비밀번호: <input type="text" name="password" required="">
+        캡챠: <input type="text" required="">
+        내용: <textarea name="content" cols="30" rows="10"></textarea>
+        <button type="submit">등록</button>
+    </form>
+    <script>
+        const COMMENT_FORM = document.getElementById("comment-form");
+        COMMENT_FORM.addEventListener("submit", (e) => {
+            e.preventDefault();//submit 멈춰!
+            createComment();
+        });
+
+        function createComment() {
+            const PAYLOAD = new FormData(COMMENT_FORM);
+            const URL = "{% url 'blog:create_cmt' %}";
+            const OPTIONS = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: PAYLOAD,
+            }
+            fetch(URL, OPTIONS)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    alert(data.message);
+                }else{
+                    let mess = "";
+                    for(key in data.data){
+                        mess += key+": "+data.data[key]+"\n";
+                    }
+                    alert(data.message+"\n"+mess);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        }
+    </script>
 </div>
 <hr>

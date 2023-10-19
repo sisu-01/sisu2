@@ -34,3 +34,20 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+class BlogComment(models.Model):
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comment')
+    is_authenticated = models.BooleanField()
+    nickname = models.CharField(max_length=10)
+    password = models.CharField(max_length=2, blank=True, null=True)
+    content = models.CharField(max_length=10)
+    insert_date = models.DateTimeField()
+    insert_ip = models.CharField(max_length=40)
+
+    class Meta:
+        managed = True
+        db_table = 't_blog_comment'
+        db_table_comment = '블로그 댓글'
+
+    def __str__(self):
+        return self.post

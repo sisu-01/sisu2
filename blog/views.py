@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.conf import settings
 from common.utils import get_client_ip, Response
-from .models import BlogTree, BlogPost
-from .forms import PostForm, TreeForm
+from .models import BlogTree, BlogPost, BlogComment
+from .forms import TreeForm, PostForm, CommentForm
 from dataclasses import asdict, dataclass
 from datetime import datetime
 import os, json
@@ -171,6 +171,31 @@ def delete_post(request, id):
     post.delete()
     messages.success(request, '삭제 완료')
     return redirect('blog:post_list', id=post.id)
+
+@require_http_methods("POST")
+def get_cmt(request):
+    return 'z'
+
+@require_http_methods("POST")
+def create_cmt(request):
+    try:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            cmt = form.save(commit=False)
+            cmt.is_authenticated = request.user.is_authenticated
+            cmt.insert_date = timezone.now()
+            cmt.insert_ip = get_client_ip(request)
+            cmt.save()
+            res = Response(True, '성공', None)
+        else:
+            res = Response(False, 'The form is invalid.', dict(form.errors))
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def delete_cmt(request):
+    return 'z'
 
 @login_required(login_url='common:login')
 def tree(request):
