@@ -22,22 +22,29 @@
 <div id="comment-wrapper">
     {% if cmt_list %}
         {% for cmt in cmt_list %}
-            <div id="{{cmt.id}}" class="comment">
+            <div class="comment">
                 <span>이름:{{cmt.nickname}}</span>
-                <span>내용:{{cmt.content}}</span>
                 {% if cmt.is_authenticated %}
                 (주인이다!)
                 {% endif %}
+                <br/>
+                <span>내용:{{cmt.content}}</span>
                 {% if user.is_authenticated %}
                 <button class="delete-button" post-id="{{cmt.id}}">수퍼x</button>
                 {% elif not user.is_authenticated and not cmt.is_authenticated %}
-                <button class="delete-button" post-id="{{cmt.id}}">x</button>
+                <button type="button" class="modal-button" modal-id="{{cmt.id}}">모달x</button>
                 {% endif %}
                 
             </div>
             <hr>
         {% endfor %}
     {% endif %}
+</div>
+<div>
+    {% comment %} readOnly {% endcomment %}
+    comment: <input type="text" id="modal-id" required="" value=""><br/>
+    비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
+    <button class="delete-aa" post-id="{{cmt.id}}">삭제</button>
 </div>
 <hr>
 <div>
@@ -60,17 +67,39 @@
 </div>
 <script>
     const postId = {{post.id}};
-
-    const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
-    DELETE_BUTTONS.forEach(btn => {
-        btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
-    });
-
     const COMMENT_FORM = document.getElementById("comment-form");
     COMMENT_FORM.addEventListener("submit", (e) => {
         e.preventDefault();//submit 멈춰!
         createComment();
     });
+    const MODAL_ID = document.getElementById("modal-id");
+
+    document.querySelector(".delete-aa").addEventListener("click", () => {
+        if(!MODAL_ID.value){
+            alert("뭔 댓글을 지워야 하는겨?");
+            return false;
+        }
+        deleteComment(MODAL_ID.value, document.getElementById("modal-password").value)
+    });
+
+    function initButton() {
+        const MODAL_BUTTON = document.querySelectorAll(".modal-button");
+        MODAL_BUTTON.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                //수정 모달 띄워~!3
+                MODAL_ID.value = e.target.getAttribute("modal-id");
+            });
+        });
+    
+        const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+        DELETE_BUTTONS.forEach(btn => {
+            btn.addEventListener("click", () => 
+                deleteComment(btn.getAttribute("post-id"))
+            );
+        });
+    }
+
+    initButton();
 
     function refreshComment() {
         const URL = "{% url 'blog:get_cmt' %}"
@@ -94,19 +123,14 @@
                     cmtHtml += `
                     <div>
                         <div id="${e.id}" class="comment">
-                            <span>이름:${e.nickname}</span>
+                            <span>이름:${e.nickname}</span><br/>
                             <span>내용:${e.content}</span>
                             <button class="delete-button" post-id="${e.id}">x</button>
                         </div>
                     </div><hr>`
                 });
                 document.getElementById("comment-wrapper").innerHTML = cmtHtml;
-
-                //생성된 삭제 버튼들에 함수 할당.
-                const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
-                DELETE_BUTTONS.forEach(btn => {
-                    btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
-                });
+                initButton();
             }else{
                 let mess = "";
                 for(key in data.data){
@@ -146,7 +170,7 @@
         .catch((error) => console.log("error:", error));
     }
 
-    function deleteComment(id) {
+    function deleteComment(id, password=null) {
         const URL = "{% url 'blog:delete_cmt' %}"
         const OPTIONS = {
             method: "POST",
@@ -157,13 +181,14 @@
             },
             body: JSON.stringify({
                 id: id,
+                password: password,
             }),
         }
         fetch(URL, OPTIONS)
         .then(response => response.json())
         .then(data => {
             if(data.status){
-                refreshComment();
+                //refreshComment();
                 alert(data.message);
             }else{
                 let mess = "";
@@ -171,6 +196,7 @@
                     mess += key+": "+data.data[key]+"\n";
                 }
                 alert(data.message+"\n"+mess);
+                //fetch들 data.status 실패하고 data.data 에서 key 받아오는거 뭔지 정리 좀 해라.
             }
         })
         .catch((error) => console.log("error:", error));

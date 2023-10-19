@@ -205,11 +205,25 @@ def create_cmt(request):
 def delete_cmt(request):
     try:
         param = json.loads(request.body)
+        print(param)
         cmt = get_object_or_404(BlogComment, pk=param['id'])
-        cmt.delete()
-        res = Response(True, '삭제 성공', None)
+        if request.user.is_authenticated:
+            cmt.delete()
+            res = Response(True, '수퍼 삭제 성공', None)
+        else:
+            if cmt.is_authenticated:
+                res = Response(False, '왜 로그인 댓글을 지우시려고;;', None)
+            else:
+                if cmt.password != param['password']:
+                    res = Response(False, '비번이 다름;;', None)
+                else:
+                    cmt.delete()
+                    res = Response(True, '텅과!', None)
+                    #//실패인데도 Res에 True라고 적은게 있나 확인.
     except Exception as e:
         res = Response(False, str(e), None)
+        #//수정 에러 로그 자세히 주면 해킹당해..
+        #//172번 댓글이 없다고 에러를 뿜으면 어카냐..
     return JsonResponse(asdict(res))
 
 @login_required(login_url='common:login')
