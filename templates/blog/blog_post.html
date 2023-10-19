@@ -20,10 +20,12 @@
     {% endautoescape %}
 </div>
 <div id="comment-wrapper">
-    {% if comment_list %}
-        {% for comment in comment_list %}
-            <div id="{{comment.id}}" class="comment">
-                {{comment.content}}
+    {% if cmt_list %}
+        {% for cmt in cmt_list %}
+            <div id="{{cmt.id}}" class="comment">
+                <span>이름:{{cmt.nickname}}</span>
+                <span>내용:{{cmt.content}}</span>
+                <button>x</button>
             </div>
             <hr>
         {% endfor %}
@@ -45,6 +47,32 @@
             e.preventDefault();//submit 멈춰!
             createComment();
         });
+        function refreshComment() {
+            const URL = "{% url 'blog:create_cmt' %}";
+            const OPTIONS = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: PAYLOAD,
+            }
+            fetch(URL, OPTIONS)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+
+                    alert(data.message);
+                }else{
+                    let mess = "";
+                    for(key in data.data){
+                        mess += key+": "+data.data[key]+"\n";
+                    }
+                    alert(data.message+"\n"+mess);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        }
 
         function createComment() {
             const PAYLOAD = new FormData(COMMENT_FORM);
@@ -61,6 +89,7 @@
             .then(response => response.json())
             .then(data => {
                 if(data.status){
+
                     alert(data.message);
                 }else{
                     let mess = "";

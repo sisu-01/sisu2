@@ -84,11 +84,10 @@ def get_post(request, id):
     else:
         post.view_count += 1
         post.save()
-
-        print(post.content[:60])
+        cmt_list = BlogComment.objects.filter(post=post.id)
         """
         from django.utils.html import strip_tags
-        
+        print(post.content[:60])
         print(strip_tags(post.content[:100]))
         temp = strip_tags(post.content[:100])
         temp = temp.replace(chr(13),'')
@@ -97,6 +96,7 @@ def get_post(request, id):
         """
         context = {
             'post': post,
+            'cmt_list': cmt_list,
             'template': 'blog/blog_post.html',
             'og': asdict(OpenGraph(post.title, post.content[:60], post.thumbnail)),
         }
