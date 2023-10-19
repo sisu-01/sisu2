@@ -20,3 +20,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = BlogComment
         fields = ['post','nickname','password','content']
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, {})
+        if kwargs['user'].is_authenticated:
+            args[0]['nickname'] = kwargs['user'].first_name
+            self.fields['password'].required = False

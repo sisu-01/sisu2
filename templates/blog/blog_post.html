@@ -25,7 +25,15 @@
             <div id="{{cmt.id}}" class="comment">
                 <span>이름:{{cmt.nickname}}</span>
                 <span>내용:{{cmt.content}}</span>
+                {% if cmt.is_authenticated %}
+                (주인이다!)
+                {% endif %}
+                {% if user.is_authenticated %}
+                <button class="delete-button" post-id="{{cmt.id}}">수퍼x</button>
+                {% elif not user.is_authenticated and not cmt.is_authenticated %}
                 <button class="delete-button" post-id="{{cmt.id}}">x</button>
+                {% endif %}
+                
             </div>
             <hr>
         {% endfor %}
@@ -33,6 +41,13 @@
 </div>
 <hr>
 <div>
+    {% if user.is_authenticated %}
+    <form id="comment-form">
+        post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
+        내용: <textarea name="content" cols="30" rows="10"></textarea>
+        <button type="submit">등록</button>
+    </form>
+    {% else %}
     <form id="comment-form">
         post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
         이름: <input type="text" name="nickname" required="">
@@ -41,123 +56,124 @@
         내용: <textarea name="content" cols="30" rows="10"></textarea>
         <button type="submit">등록</button>
     </form>
-    <script>
-        const postId = {{post.id}};
-
-        const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
-        DELETE_BUTTONS.forEach(btn => {
-            btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
-        });
-
-        const COMMENT_FORM = document.getElementById("comment-form");
-        COMMENT_FORM.addEventListener("submit", (e) => {
-            e.preventDefault();//submit 멈춰!
-            createComment();
-        });
-
-        function refreshComment() {
-            const URL = "{% url 'blog:get_cmt' %}"
-            const OPTIONS = {
-                method: "POST",
-                mode: "same-origin",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    postId: postId,
-                }),
-            }
-            fetch(URL, OPTIONS)
-            .then(response => response.json())
-            .then(data => {
-                if(data.status){
-                    let cmtHtml = "";
-                    data.data.forEach((e)=> {
-                        cmtHtml += `
-                        <div>
-                            <div id="${e.id}" class="comment">
-                                <span>이름:${e.nickname}</span>
-                                <span>내용:${e.content}</span>
-                                <button class="delete-button" post-id="${e.id}">x</button>
-                            </div>
-                        </div><hr>`
-                    });
-                    document.getElementById("comment-wrapper").innerHTML = cmtHtml;
-
-                    //생성된 삭제 버튼들에 함수 할당.
-                    const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
-                    DELETE_BUTTONS.forEach(btn => {
-                        btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
-                    });
-                }else{
-                    let mess = "";
-                    for(key in data.data){
-                        mess += key+": "+data.data[key]+"\n";
-                    }
-                    alert(data.message+"\n"+mess);
-                }
-            })
-            .catch((error) => console.log("error:", error));
-        }
-
-        function createComment() {
-            const PAYLOAD = new FormData(COMMENT_FORM);
-            const URL = "{% url 'blog:create_cmt' %}";
-            const OPTIONS = {
-                method: "POST",
-                mode: "same-origin",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                },
-                body: PAYLOAD,
-            }
-            fetch(URL, OPTIONS)
-            .then(response => response.json())
-            .then(data => {
-                if(data.status){
-                    refreshComment();
-                    alert(data.message);
-                }else{
-                    let mess = "";
-                    for(key in data.data){
-                        mess += key+": "+data.data[key]+"\n";
-                    }
-                    alert(data.message+"\n"+mess);
-                }
-            })
-            .catch((error) => console.log("error:", error));
-        }
-
-        function deleteComment(id) {
-            const URL = "{% url 'blog:delete_cmt' %}"
-            const OPTIONS = {
-                method: "POST",
-                mode: "same-origin",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: id,
-                }),
-            }
-            fetch(URL, OPTIONS)
-            .then(response => response.json())
-            .then(data => {
-                if(data.status){
-                    refreshComment();
-                    alert(data.message);
-                }else{
-                    let mess = "";
-                    for(key in data.data){
-                        mess += key+": "+data.data[key]+"\n";
-                    }
-                    alert(data.message+"\n"+mess);
-                }
-            })
-            .catch((error) => console.log("error:", error));
-        }
-    </script>
+    {% endif %}
 </div>
+<script>
+    const postId = {{post.id}};
+
+    const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+    DELETE_BUTTONS.forEach(btn => {
+        btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
+    });
+
+    const COMMENT_FORM = document.getElementById("comment-form");
+    COMMENT_FORM.addEventListener("submit", (e) => {
+        e.preventDefault();//submit 멈춰!
+        createComment();
+    });
+
+    function refreshComment() {
+        const URL = "{% url 'blog:get_cmt' %}"
+        const OPTIONS = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                postId: postId,
+            }),
+        }
+        fetch(URL, OPTIONS)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                let cmtHtml = "";
+                data.data.forEach((e)=> {
+                    cmtHtml += `
+                    <div>
+                        <div id="${e.id}" class="comment">
+                            <span>이름:${e.nickname}</span>
+                            <span>내용:${e.content}</span>
+                            <button class="delete-button" post-id="${e.id}">x</button>
+                        </div>
+                    </div><hr>`
+                });
+                document.getElementById("comment-wrapper").innerHTML = cmtHtml;
+
+                //생성된 삭제 버튼들에 함수 할당.
+                const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+                DELETE_BUTTONS.forEach(btn => {
+                    btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
+                });
+            }else{
+                let mess = "";
+                for(key in data.data){
+                    mess += key+": "+data.data[key]+"\n";
+                }
+                alert(data.message+"\n"+mess);
+            }
+        })
+        .catch((error) => console.log("error:", error));
+    }
+
+    function createComment() {
+        const PAYLOAD = new FormData(COMMENT_FORM);
+        const URL = "{% url 'blog:create_cmt' %}";
+        const OPTIONS = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: PAYLOAD,
+        }
+        fetch(URL, OPTIONS)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                refreshComment();
+                alert(data.message);
+            }else{
+                let mess = "";
+                for(key in data.data){
+                    mess += key+": "+data.data[key]+"\n";
+                }
+                alert(data.message+"\n"+mess);
+            }
+        })
+        .catch((error) => console.log("error:", error));
+    }
+
+    function deleteComment(id) {
+        const URL = "{% url 'blog:delete_cmt' %}"
+        const OPTIONS = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: id,
+            }),
+        }
+        fetch(URL, OPTIONS)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                refreshComment();
+                alert(data.message);
+            }else{
+                let mess = "";
+                for(key in data.data){
+                    mess += key+": "+data.data[key]+"\n";
+                }
+                alert(data.message+"\n"+mess);
+            }
+        })
+        .catch((error) => console.log("error:", error));
+    }
+</script>
 <hr>

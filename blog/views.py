@@ -185,7 +185,9 @@ def get_cmt(request):
 @require_http_methods("POST")
 def create_cmt(request):
     try:
-        form = CommentForm(request.POST)
+        #copy()를 주는 이유는 그냥 POST는 immutable, 수정 불가능이라서..
+        #만약 로그인시 nickname 자동 추가, 비번 필수 뺴려고..
+        form = CommentForm(request.POST.copy(), user=request.user)
         if form.is_valid():
             cmt = form.save(commit=False)
             cmt.is_authenticated = request.user.is_authenticated
