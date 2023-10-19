@@ -25,7 +25,7 @@
             <div id="{{cmt.id}}" class="comment">
                 <span>이름:{{cmt.nickname}}</span>
                 <span>내용:{{cmt.content}}</span>
-                <button>x</button>
+                <button class="delete-button" post-id="{{cmt.id}}">x</button>
             </div>
             <hr>
         {% endfor %}
@@ -42,27 +42,54 @@
         <button type="submit">등록</button>
     </form>
     <script>
+        const postId = {{post.id}};
+
+        const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+        DELETE_BUTTONS.forEach(btn => {
+            btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
+        });
+
         const COMMENT_FORM = document.getElementById("comment-form");
         COMMENT_FORM.addEventListener("submit", (e) => {
             e.preventDefault();//submit 멈춰!
             createComment();
         });
+
         function refreshComment() {
-            const URL = "{% url 'blog:create_cmt' %}";
+            const URL = "{% url 'blog:get_cmt' %}"
             const OPTIONS = {
                 method: "POST",
                 mode: "same-origin",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json",
                 },
-                body: PAYLOAD,
+                body: JSON.stringify({
+                    postId: postId,
+                }),
             }
             fetch(URL, OPTIONS)
             .then(response => response.json())
             .then(data => {
                 if(data.status){
+                    let cmtHtml = "";
+                    data.data.forEach((e)=> {
+                        cmtHtml += `
+                        <div>
+                            <div id="${e.id}" class="comment">
+                                <span>이름:${e.nickname}</span>
+                                <span>내용:${e.content}</span>
+                                <button class="delete-button" post-id="${e.id}">x</button>
+                            </div>
+                        </div><hr>`
+                    });
+                    document.getElementById("comment-wrapper").innerHTML = cmtHtml;
 
-                    alert(data.message);
+                    //생성된 삭제 버튼들에 함수 할당.
+                    const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
+                    DELETE_BUTTONS.forEach(btn => {
+                        btn.addEventListener("click", () => deleteComment(btn.getAttribute("post-id")));
+                    });
                 }else{
                     let mess = "";
                     for(key in data.data){
@@ -89,7 +116,37 @@
             .then(response => response.json())
             .then(data => {
                 if(data.status){
+                    refreshComment();
+                    alert(data.message);
+                }else{
+                    let mess = "";
+                    for(key in data.data){
+                        mess += key+": "+data.data[key]+"\n";
+                    }
+                    alert(data.message+"\n"+mess);
+                }
+            })
+            .catch((error) => console.log("error:", error));
+        }
 
+        function deleteComment(id) {
+            const URL = "{% url 'blog:delete_cmt' %}"
+            const OPTIONS = {
+                method: "POST",
+                mode: "same-origin",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: id,
+                }),
+            }
+            fetch(URL, OPTIONS)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status){
+                    refreshComment();
                     alert(data.message);
                 }else{
                     let mess = "";

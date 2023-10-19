@@ -174,7 +174,13 @@ def delete_post(request, id):
 
 @require_http_methods("POST")
 def get_cmt(request):
-    return 'z'
+    try:
+        param = json.loads(request.body)
+        cmt_list = list(BlogComment.objects.filter(post=param['postId']).values())
+        res = Response(True,'성공',cmt_list)
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
 def create_cmt(request):
@@ -195,7 +201,14 @@ def create_cmt(request):
 
 @require_http_methods("POST")
 def delete_cmt(request):
-    return 'z'
+    try:
+        param = json.loads(request.body)
+        cmt = get_object_or_404(BlogComment, pk=param['id'])
+        cmt.delete()
+        res = Response(True, '삭제 성공', None)
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
 
 @login_required(login_url='common:login')
 def tree(request):
