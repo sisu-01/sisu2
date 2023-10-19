@@ -38,9 +38,9 @@ class BlogPost(models.Model):
 class BlogComment(models.Model):
     post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comment')
     is_authenticated = models.BooleanField()
-    nickname = models.CharField(max_length=10)
-    password = models.CharField(max_length=2, null=True)
-    content = models.CharField(max_length=10)
+    nickname = models.CharField(max_length=12)
+    password = models.CharField(max_length=20, null=True)
+    content = models.CharField(max_length=400)
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
 

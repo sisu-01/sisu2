@@ -50,10 +50,10 @@
     {% else %}
     <form id="comment-form">
         post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
-        이름: <input type="text" name="nickname" required="">
-        비밀번호: <input type="text" name="password" required="">
+        이름: <input type="text" name="nickname" maxlength="12" required="">
+        비밀번호: <input type="text" name="password" maxlength="20"required="">
         캡챠: <input type="text" required="">
-        내용: <textarea name="content" cols="30" rows="10"></textarea>
+        내용: <textarea name="content" maxlength="400" required="" cols="40" rows="10"></textarea>
         <button type="submit">등록</button>
     </form>
     {% endif %}
