@@ -94,9 +94,11 @@ def get_post(request, id):
         temp = temp.replace(chr(10),'')
         //수정 나중에 os description 확인해보셈
         """
+        form = CommentForm(user=request.user)
         context = {
             'post': post,
             'cmt_list': cmt_list,
+            'form': form,
             'template': 'blog/blog_post.html',
             'og': asdict(OpenGraph(post.title, post.content[:60], post.thumbnail)),
         }

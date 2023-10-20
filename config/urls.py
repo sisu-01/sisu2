@@ -25,6 +25,8 @@ urlpatterns = [
     path('', include('common.urls')),
     path('blog/', include('blog.urls')),
     path('movie/', include('movie.urls')),
+
+    path('captcha/', include('captcha.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,3 +1,4 @@
+from captcha.fields import CaptchaTextInput, CaptchaField
 from django import forms
 from .models import *
 
@@ -17,6 +18,7 @@ class PostForm(forms.ModelForm):
         fields = ['title','content','is_public','tree']
 
 class CommentForm(forms.ModelForm):
+    captcha = CaptchaField()
     class Meta:
         model = BlogComment
         fields = ['post','nickname','password','content']
