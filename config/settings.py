@@ -144,6 +144,22 @@ LOGOUT_REDIRECT_URL = '/'
 # 1년 31536000 한달 2628000 일주일 604800
 
 
+# 캡챠 설정
+# https://django-simple-captcha.readthedocs.io/en/latest/advanced.html
+ 
+CAPTCHA_FONT_SIZE = 26
+
+CAPTCHA_IMAGE_SIZE = (90,33)
+
+#CAPTCHA_LETTER_ROTATION = None
+
+CAPTCHA_FOREGROUND_COLOR = '#ff0000'
+
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_arcs', 'captcha.helpers.noise_dots',)
+
+CAPTCHA_LENGTH = 2
+
+
 # Static 파일 (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
