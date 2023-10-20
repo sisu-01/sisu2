@@ -1,0 +1,5 @@
+{% load i18n %}
+{% spaceless %}
+이미지: <img src="{{ image }}" alt="captcha"/>
+캡챠: {% include "django/forms/widgets/multiwidget.html" %}
+{% endspaceless %}

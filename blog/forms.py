@@ -17,8 +17,11 @@ class PostForm(forms.ModelForm):
         model = BlogPost
         fields = ['title','content','is_public','tree']
 
+class CustomCaptchaTextInput(CaptchaTextInput):
+    template_name = 'blog/captcha.html'
+
 class CommentForm(forms.ModelForm):
-    captcha = CaptchaField()
+    captcha = CaptchaField(widget=CustomCaptchaTextInput)
     class Meta:
         model = BlogComment
         fields = ['post','nickname','password','content']

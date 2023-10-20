@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'movie',
     'captcha',
+    'django.forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -158,6 +159,8 @@ CAPTCHA_FOREGROUND_COLOR = '#ff0000'
 CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_arcs', 'captcha.helpers.noise_dots',)
 
 CAPTCHA_LENGTH = 2
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 
 # Static 파일 (CSS, JavaScript, Images)
