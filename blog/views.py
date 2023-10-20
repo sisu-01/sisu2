@@ -176,8 +176,20 @@ def delete_post(request, id):
 def get_cmt(request):
     try:
         param = json.loads(request.body)
-        cmt_list = list(BlogComment.objects.filter(post=param['postId']).values())
-        res = Response(True,'성공',cmt_list)
+        cmt_list = BlogComment.objects.filter(post=param['postId']).values()
+        comment = ''
+        for i in cmt_list:
+            comment += '<div class="comment">'
+            comment += f'<span>이름:{i["nickname"]}</span>'
+            if i['is_authenticated']:
+                comment += ' (주인이다!)'
+            comment += f'<br/><span>내용:{i["content"]}</span>'
+            if request.user.is_authenticated:
+                comment += f' <button class="delete-button" post-id="{str(i["id"])}">수퍼x</button>'
+            elif not request.user.is_authenticated and not i['is_authenticated']:
+                comment += f' <button type="button" class="modal-button" modal-id="{str(i["id"])}">모달x</button>'
+            comment += '</div><hr>'
+        res = Response(True, '성공', comment)
     except Exception as e:
         res = Response(False, str(e), None)
     return JsonResponse(asdict(res))

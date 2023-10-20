@@ -19,6 +19,7 @@
     {{post.content}}
     {% endautoescape %}
 </div>
+<button onClick="refreshComment()">refresh</button>
 <div id="comment-wrapper">
     {% if cmt_list %}
         {% for cmt in cmt_list %}
@@ -34,7 +35,6 @@
                 {% elif not user.is_authenticated and not cmt.is_authenticated %}
                 <button type="button" class="modal-button" modal-id="{{cmt.id}}">모달x</button>
                 {% endif %}
-                
             </div>
             <hr>
         {% endfor %}
@@ -118,18 +118,7 @@
         .then(response => response.json())
         .then(data => {
             if(data.status){
-                let cmtHtml = "";
-                data.data.forEach((e)=> {
-                    cmtHtml += `
-                    <div>
-                        <div id="${e.id}" class="comment">
-                            <span>이름:${e.nickname}</span><br/>
-                            <span>내용:${e.content}</span>
-                            <button class="delete-button" post-id="${e.id}">x</button>
-                        </div>
-                    </div><hr>`
-                });
-                document.getElementById("comment-wrapper").innerHTML = cmtHtml;
+                document.getElementById("comment-wrapper").innerHTML = data.data;
                 initButton();
             }else{
                 let mess = "";
