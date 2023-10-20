@@ -3,4 +3,5 @@ gunicorn
 django-environ
 mysqlclient
 beautifulsoup4
+django-simple-captcha
 Pillow==10.0.0

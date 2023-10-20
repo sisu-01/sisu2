@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'common',
     'blog',
     'movie',
+    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
