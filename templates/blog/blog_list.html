@@ -3,7 +3,10 @@
 {% if post_list %}
 {% for post in post_list %}
     <div>
-        <hr><a href="{% url 'blog:get_post' post.id %}">{{post.title}}<br/>{{post.insert_date}}
+        <hr><a href="{% url 'blog:get_post' post.id %}">{{post.title}}<br/>{{post.insert_date}}/조회수:{{post.view_count}}
+            {% if post.comment.count %}
+            /댓글수:{{post.comment.count}}
+            {% endif %}
             {% if post.thumbnail %}
             <img src="{{post.thumbnail}}" alt="썸네일 종범 ㅋ;;;" height="120">
             {% endif %}
