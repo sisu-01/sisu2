@@ -3,13 +3,14 @@
 {% load filter %}
 
 {% block meta %}
+<link href="{% static 'css/movie.css' %}" rel="stylesheet">
 <script>
     console.log('movie.html');
 </script>
 {% endblock %}
 
 {% block content %}
-<main class="container-lg">
+<main class="container-xxl">
     <h1>Hello Movie!</h1>
     <div class="row">
         <div class="col-md-3">
@@ -23,14 +24,23 @@
             <div id="movie-wrapper" class="row">
             {% if movie_list %}
             {% for movie in movie_list %}
-                <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3 col-xl-2">
-                    id={{movie.id}}
-                    <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
-                    <div>{{movie.format}}</div>
-                    <div>{{movie.title}}</div>
-                    <div>{{movie.title_en}}</div>
-                    <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
-                    <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
+                <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3">
+                    <div class="flip active">
+                        <div class="card">
+                            <div class="front">
+                                <img src="{{movie.thumbnail.url}}" class="thumbnail" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                            </div>
+                            <div class="back">
+                                <div>{{movie.format}}</div>
+                                <hr>
+                                <div>{{movie.title}}</div>
+                                <div>{{movie.title_en}}</div>
+                                <hr>
+                                <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
+                                <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <a href="{{movie.poster.url}}" target="_blank">원본</a>
                     {% if user.is_authenticated %}
