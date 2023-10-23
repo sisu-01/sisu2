@@ -1,4 +1,3 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path
 from . import views
 
@@ -11,17 +10,16 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create_post'),
     path('update_post/<int:id>', views.update_post, name='update_post'),
     path('delete_post/<int:id>', views.delete_post, name='delete_post'),
-    path('upload_image/', staff_member_required(views.ckeditor_upload_image), name='upload_image'),
-    
+    path('upload_image/', views.ckeditor_upload_image, name='upload_image'),
+
     path('get_cmt/', views.get_cmt, name='get_cmt'),
     path('create_cmt/', views.create_cmt, name='create_cmt'),
     path('delete_cmt/', views.delete_cmt, name='delete_cmt'),
 
-    path('tree/', staff_member_required(views.tree), name='set_tree'),
-    path('get_tree/', staff_member_required(views.get_tree), name='get_tree'),
-    path('select_tree/', staff_member_required(views.select_tree), name='select_tree'),
-    path('create_tree/', staff_member_required(views.save_tree), name='save_tree'),
-    path('delete_tree/', staff_member_required(views.delete_tree), name='delete_tree'),
+    path('tree/', views.tree, name='set_tree'),
+    path('get_tree/', views.get_tree, name='get_tree'),
+    path('select_tree/', views.select_tree, name='select_tree'),
+    path('create_tree/', views.save_tree, name='save_tree'),
+    path('delete_tree/', views.delete_tree, name='delete_tree'),
 ]
 #//수정 login_required는 로그인 사용자 모두
-#//수정 staff_membe_required는 스태프만. 이거 구분해서 정해라

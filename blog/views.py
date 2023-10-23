@@ -148,6 +148,7 @@ def check_thumbnail(content):
     else:
         return None
 
+@login_required(login_url='common:login')
 @require_http_methods("POST")
 def ckeditor_upload_image(request):
     if request.method == 'POST' and request.FILES['upload']:
@@ -245,6 +246,7 @@ def tree(request):
     context = {}
     return render(request, 'blog/blog_tree.html', context)
 
+@login_required(login_url='common:login')
 @require_http_methods("POST")
 def get_tree(request):
     try:
@@ -254,6 +256,7 @@ def get_tree(request):
         res = Response(False, str(e), None)
     return JsonResponse(asdict(res))
 
+@login_required(login_url='common:login')
 @require_http_methods("POST")
 def save_tree(request):
     try:
@@ -272,6 +275,7 @@ def save_tree(request):
         res = Response(False, str(e), None)
     return JsonResponse(asdict(res))
 
+@login_required(login_url='common:login')
 @require_http_methods("POST")
 def select_tree(request):
     try:
@@ -282,6 +286,7 @@ def select_tree(request):
         res = Response(False, str(e), None)
     return JsonResponse(asdict(res))
 
+@login_required(login_url='common:login')
 @require_http_methods("POST")
 def delete_tree(request):
     try:
