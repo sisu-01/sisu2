@@ -1,5 +1,28 @@
 {% load i18n %}
 {% spaceless %}
-이미지: <img src="{{ image }}" alt="captcha"/>
+이미지: <button type="button" id="refreshCaptcha">🎲</button><img src="{{ image }}" id="captcha_image" alt="captcha"/>
 캡챠: {% include "django/forms/widgets/multiwidget.html" %}
 {% endspaceless %}
+<script>
+    document.getElementById("refreshCaptcha").addEventListener("click", () => {
+        const URL = "/captcha/refresh/";
+        const OPTIONS = {
+            //GET 뭐고; POST로 따이
+            method: "GET",
+            mode: "same-origin",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+        }
+        fetch(URL, OPTIONS)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("captcha_image").setAttribute("src", data["image_url"]);
+            document.getElementById("id_captcha_0").value = data["key"];
+            document.getElementById("id_captcha_1").value = "";
+        })
+        .catch((error) => console.log("error:", error));
+    });
+</script>
