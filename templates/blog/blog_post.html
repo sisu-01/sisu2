@@ -19,6 +19,7 @@
     {{post.content}}
     {% endautoescape %}
 </div>
+<hr>
 <div id="comment-wrapper">
     {% if cmt_list %}
         {% for cmt in cmt_list %}
@@ -40,22 +41,22 @@
     {% endif %}
 </div>
 <div>
-    {% comment %} readOnly {% endcomment %}
-    comment: <input type="text" id="modal-id" required="" value=""><br/>
-    비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
-    <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
-</div>
-<hr>
-<div>
     {% if user.is_authenticated %}
     <form id="comment-form">
-        post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
+        <input type="hidden" name="post" required="" value="{{post.id}}">
         내용: <textarea name="content" cols="30" rows="10"></textarea>
         <button type="submit">등록</button>
     </form>
     {% else %}
+    <div>
+        {% comment %} readOnly {% endcomment %}
+        <input type="hidden" id="modal-id" required="" value="">
+        비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
+        <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
+    </div>
+    <hr>
     <form id="comment-form">
-        post: <input type="text" name="post" readOnly required="" value="{{post.id}}">
+        <input type="hidden" name="post" required="" value="{{post.id}}">
         이름: <input type="text" name="nickname" maxlength="12" required="">
         비밀번호: <input type="text" name="password" maxlength="20"required=""><br/>
         캡챠: {{form.captcha}}
