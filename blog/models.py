@@ -25,7 +25,6 @@ class BlogPost(models.Model):
     update_ip = models.CharField(max_length=40, blank=True, null=True)
     tree = models.ForeignKey(BlogTree, on_delete=models.SET_NULL, related_name='post', null=True)
     view_count = models.IntegerField(default=0)
-    #//수정 댓글 추가하기
 
     class Meta:
         managed = True
