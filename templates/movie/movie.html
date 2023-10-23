@@ -9,34 +9,40 @@
 {% endblock %}
 
 {% block content %}
-<main>
+<main class="container-lg">
     <h1>Hello Movie!</h1>
-    {% include 'movie/movie_toc.html' %}
-    {% if user.is_authenticated %}
-        <button type="button" onClick="setMovieForm()">추가</button>
-        {% include 'movie/movie_form.html' %}
-    {% endif %}
-    <div id="movie-wrapper">
-    {% if movie_list %}
-        {% for movie in movie_list %}
-        <div id="{{movie.id}}">
-            id={{movie.id}}
-            <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
-            <div>{{movie.format}}</div>
-            <div>{{movie.title}}</div>
-            <div>{{movie.title_en}}</div>
-            <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
-            <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
-            <div>
-                <a href="{{movie.poster.url}}" target="_blank">원본</a>
-                {% if user.is_authenticated %}
-                <button onClick="getMovie('{{movie.id}}')">수정</button>
-                <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
-                {% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'movie/movie_toc.html' %}
+        </div>
+        <div class="col-md-9">
+        {% if user.is_authenticated %}
+            <button type="button" onClick="setMovieForm()">추가</button>
+            {% include 'movie/movie_form.html' %}
+        {% endif %}
+            <div id="movie-wrapper" class="row">
+            {% if movie_list %}
+            {% for movie in movie_list %}
+                <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                    id={{movie.id}}
+                    <img src="{{movie.thumbnail.url}}" alt="{{movie.title}}">
+                    <div>{{movie.format}}</div>
+                    <div>{{movie.title}}</div>
+                    <div>{{movie.title_en}}</div>
+                    <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
+                    <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
+                    <div>
+                        <a href="{{movie.poster.url}}" target="_blank">원본</a>
+                    {% if user.is_authenticated %}
+                        <button onClick="getMovie('{{movie.id}}')">수정</button>
+                        <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
+                    {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
             </div>
         </div>
-        {% endfor %}
-    {% endif %}
     </div>
 </main>
 <script>
