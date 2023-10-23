@@ -219,7 +219,6 @@ def create_cmt(request):
 def delete_cmt(request):
     try:
         param = json.loads(request.body)
-        print(param)
         cmt = get_object_or_404(BlogComment, pk=param['id'])
         if request.user.is_authenticated:
             cmt.delete()
