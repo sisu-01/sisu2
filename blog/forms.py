@@ -28,6 +28,6 @@ class CommentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, {})
-        if kwargs['user'].is_authenticated:
+        if kwargs['user'].is_authenticated and args:
             args[0]['nickname'] = kwargs['user'].first_name
             self.fields['password'].required = False
