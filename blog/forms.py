@@ -31,3 +31,4 @@ class CommentForm(forms.ModelForm):
         if kwargs['user'].is_authenticated and args:
             args[0]['nickname'] = kwargs['user'].first_name
             self.fields['password'].required = False
+            self.fields['captcha'].required = False
