@@ -22,4 +22,3 @@ urlpatterns = [
     path('create_tree/', views.save_tree, name='save_tree'),
     path('delete_tree/', views.delete_tree, name='delete_tree'),
 ]
-#//수정 login_required는 로그인 사용자 모두
