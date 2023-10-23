@@ -7,13 +7,10 @@
     document.getElementById("refreshCaptcha").addEventListener("click", () => {
         const URL = "/captcha/refresh/";
         const OPTIONS = {
-            //GET 뭐고; POST로 따이
             method: "GET",
             mode: "same-origin",
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json",
             },
         }
         fetch(URL, OPTIONS)
