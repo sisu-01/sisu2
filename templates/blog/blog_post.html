@@ -44,7 +44,7 @@
     {% comment %} readOnly {% endcomment %}
     comment: <input type="text" id="modal-id" required="" value=""><br/>
     비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
-    <button class="delete-aa" post-id="{{cmt.id}}">삭제</button>
+    <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
 </div>
 <hr>
 <div>
@@ -74,7 +74,7 @@
     });
     const MODAL_ID = document.getElementById("modal-id");
 
-    document.querySelector(".delete-aa").addEventListener("click", () => {
+    document.querySelector(".modal-delete").addEventListener("click", () => {
         if(!MODAL_ID.value){
             alert("뭔 댓글을 지워야 하는겨?");
             return false;
