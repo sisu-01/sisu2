@@ -25,4 +25,3 @@ urlpatterns = [
 ]
 #//수정 login_required는 로그인 사용자 모두
 #//수정 staff_membe_required는 스태프만. 이거 구분해서 정해라
-#//수정 r"^upload/" 이러는 이ㅠ가 있나?
