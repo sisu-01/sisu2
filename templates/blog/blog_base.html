@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% block content %}
-<main class="container-lg">
+<main class="container-xxl bbb">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-12 col-lg-auto aaa">
             <ul>
                 {% if user.is_authenticated %}
                 <a href="{% url 'blog:set_tree' %}">트리설정</a>
@@ -23,7 +23,7 @@
                 <li><a href="{% url 'blog:post_list' 'null' %}">고아들😢</a></li>
             </ul>
         </div>
-        <div class="col-md-9">
+        <div class="col-12 col-lg aaa">
             <div>
                 {% if user.is_authenticated %}
                 <a href="{% url 'blog:create_post' %}">create</a>
