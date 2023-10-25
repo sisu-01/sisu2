@@ -1,22 +1,24 @@
 {% load filter %}
-<header>
-    <h1>
-        <span>Header</span>
-        <a href="/">index</a>
-    {% top_menu as context %}
-    {% for menu in context %}
-        <a href="{% url menu.url %}">{{menu}}</a>
-        {% comment %} {% if request.path|menu:1|contain:menu.id %}
-        <a class="nav-link p2 active" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
+<header class="aaa">
+    <div class="container-xxl bbb">
+        <h1>
+            <span>Header</span>
+            <a href="/">index</a>
+        {% top_menu as context %}
+        {% for menu in context %}
+            <a href="{% url menu.url %}">{{menu}}</a>
+            {% comment %} {% if request.path|menu:1|contain:menu.id %}
+            <a class="nav-link p2 active" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
+            {% else %}
+            <a class="nav-link p2" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
+            {% endif %} {% endcomment %}
+        {% endfor %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'common:logout' %}?next={{request.get_full_path|urlencode}}">logout</a>
         {% else %}
-        <a class="nav-link p2" id="{{menu.id}}" href="/{{menu.id}}/">{{menu.name}}</a>
-        {% endif %} {% endcomment %}
-    {% endfor %}
-    {% if user.is_authenticated %}
-        <a href="{% url 'common:logout' %}?next={{request.get_full_path|urlencode}}">logout</a>
-    {% else %}
-        <a href="{% url 'common:login' %}?next={{request.get_full_path|urlencode}}">login</a>
-    {% endif %}
-    <a href="https://github.com/sisu-01" target="_blank">github</a>
-    </h1>
+            <a href="{% url 'common:login' %}?next={{request.get_full_path|urlencode}}">login</a>
+        {% endif %}
+        <a href="https://github.com/sisu-01" target="_blank">github</a>
+        </h1>
+    </div>
 </header>
