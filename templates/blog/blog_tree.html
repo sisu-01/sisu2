@@ -5,23 +5,26 @@
     {% include 'layout/meta.html' %}
 </head>
 <body>
-    <a href="{% url 'blog:index' %}">크크</a>
-    <div id="tree-wrapper">
-    </div>
-    <button type="button" onClick="insertTree()">추가</button>
-    <hr>
-    <form id="tree-form" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="id"/>
-        <div>title: <input type="text" name="title"/></div>
-        <div>seq: <input type="number" name="seq"/></div>
-        <div>parent: <input type="text" id="parent" name="parent"/></div>
-        <button type="submit">submit</button>
-    </form>
-    <hr>
-    {% if messages %}
-        {% include 'layout/message.html' %}
-    {% endif %}
+    <main class="container border">
+        <div class="row justify-content-center">
+            <div class="col-auto border">
+                <a href="{% url 'blog:index' %}">블로그로</a><br/>
+                <div id="tree-wrapper">
+                </div>
+            </div>
+            <div class="col-auto border">
+                <button type="button" onClick="insertTree()">📄</button>
+                <form id="tree-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="id" name="id"/>
+                    <div>이름: <input type="text" id="title" name="title" maxlength="20"/></div>
+                    <div>순서: <input type="number" id="seq" name="seq"/></div>
+                    <div>부모: <input type="text" id="parent" name="parent"/></div>
+                    <button type="submit">💾</button>
+                </form>
+            </div>
+        </div>
+    </main>
     <script>
         function getTree(){
             const URL = "{% url 'blog:get_tree' %}"
@@ -43,7 +46,7 @@
                     const ID_BUTTONS = document.querySelectorAll(".id-button");
                     ID_BUTTONS.forEach(btn => {
                         btn.addEventListener("click", () => {
-                            document.getElementById("parent").value = btn.getAttribute("menu-id");
+                            selectParent(btn);
                         });
                     });
 
@@ -75,13 +78,12 @@
                 if(menu.parent_id === parent){
                     tree +=
                     `<div style="margin-left:${depth}px;">
-                        <span><b>${menu.title}</b></span>
-                        <span>seq: ${menu.seq}</span>
-                        <button class="id-button" menu-id="${menu.id}">id: ${menu.id}</button>
-                        <button class="select-button" value="${menu.id}">${menu.title} 선택(수정)</button>
-                        <button class="delete-button" value="${menu.id}">${menu.title} 삭제</button>
+                        <span><b>${menu.seq}:&nbsp;${menu.title}</b></span>
+                        <button class="id-button" menu-id="${menu.id}">👶</button>
+                        <button class="select-button" value="${menu.id}">📝</button>
+                        <button class="delete-button" value="${menu.id}">🗑</button>
                     </div>`;
-                    tree += makeTree(MENUS, menu.id, depth+20);
+                    tree += makeTree(MENUS, menu.id, depth+40);
                 }
             })
             return tree;
@@ -123,6 +125,19 @@
             .catch((error) => console.log("error:", error));
         }
 
+        function initButton() {
+            document.getElementsByName("id")[0].value = "";
+            document.getElementById("id").value = "";
+            document.getElementById("title").value = "";
+            document.getElementById("seq").value = "";
+            document.getElementById("parent").value = "";
+        }
+
+        function selectParent(btn) {
+            initButton();
+            document.getElementById("parent").value = btn.getAttribute("menu-id");
+        }
+
         function selectTree(id) {
             const URL = "{% url 'blog:select_tree' %}";
             const OPTIONS = {
@@ -140,6 +155,7 @@
             .then(response => response.json())
             .then(data => {
                 if(data.status){
+                    initButton();
                     for(key in data.data){
                         const el = document.getElementsByName(key)[0];
                         if(el !== undefined){
@@ -155,7 +171,7 @@
 
         function insertTree(){
             //수정 팝업창 등장~
-            document.getElementsByName("id")[0].value = "";
+            initButton();
         }
 
         function deleteTree(id){
