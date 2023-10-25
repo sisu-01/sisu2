@@ -4,3 +4,16 @@
 .bbb {
     border: 5px solid #000!important;
 }
+
+.image-box {
+    width:100px;
+    height:100px;
+    overflow:hidden;
+    margin:0 auto;
+}
+
+.image-thumbnail {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}

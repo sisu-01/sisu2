@@ -1,20 +1,30 @@
-<h1>Hello List! {{tree_title}}</h1>
-<div>
+<div class="bbb">
+    <h1>Hello List! {{tree_title}}</h1>
+</div>
+<div class="bbb">
 {% if post_list %}
-{% for post in post_list %}
-    <div>
-        <hr><a href="{% url 'blog:get_post' post.id %}">{{post.title}}<br/>{{post.insert_date}}/조회수:{{post.view_count}}
-            {% if post.comment.count %}
-            /댓글수:{{post.comment.count}}
-            {% endif %}
-            {% if post.thumbnail %}
-            <img src="{{post.thumbnail}}" alt="썸네일 종범 ㅋ;;;" height="120">
-            {% endif %}
+    <div class="aaa">
+    {% for post in post_list %}
+        <a href="{% url 'blog:get_post' post.id %}">
+            <div class="row bbb">
+                <div class="col aaa">
+                    <div><h5><b>{{post.title}}</b></h5></div>
+                    <div>{{post.content|striptags|safe|truncatechars:200}}</div>
+                    <div>{{post.insert_date|date:'Y.m.d (D)'}}</div>
+                    <div>조회: {{post.view_count}}&nbsp;댓글: {{post.comment.count}}</div>
+                </div>
+                {% if post.thumbnail %}
+                <div class="col-auto d-flex justify-content-center align-items-center aaa">
+                    <div class="image-box">
+                        <img src="{{post.thumbnail}}" class="image-thumbnail" alt="썸네일">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </a>
+    {% endfor %}
     </div>
-{% endfor %}
-    <hr>
-    <div class="pagination">
+    <div class="pagination aaa d-flex justify-content-center">
         {% if slicing >= 1 %}
             <a href="?page=1"><button>맨처음</button></a>
             <a href="?page={{ slicing }}"><button>&lt;</button></a>
@@ -24,7 +34,7 @@
         {% endif %}
         {% for page in paging %}
             {% if post_list.number == page %}
-            <button><h1><b>{{page}}</b></h1></button>
+            <h4><b>{{page}}</b></h4>
             {% else %}
             <a href="?page={{page}}"><button>{{page}}</button></a>
             {% endif %}
