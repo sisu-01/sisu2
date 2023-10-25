@@ -14,7 +14,8 @@
                     <div>조회: {{post.view_count}}&nbsp;댓글: {{post.comment.count}}</div>
                 </div>
                 {% if post.thumbnail %}
-                <div class="thumbnail d-flex justify-content-center align-items-center aaa">
+                <div class="thumbnail aaa">
+                    {% comment %} d-flex justify-content-center align-items-center  {% endcomment %}
                     <div class="image-box">
                         <img src="{{post.thumbnail}}" class="image-thumbnail" alt="썸네일">
                     </div>
