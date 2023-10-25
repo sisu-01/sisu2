@@ -9,7 +9,7 @@
             <div class="row bbb">
                 <div class="col aaa">
                     <div><h5><b>{{post.title}}</b></h5></div>
-                    <div>{{post.content|striptags|safe|truncatechars:200}}</div>
+                    <div><span class="content-span">{{post.content|striptags|safe|truncatechars:200}}</span></div>
                     <div>{{post.insert_date|date:'Y.m.d (D)'}}</div>
                     <div>조회: {{post.view_count}}&nbsp;댓글: {{post.comment.count}}</div>
                 </div>

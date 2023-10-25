@@ -5,6 +5,14 @@
     border: 5px solid #000!important;
 }
 
+.content-span {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: normal;
+    word-wrap: break-word;
+}
 .image-box {
     width:100px;
     height:100px;
