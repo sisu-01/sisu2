@@ -42,7 +42,7 @@
     {% if user.is_authenticated %}
     <form id="comment-form">
         <input type="hidden" name="post" required="" value="{{post.id}}">
-        내용: <textarea name="content" cols="30" rows="10"></textarea>
+        내용: <textarea name="content" cols="35" rows="4"></textarea>
         <button type="submit">등록</button>
     </form>
     {% else %}
@@ -58,7 +58,7 @@
         비밀번호: <input type="text" name="password" maxlength="20"required=""><br/>
         캡챠: {{form.captcha}}
         <div>
-            <textarea name="content" maxlength="400" required="" cols="40" rows="10"></textarea>
+            <textarea name="content" maxlength="400" required="" cols="35" rows="4"></textarea>
         </div>
         <button type="submit">등록</button>
     </form>
