@@ -6,15 +6,15 @@
     <div class="aaa">
     {% for post in post_list %}
         <a href="{% url 'blog:get_post' post.id %}">
-            <div class="row bbb">
-                <div class="col aaa">
+            <div class="post-wrapper bbb">
+                <div class="content aaa">
                     <div><h5><b>{{post.title}}</b></h5></div>
                     <div><span class="content-span">{{post.content|striptags|safe|truncatechars:200}}</span></div>
                     <div>{{post.insert_date|date:'Y.m.d (D)'}}</div>
                     <div>조회: {{post.view_count}}&nbsp;댓글: {{post.comment.count}}</div>
                 </div>
                 {% if post.thumbnail %}
-                <div class="col-auto d-flex justify-content-center align-items-center aaa">
+                <div class="thumbnail d-flex justify-content-center align-items-center aaa">
                     <div class="image-box">
                         <img src="{{post.thumbnail}}" class="image-thumbnail" alt="썸네일">
                     </div>
