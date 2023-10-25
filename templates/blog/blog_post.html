@@ -1,29 +1,28 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'ckeditor5/content-styles.css' %}" type="text/css">
-<h1>Hello Post!</h1>
-{% if user.is_authenticated %}
-<a href="{% url 'blog:update_post' post.id %}">update</a>
-<a href="{% url 'blog:delete_post' post.id %}">delete</a>
-공개여부:{{post.is_public}}<br/>
-조회수:{{post.view_count}}
-{% endif %}
-<div>
-    {% if post.is_public or user.is_authenticated %}
-        {{post.title}}
-    {% else %}
-        응 비공개
-    {% endif %}
+<div class="bbb">
+    <h1>{{post.title}}</h1>
 </div>
-<div class="ck-content">
+<div class="bbb">
+    조회: {{post.view_count}}
+    <a href="#comment-wrapper">댓글: {{post.comment.count}}개</a>
+</div>
+{% if user.is_authenticated %}
+<div class="bbb">
+    <a href="{% url 'blog:update_post' post.id %}">update</a>
+    <a href="{% url 'blog:delete_post' post.id %}">delete</a>
+    공개여부:{{post.is_public}}
+</div>
+{% endif %}
+<div class="ck-content text-break bbb">
     {% autoescape off %}
     {{post.content}}
     {% endautoescape %}
 </div>
-<hr>
-<div id="comment-wrapper">
+<div id="comment-wrapper" class="bbb">
     {% if cmt_list %}
         {% for cmt in cmt_list %}
-            <div class="comment">
+            <div class="comment aaa">
                 <span>이름:{{cmt.nickname}}</span>
                 {% if cmt.is_authenticated %}
                 (주인이다!)
@@ -36,11 +35,10 @@
                 <button type="button" class="modal-button" modal-id="{{cmt.id}}">모달x</button>
                 {% endif %}
             </div>
-            <hr>
         {% endfor %}
     {% endif %}
 </div>
-<div>
+<div class="bbb">
     {% if user.is_authenticated %}
     <form id="comment-form">
         <input type="hidden" name="post" required="" value="{{post.id}}">
@@ -48,19 +46,20 @@
         <button type="submit">등록</button>
     </form>
     {% else %}
-    <div>
-        {% comment %} readOnly {% endcomment %}
-        <input type="hidden" id="modal-id" required="" value="">
+    <div class="aaa">
+        <input type="text" id="modal-id" required="" value="" readOnly>
+        {% comment %} //수정 모달 {% endcomment %}
         비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
         <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
     </div>
-    <hr>
-    <form id="comment-form">
+    <form id="comment-form" class="aaa">
         <input type="hidden" name="post" required="" value="{{post.id}}">
         이름: <input type="text" name="nickname" maxlength="12" required="">
         비밀번호: <input type="text" name="password" maxlength="20"required=""><br/>
         캡챠: {{form.captcha}}
-        내용: <textarea name="content" maxlength="400" required="" cols="40" rows="10"></textarea>
+        <div>
+            <textarea name="content" maxlength="400" required="" cols="40" rows="10"></textarea>
+        </div>
         <button type="submit">등록</button>
     </form>
     {% endif %}
@@ -191,4 +190,3 @@
         .catch((error) => console.log("error:", error));
     }
 </script>
-<hr>
