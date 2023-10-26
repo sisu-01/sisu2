@@ -5,14 +5,14 @@
     {% include 'layout/meta.html' %}
 </head>
 <body>
-    <main class="container border">
-        <div class="row justify-content-center">
-            <div class="col-auto border">
+    <main class="container aaa">
+        <div class="row justify-content-center bbb">
+            <div class="col-auto aaa">
                 <a href="{% url 'blog:index' %}">블로그로</a><br/>
                 <div id="tree-wrapper">
                 </div>
             </div>
-            <div class="col-auto border">
+            <div class="col-auto aaa">
                 <button type="button" onClick="insertTree()">📄</button>
                 <form id="tree-form" enctype="multipart/form-data">
                     {% csrf_token %}
