@@ -1,83 +1,72 @@
-.thumbnail-wrapper {
-  border: 1px solid black;
-  padding: 10px;
+/* 카드 디자인 */
+.thumbnail-box {
+    box-shadow: 0 .2rem 1rem rgba(0,0,0,.15);
+    border-radius: 5%;
+    padding: 10px;
+    background-color: white;
 }
-
 .thumbnail {
     display: block;
+    /* inherit = 부모 상속 */
+    border-radius: inherit;
     width: 100%;
 }
 
+/* 카드 뒤집기 */
 .flip { 
-  position: relative; 
-  perspective: 1100px;
-  transition: all 0.3s ease;
+    perspective: 1100px;
+    transition: all 0.2s ease;
 }
-
-.cardz {
-  width: 100%; 
-  height: 100%; 
-  position: relative;
-  transition: .4s;
-  transform-style: preserve-3d;
-} 
-
-.front {
-  backface-visibility: hidden;
+.flip:hover:not(.active) {
+    transform: scale(1.1);
 }
-
-.back { 
-  transform: rotateY(180deg);
-  position: absolute;
-  top: 0;
-  width: 100%; 
-  height: 100%;
-  backface-visibility: hidden;
-  box-shadow: 0 0 0 2px #000 inset;
-  background-color: white;
-}
-
-.flip:hover:not(.active) .cardz {
-  transform: scale(1.1);
-}
-
 .flip.active {
-  z-index: 1051;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transition: all 0.3s ease;
-  transform: translate(-50%, -50%);
+    z-index: 1051;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transition: all 0.6s ease;
+    transform: translate(-50%, -50%);
 }
-.active {
-  transition: left 2s ease;
+/* //수정 css-test.kro.kr 3번의 비밀을 파해치자 */
+.paper {
+    /* position: relative; */
+    width: 100%; 
+    height: 100%; 
+    transition: all 0.6s ease;
+    /* 얘가 3d 랜더링 해줘서 카드 앞 뒤 인식이 가능한 것 */
+    transform-style: preserve-3d;
 }
-
-.active .cardz {
-  transform: rotateY(180deg);
+.active .paper {
+    transform: rotateY(180deg);
 }
-
-.mm {
-  overflow: hidden;
-  padding-right: 17px;
+.front {
+    /* 요소 뒤 요소 보일까 말까 */
+    backface-visibility: hidden;
 }
-
-.zz {
-  transition: opacity 1.15s linear;
+.back { 
+    position: absolute;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 0 2px #000 inset;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
 }
-.zz.ff {
-  opacity: 0;
+.hide {
+    transition: opacity 1.15s linear;
 }
-.zz.ss {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1050;
-  width: 100vw;
-  height: 100vh;
-  opacity: 0.5;
-  background-color: #000;
+.shield.hide {
+    opacity: 0;
 }
-.ff {
-  transition: opacity 0.15s linear;
+.shield.show {
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
 }

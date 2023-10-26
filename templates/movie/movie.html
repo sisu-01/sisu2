@@ -28,9 +28,9 @@
             {% for movie in movie_list %}
                 <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3 my-2">
                     <div class="flip">
-                        <div class="cardz">
+                        <div class="paper">
                             <div class="front">
-                                <div class="thumbnail-wrapper">
+                                <div class="thumbnail-box">
                                     <img src="{{movie.thumbnail.url}}" class="thumbnail" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
                                 </div>
                             </div>
@@ -58,29 +58,30 @@
             </div>
         </div>
     </div>
-    <div id="wow" class="zz ff"></div>
+    <div id="modal-background" class="shield hide"></div>
 </main>
 <script>
-    let focus;
+    let focusMovie;
     const CARDS = document.querySelectorAll(".flip");
     CARDS.forEach((e)=> {
         e.addEventListener("click", () => {
-            const bol = e.classList.contains("active");
-            if(!bol){
+            const IS_ACTIVE = e.classList.contains("active");
+            if(!IS_ACTIVE){
                 e.classList.add("active");
-                document.body.classList.add("mm");
-                document.querySelector(".zz").classList.add("ss");
-                focus = e;
+                const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+                document.body.style.cssText = `padding-right: ${scrollbarWidth}px; overflow: hidden;`;
+                document.querySelector(".shield").classList.add("show");
+                focusMovie = e;
             }
         });
     });
-    document.getElementById("wow").addEventListener("click", () => {
-        const bol = focus.classList.contains("active");
-        if(bol){
-            focus.classList.remove("active");
-            document.body.classList.remove("mm");
-            document.querySelector(".zz").classList.remove("ss");
-            focus = null;
+    document.getElementById("modal-background").addEventListener("click", () => {
+        const IS_ACTIVE = focusMovie.classList.contains("active");
+        if(IS_ACTIVE){
+            focusMovie.classList.remove("active");
+            document.body.style.cssText = "";
+            document.querySelector(".shield").classList.remove("show");
+            focusMovie = null;
         }
     });
 
