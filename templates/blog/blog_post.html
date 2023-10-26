@@ -52,14 +52,12 @@
         비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
         <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
     </div>
-    <form id="comment-form" class="aaa">
+    <form id="comment-form" class="d-flex flex-wrap aaa">
         <input type="hidden" name="post" required="" value="{{post.id}}">
-        이름: <input type="text" name="nickname" maxlength="12" required="">
-        비밀번호: <input type="text" name="password" maxlength="20"required=""><br/>
-        캡챠: {{form.captcha}}
-        <div>
-            <textarea name="content" maxlength="400" required="" cols="35" rows="4"></textarea>
-        </div>
+        <div>이름: <input type="text" name="nickname" maxlength="12" required=""></div>
+        <div>비밀번호: <input type="text" name="password" maxlength="20"required=""><br/></div>
+        <div>캡챠: {{form.captcha}}</div>
+        <div><textarea name="content" maxlength="400" required="" cols="35" rows="4"></textarea></div>
         <button type="submit">등록</button>
     </form>
     {% endif %}
