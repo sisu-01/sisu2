@@ -26,11 +26,13 @@
             <div id="movie-wrapper" class="row">
             {% if movie_list %}
             {% for movie in movie_list %}
-                <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3">
-                    <div class="flip active">
-                        <div class="card">
+                <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3 my-2">
+                    <div class="flip">
+                        <div class="cardz">
                             <div class="front">
-                                <img src="{{movie.thumbnail.url}}" class="thumbnail" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                <div class="thumbnail-wrapper">
+                                    <img src="{{movie.thumbnail.url}}" class="thumbnail" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                </div>
                             </div>
                             <div class="back">
                                 <div>{{movie.format}}</div>
@@ -56,8 +58,32 @@
             </div>
         </div>
     </div>
+    <div id="wow" class="zz ff"></div>
 </main>
 <script>
+    let focus;
+    const CARDS = document.querySelectorAll(".flip");
+    CARDS.forEach((e)=> {
+        e.addEventListener("click", () => {
+            const bol = e.classList.contains("active");
+            if(!bol){
+                e.classList.add("active");
+                document.body.classList.add("mm");
+                document.querySelector(".zz").classList.add("ss");
+                focus = e;
+            }
+        });
+    });
+    document.getElementById("wow").addEventListener("click", () => {
+        const bol = focus.classList.contains("active");
+        if(bol){
+            focus.classList.remove("active");
+            document.body.classList.remove("mm");
+            document.querySelector(".zz").classList.remove("ss");
+            focus = null;
+        }
+    });
+
     {% if user.is_authenticated %}
     function setMovieForm(){
         document.getElementsByName("id")[0].value = "";

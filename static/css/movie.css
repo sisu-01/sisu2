@@ -1,3 +1,8 @@
+.thumbnail-wrapper {
+  border: 1px solid black;
+  padding: 10px;
+}
+
 .thumbnail {
     display: block;
     width: 100%;
@@ -6,9 +11,10 @@
 .flip { 
   position: relative; 
   perspective: 1100px;
+  transition: all 0.3s ease;
 }
 
-.card {
+.cardz {
   width: 100%; 
   height: 100%; 
   position: relative;
@@ -31,6 +37,47 @@
   background-color: white;
 }
 
-.flip:hover .card {
+.flip:hover:not(.active) .cardz {
+  transform: scale(1.1);
+}
+
+.flip.active {
+  z-index: 1051;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+.active {
+  transition: left 2s ease;
+}
+
+.active .cardz {
   transform: rotateY(180deg);
+}
+
+.mm {
+  overflow: hidden;
+  padding-right: 17px;
+}
+
+.zz {
+  transition: opacity 1.15s linear;
+}
+.zz.ff {
+  opacity: 0;
+}
+.zz.ss {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.5;
+  background-color: #000;
+}
+.ff {
+  transition: opacity 0.15s linear;
 }
