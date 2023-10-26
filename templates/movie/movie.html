@@ -10,13 +10,15 @@
 {% endblock %}
 
 {% block content %}
-<main class="container-xxl">
-    <h1>Hello Movie!</h1>
-    <div class="row">
-        <div class="col-md-3">
+<main class="container-xxl bbb">
+    <div class="aaa">
+        <h1>Hello Movie!</h1>
+    </div>
+    <div class="row aaa">
+        <div class="col-12 col-lg bbb">
             {% include 'movie/movie_toc.html' %}
         </div>
-        <div class="col-md-9">
+        <div class="col-12 col-lg-9 bbb">
         {% if user.is_authenticated %}
             <button type="button" onClick="setMovieForm()">추가</button>
             {% include 'movie/movie_form.html' %}
@@ -38,15 +40,15 @@
                                 <hr>
                                 <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
                                 <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
+                                <div>
+                                    <a href="{{movie.poster.url}}" target="_blank">원본</a>
+                                {% if user.is_authenticated %}
+                                    <button onClick="getMovie('{{movie.id}}')">수정</button>
+                                    <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
+                                {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <a href="{{movie.poster.url}}" target="_blank">원본</a>
-                    {% if user.is_authenticated %}
-                        <button onClick="getMovie('{{movie.id}}')">수정</button>
-                        <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
-                    {% endif %}
                     </div>
                 </div>
             {% endfor %}
