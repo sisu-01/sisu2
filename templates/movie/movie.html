@@ -5,7 +5,25 @@
 {% block meta %}
 <link href="{% static 'css/movie.css' %}" rel="stylesheet">
 <script>
-    console.log('movie.html');
+    //수정 레이지로딩
+    document.addEventListener("DOMContentLoaded", function() {
+        const options = {
+            threshold: 0.01 //1%
+        };
+        const callback = (entries, observer) => {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    let image = entry.target;
+                    image.src = image.dataset.src;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }
+        const observer = new IntersectionObserver(callback, options);
+        document.querySelectorAll(".lazy").forEach(function(image) {
+            observer.observe(image);
+        });
+    });
 </script>
 {% endblock %}
 
@@ -31,7 +49,7 @@
                         <div class="paper">
                             <div class="front">
                                 <div class="thumbnail-box">
-                                    <img src="{{movie.thumbnail.url}}" class="thumbnail" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                    <img src="{{movie.thumbnail.url}}" class="thumbnail lazy" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
                                 </div>
                             </div>
                             <div class="back">
@@ -87,6 +105,7 @@
 
     {% if user.is_authenticated %}
     function setMovieForm(){
+        //수정 모달이 뿅~
         document.getElementsByName("id")[0].value = "";
     }
 
@@ -227,6 +246,7 @@
         .then(data => {
             if(data.status){
                 for(key in data.data){
+                    //수정 모달이 뿅~
                     //수정 언젠가 getElementById로 바꾸고 말거야
                     const INPUT = document.getElementsByName(key)[0];
                     if(INPUT !== undefined){
