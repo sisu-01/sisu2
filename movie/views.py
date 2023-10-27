@@ -25,30 +25,33 @@ def index(request):
     첫 화면
     """
     movie_list = Movie.objects.all().order_by('-date', '-id')
-    toc = {}
-    total = len(movie_list)
-    for movie in movie_list:
-        year = movie.date.year
-        if (not year in toc):
-            toc[year] = []
-        toc[movie.date.year].append({
-            'id': movie.id,
-            'title': movie.title,
-            'count': total,
-        })
-        total -= 1
-    form = MovieForm()
-    og = {
-        'title': '포토티켓일지도?',
-        'desc': '영화들 ㅋㅋㅋㅋㅋㅋ',
-        'image': movie_list[0].thumbnail,
-    }
-    context = {
-        'form': form,
-        'movie_list': movie_list,
-        'toc': toc,
-        'og': og,
-    }
+    if movie_list:
+        toc = {}
+        total = len(movie_list)
+        for movie in movie_list:
+            year = movie.date.year
+            if (not year in toc):
+                toc[year] = []
+            toc[movie.date.year].append({
+                'id': movie.id,
+                'title': movie.title,
+                'count': total,
+            })
+            total -= 1
+        form = MovieForm()
+        og = {
+            'title': '포토티켓일지도?',
+            'desc': '영화들 ㅋㅋㅋㅋㅋㅋ',
+            'image': movie_list[0].thumbnail,
+        }
+        context = {
+            'form': form,
+            'movie_list': movie_list,
+            'toc': toc,
+            'og': og,
+        }
+    else:
+        context = {}
     return render(request, 'movie/movie.html', context)
 
 @require_http_methods("POST")
