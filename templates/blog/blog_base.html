@@ -1,7 +1,9 @@
 {% extends 'layout/base.html' %}
+{% load static %}
 {% load blog_filter %}
 
 {% block meta %}
+<link href="{% static 'css/blog.css' %}" rel="stylesheet">
 <script>
     console.log('blog_base');
 </script>
@@ -10,25 +12,66 @@
 {% block content %}
 <main class="container-xxl bbb">
     <div class="row">
-        <div class="col-12 col-lg aaa">
-            <ul class="bbb">
-                {% if user.is_authenticated %}
-                <a href="{% url 'blog:set_tree' %}">트리설정</a>
-                {% endif %}
-                <li><a href="{% url 'blog:post_list' 'all' %}">전체보기🔮</a></li>
-                {% getTree as menus %}
-                {% for node in menus %} 
-                    {% include 'blog/tree.html' %}
-                {% endfor %}
-                <li><a href="{% url 'blog:post_list' 'null' %}">고아들😢</a></li>
-            </ul>
-        </div>
-        <div class="col-12 col-lg-9 aaa">
-            {% if user.is_authenticated %}
-            <div class="bbb">
-                <a href="{% url 'blog:create_post' %}">create</a>
+        <aside class="col-12 col-lg aaa">
+            <div class="prifile d-none d-lg-block bbb">
+                <div class="aaa">
+                    <img src="https://picsum.photos/100" style="width:100%; border-radius: 50%;">
+                </div>
+                <div class="aaa">
+                    테스트용
+                </div>
+                <div class="aaa">
+                    Hello World!<br/>SPring
+                </div>
             </div>
-            {% endif %}
+            <div class="mobile-wrapper bbb">
+                {% if user.is_authenticated %}
+                <div class="aaa">
+                    <a href="{% url 'blog:create_post' %}">create</a>
+                </div>
+                {% endif %}
+                <div class="aaa">
+                    검색창
+                </div>
+                <div class="d-lg-none aaa">
+                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        메뉴 열기
+                    </button>
+                </div>
+            </div>
+            <div class="offcanvas-lg offcanvas-start bbb" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="d-lg-none aaa">
+                    <h5 id="offcanvasExampleLabel">asdf</h5>
+                    <button type="button" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasExample" aria-label="Close">닫기</button>
+                </div>
+                <div class="aaa">
+                    <ul class="bbb">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'blog:set_tree' %}">트리설정</a>
+                        {% endif %}
+                        <li><a href="{% url 'blog:post_list' 'all' %}">전체보기🔮</a></li>
+                        {% getTree as menus %}
+                        {% for node in menus %} 
+                            {% include 'blog/tree.html' %}
+                        {% endfor %}
+                        <li><a href="{% url 'blog:post_list' 'null' %}">고아들😢</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% comment %} //수정 개발 할 것들 {% endcomment %}
+            <div class="current d-none d-lg-block bbb">
+                <div class="aaa">
+                    최근 작성 글
+                </div>
+                <div class="aaa">
+                    최근 달린 댓글
+                </div>
+                <div class="aaa">
+                    최근 본 영화
+                </div>
+            </div>
+        </aside>
+        <div class="col-12 col-lg-9 aaa">
             {% include template %}
         </div>
     </div>
