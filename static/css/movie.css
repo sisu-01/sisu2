@@ -11,6 +11,15 @@
     }
 }
 
+.toc-text {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
 .box {
     position: relative;
     width: 100%;

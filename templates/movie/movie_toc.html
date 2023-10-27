@@ -3,7 +3,7 @@
     <li>{{key}}&nbsp;({{value|length}})</li>
     <ul>
         {% for i in value %}
-        <li><a href="#{{i.id}}">{{i.count}}.&nbsp;{{i.title}}</a></li>
+        <li class="toc-text"><a href="#{{i.id}}">{{i.count}}.&nbsp;{{i.title}}</a></li>
         {% endfor %}
     </ul>
 {% endfor %}
