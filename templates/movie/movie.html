@@ -5,8 +5,9 @@
 {% block meta %}
 <link href="{% static 'css/movie.css' %}" rel="stylesheet">
 <script>
-    //수정 레이지로딩
-    document.addEventListener("DOMContentLoaded", function() {
+    //이미지 레이지 로딩
+    //수정 버그있다.
+    {% comment %} document.addEventListener("DOMContentLoaded", function() {
         const options = {
             threshold: 0.01 //1%
         };
@@ -23,7 +24,7 @@
         document.querySelectorAll(".lazy").forEach(function(image) {
             observer.observe(image);
         });
-    });
+    }); {% endcomment %}
 </script>
 {% endblock %}
 
@@ -35,7 +36,7 @@
                 <div class="mobile-wrapper bbb">
                     {% if user.is_authenticated %}
                     <div class="aaa">
-                        <a href="{% url 'blog:create_post' %}">create</a>
+                        <button type="button" onClick="setMovieForm()">추가</button>                          
                     </div>
                     {% endif %}
                     <div class="d-lg-none aaa">
@@ -59,11 +60,7 @@
             <div class="aaa">
                 <h1>Hello Movie!</h1>
             </div>
-        {% if user.is_authenticated %}
-            <button type="button" onClick="setMovieForm()">추가</button>
-            {% include 'movie/movie_form.html' %}
-        {% endif %}
-            <div id="movie-wrapper" class="row">
+            <div id="movie-wrapper" class="row aaa">
         {% if movie_list %}
             {% for movie in movie_list %}
                 <div id="{{movie.id}}" class="col-6 col-sm-4 col-lg-3 my-2">
@@ -101,6 +98,9 @@
         </div>
     </div>
     <div id="modal-background" class="shield hide"></div>
+    {% if user.is_authenticated %}
+    {% include 'movie/movie_form.html' %}
+    {% endif %}
 </main>
 <script>
     let focusMovie;
@@ -118,6 +118,9 @@
         });
     });
     document.getElementById("modal-background").addEventListener("click", () => {
+        hideModal();
+    });
+    function hideModal(){
         const IS_ACTIVE = focusMovie.classList.contains("active");
         if(IS_ACTIVE){
             focusMovie.classList.remove("active");
@@ -125,12 +128,20 @@
             document.querySelector(".shield").classList.remove("show");
             focusMovie = null;
         }
-    });
+    }
 
     {% if user.is_authenticated %}
+    const MODAL_FORM = new bootstrap.Modal(document.getElementById("exampleModal"));
+
+    function initForm(){
+        document.getElementById("movie-form").reset();
+        document.getElementById("poster-image").src = "";
+    }
+
     function setMovieForm(){
-        //수정 모달이 뿅~
-        document.getElementsByName("id")[0].value = "";
+        initForm();
+        hideModal();
+        MODAL_FORM.show();
     }
 
     function callKobisApi(){
@@ -270,7 +281,6 @@
         .then(data => {
             if(data.status){
                 for(key in data.data){
-                    //수정 모달이 뿅~
                     //수정 언젠가 getElementById로 바꾸고 말거야
                     const INPUT = document.getElementsByName(key)[0];
                     if(INPUT !== undefined){
@@ -288,6 +298,8 @@
                         }
                     }
                 }
+                hideModal();
+                MODAL_FORM.show();
             }else{
                 alert(data.message);
             }
