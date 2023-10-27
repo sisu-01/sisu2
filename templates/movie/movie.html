@@ -29,14 +29,36 @@
 
 {% block content %}
 <main class="container-xxl bbb">
-    <div class="aaa">
-        <h1>Hello Movie!</h1>
-    </div>
     <div class="row aaa">
-        <div class="col-12 col-lg bbb">
-            {% include 'movie/movie_toc.html' %}
-        </div>
+        <aside class="sisu-aside col-12 col-lg bbb">
+            <div class="large-sticky aaa">
+                <div class="mobile-wrapper bbb">
+                    {% if user.is_authenticated %}
+                    <div class="aaa">
+                        <a href="{% url 'blog:create_post' %}">create</a>
+                    </div>
+                    {% endif %}
+                    <div class="d-lg-none aaa">
+                        <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                            메뉴 열기
+                        </button>
+                    </div>
+                </div>
+                <div class="offcanvas-lg offcanvas-start test bbb" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                    <div class="d-lg-none aaa">
+                        <h5 id="offcanvasExampleLabel">영화 목록</h5>
+                        <button type="button" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasExample" aria-label="Close">닫기</button>
+                    </div>
+                    <div class="toc-wrapper aaa">
+                        {% include 'movie/movie_toc.html' %}
+                    </div>
+                </div>
+            </div>
+        </aside>
         <div class="col-12 col-lg-9 bbb">
+            <div class="aaa">
+                <h1>Hello Movie!</h1>
+            </div>
         {% if user.is_authenticated %}
             <button type="button" onClick="setMovieForm()">추가</button>
             {% include 'movie/movie_form.html' %}

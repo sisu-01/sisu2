@@ -1,3 +1,16 @@
+@media (max-width: 991.98px){
+    .toc-wrapper {
+        height: 100%;
+        overflow-y: auto;
+    }
+}
+@media (min-width: 992px){
+    .test {
+        max-height: calc( 100vh - 4rem);
+        overflow-y: auto;
+    }
+}
+
 .box {
     position: relative;
     width: 100%;
