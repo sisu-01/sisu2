@@ -32,7 +32,7 @@
                 {% if user.is_authenticated %}
                 <button class="delete-button" post-id="{{cmt.id}}">수퍼x</button>
                 {% elif not user.is_authenticated and not cmt.is_authenticated %}
-                <button type="button" class="modal-button" modal-id="{{cmt.id}}">모달x</button>
+                <button type="button" class="modal-button" modal-id="{{cmt.id}}">삭제</button>
                 {% endif %}
             </div>
         {% endfor %}
@@ -40,25 +40,34 @@
 </div>
 <div class="bbb">
     {% if user.is_authenticated %}
-    <form id="comment-form">
+    <form id="comment-form d-flex">
         <input type="hidden" name="post" required="" value="{{post.id}}">
-        내용: <textarea name="content" cols="35" rows="4"></textarea>
+        <textarea name="content" cols="35" rows="4" style="width: calc( 90% - 2rem );"></textarea>
         <button type="submit">등록</button>
     </form>
     {% else %}
-    <div class="aaa">
-        <input type="text" id="modal-id" required="" value="" readOnly>
-        {% comment %} //수정 모달 {% endcomment %}
-        비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
-        <button class="modal-delete" post-id="{{cmt.id}}">삭제</button>
+    <div class="modal modal-sm fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div>
+                        <button type="button" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                    </div>
+                    <div>
+                        <input type="hidden" id="modal-id" required="" value="" readOnly>
+                        비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
+                        <button class="modal-delete" post-id="{{cmt.id}}">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <form id="comment-form" class="d-flex flex-wrap aaa">
+    <form id="comment-form" class="row aaa">
         <input type="hidden" name="post" required="" value="{{post.id}}">
-        <div>이름: <input type="text" name="nickname" maxlength="12" required=""></div>
-        <div>비밀번호: <input type="text" name="password" maxlength="20"required=""><br/></div>
-        <div>캡챠: {{form.captcha}}</div>
-        <div><textarea name="content" maxlength="400" required="" cols="35" rows="4"></textarea></div>
-        <button type="submit">등록</button>
+        <div class="col-6 col-lg-3"><input type="text" class="w-100" name="nickname" maxlength="12" placeholder="닉네임" required=""></div>
+        <div class="col-6 col-lg-3"><input type="text" class="w-100" name="password" maxlength="20" placeholder="비밀번호" required=""></div>
+        {{form.captcha}}
+        <div><textarea name="content" maxlength="400" required="" cols="35" rows="4" style="width: calc( 90% - 2rem );"></textarea><button type="submit">등록</button></div>
     </form>
     {% endif %}
 </div>
@@ -69,7 +78,9 @@
         e.preventDefault();//submit 멈춰!
         createComment();
     });
+    const MODAL_FORM = new bootstrap.Modal(document.getElementById("exampleModal"));
     const MODAL_ID = document.getElementById("modal-id");
+    const MODAL_PASSWORD = document.getElementById("modal-password");
 
     document.querySelector(".modal-delete").addEventListener("click", () => {
         if(!MODAL_ID.value){
@@ -80,11 +91,13 @@
     });
 
     function initButton() {
+        MODAL_FORM.hide();
         const MODAL_BUTTON = document.querySelectorAll(".modal-button");
         MODAL_BUTTON.forEach(btn => {
             btn.addEventListener("click", (e) => {
-                //수정 모달 띄워~!3
+                MODAL_FORM.show();
                 MODAL_ID.value = e.target.getAttribute("modal-id");
+                MODAL_PASSWORD.value = "";
             });
         });
     

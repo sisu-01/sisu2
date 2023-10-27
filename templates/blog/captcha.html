@@ -1,9 +1,15 @@
 {% load i18n %}
 {% spaceless %}
-이미지: <button type="button" id="refreshCaptcha">🎲</button><img src="{{ image }}" id="captcha_image" alt="captcha"/>
-캡챠: {% include "django/forms/widgets/multiwidget.html" %}
+<div class="col-6 col-lg-3"><button type="button" id="refreshCaptcha">🎲</button><img src="{{ image }}" id="captcha_image" alt="captcha"/></div>
+<div class="col-6 col-lg-3">{% include "django/forms/widgets/multiwidget.html" %}</div>
 {% endspaceless %}
+<style>
+    #id_captcha_1 {
+        width: 100%;
+    }
+</style>
 <script>
+    document.getElementById("id_captcha_1").placeholder = "코드";
     document.getElementById("refreshCaptcha").addEventListener("click", () => {
         const URL = "/captcha/refresh/";
         const OPTIONS = {

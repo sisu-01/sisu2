@@ -181,7 +181,7 @@ def get_cmt(request):
         cmt_list = BlogComment.objects.filter(post=param['postId']).values()
         comment = ''
         for i in cmt_list:
-            comment += '<div class="comment">'
+            comment += '<div class="comment aaa">'
             comment += f'<span>이름:{i["nickname"]}</span>'
             if i['is_authenticated']:
                 comment += ' (주인이다!)'
@@ -189,8 +189,8 @@ def get_cmt(request):
             if request.user.is_authenticated:
                 comment += f' <button class="delete-button" post-id="{str(i["id"])}">수퍼x</button>'
             elif not request.user.is_authenticated and not i['is_authenticated']:
-                comment += f' <button type="button" class="modal-button" modal-id="{str(i["id"])}">모달x</button>'
-            comment += '</div><hr>'
+                comment += f' <button type="button" class="modal-button" modal-id="{str(i["id"])}">삭제</button>'
+            comment += '</div>'
         res = Response(True, '성공', comment)
     except Exception as e:
         res = Response(False, str(e), None)
