@@ -1,6 +1,20 @@
 @media (max-width: 991.98px){
+    .blog-aside {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+    }
     .mobile-wrapper {
         display: flex;
         justify-content: flex-end;
+    }
+}
+@media (min-width: 992px){
+    .large-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1020;
     }
 }
