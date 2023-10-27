@@ -107,26 +107,31 @@
     const CARDS = document.querySelectorAll(".flip");
     CARDS.forEach((e)=> {
         e.addEventListener("click", () => {
-            const IS_ACTIVE = e.classList.contains("active");
-            if(!IS_ACTIVE){
-                e.classList.add("active");
-                const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-                document.body.style.cssText = `padding-right: ${scrollbarWidth}px; overflow: hidden;`;
-                document.querySelector(".shield").classList.add("show");
-                focusMovie = e;
-            }
+            showModal(e);
         });
     });
     document.getElementById("modal-background").addEventListener("click", () => {
         hideModal();
     });
+    function showModal(e){
+        const IS_ACTIVE = e.classList.contains("active");
+        if(!IS_ACTIVE){
+            e.classList.add("active");
+            const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+            document.body.style.cssText = `padding-right: ${scrollbarWidth}px; overflow: hidden;`;
+            document.querySelector(".shield").classList.add("show");
+            focusMovie = e;
+        }
+    }
     function hideModal(){
-        const IS_ACTIVE = focusMovie.classList.contains("active");
-        if(IS_ACTIVE){
-            focusMovie.classList.remove("active");
-            document.body.style.cssText = "";
-            document.querySelector(".shield").classList.remove("show");
-            focusMovie = null;
+        if(focusMovie !== undefined) {
+            const IS_ACTIVE = focusMovie.classList.contains("active");
+            if(IS_ACTIVE){
+                focusMovie.classList.remove("active");
+                document.body.style.cssText = "";
+                document.querySelector(".shield").classList.remove("show");
+                focusMovie = undefined;
+            }
         }
     }
 
@@ -203,10 +208,10 @@
     const MOVIE_FORM = document.getElementById("movie-form");
     MOVIE_FORM.addEventListener("submit", (e) => {
         e.preventDefault();//submit 멈춰!
-        createMovie();
+        saveMovie();
     });
 
-    function createMovie() {
+    function saveMovie() {
         const PAYLOAD = new FormData(MOVIE_FORM);
         if(PAYLOAD.get("id") === ""){//id가 빈칸이면 신규 등록을 의미
             if(PAYLOAD.get("poster").size === 0 && PAYLOAD.get("poster").name === ""){
@@ -231,17 +236,29 @@
                 const DATE = data.data.date.replaceAll("-",".");
                 const WEEKDAY = ["월","화","수","목","금","토","일"];
                 const MOVIE_HTML = `
-                <div id="${MOVIE.id}">
-                    <img src="{% get_media_prefix %}${MOVIE.thumbnail}" alt="${MOVIE.title}">
-                    <div>${MOVIE.format}</div>
-                    <div>${MOVIE.title}</div>
-                    <div>${MOVIE.title_en}</div>
-                    <div>${MOVIE.brand}&nbsp;${MOVIE.location}</div>
-                    <div>${DATE}(${WEEKDAY[MOVIE.weekday]})</div>
-                    <div>
-                        <a href="{% get_media_prefix %}${MOVIE.poster}" target="_blank">원본</a>
-                        <button onClick="getMovie('${MOVIE.id}')">수정</button>
-                        <button onClick="deleteMovie('${MOVIE.id}')">삭제</button>
+                <div id="${MOVIE.id}" class="col-6 col-sm-4 col-lg-3 my-2">
+                    <div class="flip">
+                        <div class="paper">
+                            <div class="front">
+                                <div class="thumbnail-box">
+                                    <img src="{% get_media_prefix %}${MOVIE.thumbnail}" class="thumbnail lazy" alt="${MOVIE.title}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                </div>
+                            </div>
+                            <div class="back">
+                                <div>${MOVIE.format}</div>
+                                <hr>
+                                <div>${MOVIE.title}</div>
+                                <div>${MOVIE.title_en}</div>
+                                <hr>
+                                <div>${MOVIE.brand}&nbsp;${MOVIE.location}</div>
+                                <div>${DATE}(${WEEKDAY[MOVIE.weekday]})</div>
+                                <div>
+                                    <a href="{% get_media_prefix %}${MOVIE.poster}" target="_blank">원본</a>
+                                    <button onClick="getMovie('${MOVIE.id}')">수정</button>
+                                    <button onClick="deleteMovie('${MOVIE.id}')">삭제</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 `;
@@ -251,6 +268,10 @@
                     document.getElementById(MOVIE.id).insertAdjacentHTML("afterend", MOVIE_HTML);
                     document.getElementById(MOVIE.id).remove();
                 }
+                let temp = document.getElementById(MOVIE.id).querySelector(".flip")
+                temp.addEventListener("click", (e) => {
+                    showModal(temp);
+                });
                 alert(data.message);
             }else{
                 let mess = "";
@@ -261,6 +282,7 @@
             }
         })
         .catch((error) => console.log("error:", error));
+        MODAL_FORM.hide();
     }
 
     function getMovie(id) {
@@ -324,6 +346,7 @@
         .then(response => response.json())
         .then(data => {
             if(data.status){
+                hideModal();
                 document.getElementById(id).remove();
                 alert(data.message);
             }else{
