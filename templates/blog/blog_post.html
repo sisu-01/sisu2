@@ -83,7 +83,7 @@
         <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
     </div>
     <div class="aaa">
-        {% for i in '01234'|make_list %}
+        {% for i in small_list %}
         {% comment %} {% url 'blog:get_post' i %} {% endcomment %}
             <a href="#">
                 <div class="bbb">
@@ -95,9 +95,54 @@
     </div>
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
-                <button type="button">&lt;</button>
-                <button type="button">&gt;</button>
+                <button type="button" id="prev">&lt;</button>
+                <button type="button" id="next">&gt;</button>
         </div>
+        <script>
+            document.getElementById("prev").addEventListener("click", () => {
+                test("prev");
+            });
+            document.getElementById("next").addEventListener("click", () => {
+                test("next");
+            });
+            function test(cend) {
+                let URL;
+                if(cend==="prev"){
+                    URL = "pr";
+                }else if(cend==="next"){
+                    URL = "nx";
+                }
+                console.log(URL);
+                const OPTIONS = {
+                    method: "POST",
+                    mode: "same-origin",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        password: password,
+                    }),
+                }
+                fetch(URL, OPTIONS)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status){
+                        refreshComment();
+                        //alert(data.message);
+                    }else{
+                        let mess = "";
+                        for(key in data.data){
+                            mess += key+": "+data.data[key]+"\n";
+                        }
+                        alert(data.message+"\n"+mess);
+                        //fetch들 data.status 실패하고 data.data 에서 key 받아오는거 뭔지 정리 좀 해라.
+                    }
+                })
+                .catch((error) => console.log("error:", error));
+            }
+        </script>
     </h2>
 </div>
 <script>
