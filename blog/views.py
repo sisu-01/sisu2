@@ -48,7 +48,7 @@ def get_post_list(request, id):
     if id == 'all':
         tree_title = '전체보기'
         post_list = BlogPost.objects.all().order_by('-insert_date')
-    elif id == 'null':
+    elif id == 'None':
         tree_title = '고아들'
         post_list = BlogPost.objects.filter(tree=None).order_by('-insert_date')
     else:
