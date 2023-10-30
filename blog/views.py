@@ -26,7 +26,7 @@ class OpenGraph():
 
 def index(request):
     """
-    마이그레이션용
+    #마이그레이션용
     temp = BlogComment.objects.all()
     for i in temp:
         if len(i.password) < 30 and not i.is_authenticated:
