@@ -81,6 +81,8 @@
         e.preventDefault();//submit 멈춰!
         createComment();
     });
+
+{% if not user.is_authenticated %}
     const MODAL_FORM = new bootstrap.Modal(document.getElementById("exampleModal"));
     const MODAL_ID = document.getElementById("modal-id");
     const MODAL_PASSWORD = document.getElementById("modal-password");
@@ -92,9 +94,11 @@
         }
         deleteComment(MODAL_ID.value, document.getElementById("modal-password").value)
     });
-
+{% endif %}
     function initButton() {
+        {% if not user.is_authenticated %}
         MODAL_FORM.hide();
+        {% endif %}
         const MODAL_BUTTON = document.querySelectorAll(".modal-button");
         MODAL_BUTTON.forEach(btn => {
             btn.addEventListener("click", (e) => {
