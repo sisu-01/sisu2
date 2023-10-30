@@ -1,7 +1,12 @@
 from django import template
 from blog.models import BlogTree
+from common.models import Profile
 
 register = template.Library()
+
+@register.simple_tag
+def getProfile():
+    return Profile.objects.get(id=1)
 
 @register.simple_tag
 def getTree():

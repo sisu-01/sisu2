@@ -14,14 +14,15 @@
     <div class="row">
         <aside class="sisu-aside col-12 col-lg aaa">
             <div class="prifile d-none d-lg-block bbb">
+                {% getProfile as profile %}
                 <div class="aaa">
-                    <img src="https://picsum.photos/100" style="width:100%; border-radius: 50%;">
+                    <img src="{{profile.image.url}}" style="width:100%; border-radius: 50%;">
                 </div>
                 <div class="aaa">
-                    테스트용
+                    {{profile.nickname}}
                 </div>
                 <div class="aaa">
-                    Hello World!<br/>SPring
+                    {{profile.desc}}
                 </div>
             </div>
             <div class="large-sticky bbb">
