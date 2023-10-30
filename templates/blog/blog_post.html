@@ -1,11 +1,15 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'ckeditor5/content-styles.css' %}" type="text/css">
 <div class="bbb">
+    <h6><a href="{% url 'blog:post_list' post.tree_id %}">{{post.tree}}</a></h6>
+</div>
+<div class="bbb">
     <h1>{{post.title}}</h1>
 </div>
 <div class="bbb">
     조회: {{post.view_count}}
     <a href="#comment-wrapper">댓글: {{post.comment.count}}개</a>
+    <span class="float-end">{{post.insert_date|date:'Y.m.d G:i D'}}</span>
 </div>
 {% if user.is_authenticated %}
 <div class="bbb">
