@@ -89,7 +89,7 @@
 
     document.querySelector(".modal-delete").addEventListener("click", () => {
         if(!MODAL_ID.value){
-            alert("뭔 댓글을 지워야 하는겨?");
+            alert("댓글 삭제 오류\n댓글 선택에 문제가 발생했습니다.\n페이지를 새로고침해주십시오.");
             return false;
         }
         deleteComment(MODAL_ID.value, document.getElementById("modal-password").value)
@@ -164,7 +164,7 @@
         .then(data => {
             if(data.status){
                 refreshComment();
-                alert(data.message);
+                //alert(data.message);
             }else{
                 let mess = "";
                 for(key in data.data){
@@ -177,6 +177,7 @@
     }
 
     function deleteComment(id, password=null) {
+        if(!confirm("댓글을 삭제하시겠습니까?")) return false;
         const URL = "{% url 'blog:delete_cmt' %}"
         const OPTIONS = {
             method: "POST",
@@ -195,7 +196,7 @@
         .then(data => {
             if(data.status){
                 refreshComment();
-                alert(data.message);
+                //alert(data.message);
             }else{
                 let mess = "";
                 for(key in data.data){

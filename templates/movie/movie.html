@@ -177,7 +177,7 @@
                             </div>`
                     });
                 }else{
-                    alert("없어");
+                    alert("영화를 찾을 수 없습니다.");
                 }
             }else{
                 alert(data.message);
@@ -215,7 +215,7 @@
         const PAYLOAD = new FormData(MOVIE_FORM);
         if(PAYLOAD.get("id") === ""){//id가 빈칸이면 신규 등록을 의미
             if(PAYLOAD.get("poster").size === 0 && PAYLOAD.get("poster").name === ""){
-                alert("포스터 업로드 하쇼잉");
+                alert("포스터를 등록해주세요.");
                 return false;
             }
         }
@@ -272,7 +272,7 @@
                 temp.addEventListener("click", (e) => {
                     showModal(temp);
                 });
-                alert(data.message);
+                //alert(data.message);
             }else{
                 let mess = "";
                 for(key in data.data){
@@ -330,6 +330,7 @@
     }
 
     function deleteMovie(id) {
+        if(!confirm("영화를 삭제하시겠습니까?")) return false;
         const URL = "{% url 'movie:delete' %}";
         const OPTIONS = {
             method: "POST",
@@ -348,7 +349,7 @@
             if(data.status){
                 hideModal();
                 document.getElementById(id).remove();
-                alert(data.message);
+                //alert(data.message);
             }else{
                 alert(data.message);
             }

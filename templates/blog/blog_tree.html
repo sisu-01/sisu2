@@ -113,7 +113,7 @@
             .then(data => {
                 if(data.status){
                     getTree();
-                    alert(data.message);
+                    //alert(data.message);
                 }else{
                     let mess = "";
                     for(key in data.data){
@@ -175,6 +175,7 @@
         }
 
         function deleteTree(id){
+            if(!confirm("트리를 삭제하시겠습니까?")) return false;
             const URL = "{% url 'blog:delete_tree' %}";
             const OPTIONS = {
                 method: "POST",
@@ -192,7 +193,7 @@
             .then(data => {
                 if(data.status){
                     getTree();
-                    alert(data.message);
+                    //alert(data.message);
                 }else{
                     alert(data.message);
                 }
