@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+#from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -126,7 +126,7 @@ def create_post(request):
             post.insert_date = timezone.now()
             post.insert_ip = get_client_ip(request)
             post.save()
-            messages.success(request, '등록 완료')
+            #messages.success(request, '등록 완료')
             return redirect('blog:get_post', id=post.id)
     context = {}
     return render(request, 'blog/blog_form.html', context)
@@ -142,7 +142,7 @@ def update_post(request, id):
             post.update_date = timezone.now()
             post.update_ip = get_client_ip(request)
             post.save()
-            messages.success(request, '수정 완료')
+            #messages.success(request, '수정 완료')
             return redirect('blog:get_post', id=post.id)
     else:
         form = PostForm(instance=post)
@@ -183,7 +183,7 @@ def ckeditor_upload_image(request):
 def delete_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     post.delete()
-    messages.success(request, '삭제 완료')
+    #messages.success(request, '삭제 완료')
     return redirect('blog:post_list', id=post.id)
 
 @require_http_methods("POST")
