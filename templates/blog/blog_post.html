@@ -40,9 +40,9 @@
 </div>
 <div class="bbb">
     {% if user.is_authenticated %}
-    <form id="comment-form d-flex">
+    <form id="comment-form" class="d-flex">
         <input type="hidden" name="post" required="" value="{{post.id}}">
-        <textarea name="content" cols="35" rows="4" style="width: calc( 90% - 2rem );"></textarea>
+        <textarea class="w-100" name="content" cols="35" rows="4"></textarea>
         <button type="submit">등록</button>
     </form>
     {% else %}
@@ -67,7 +67,10 @@
         <div class="col-6 col-lg-3"><input type="text" class="w-100" name="nickname" maxlength="12" placeholder="닉네임" required=""></div>
         <div class="col-6 col-lg-3"><input type="text" class="w-100" name="password" maxlength="20" placeholder="비밀번호" required=""></div>
         {{form.captcha}}
-        <div><textarea name="content" maxlength="400" required="" cols="35" rows="4" style="width: calc( 90% - 2rem );"></textarea><button type="submit">등록</button></div>
+        <div class="d-flex">
+            <textarea class="w-100" name="content" maxlength="400" required="" cols="35" rows="4"></textarea>
+            <button type="submit">등록</button>
+        </div>
     </form>
     {% endif %}
 </div>
