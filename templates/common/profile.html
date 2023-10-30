@@ -9,14 +9,33 @@
 <body>
     <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
-        <div>닉넴<input type="text" name="nickname" maxLength="10" required=""></div>
-        <div>설명<textarea name="desc" maxLength="100" cols="30" rows="10"></textarea>
+        <div>닉넴<input type="text" name="nickname" maxLength="10" required="" value="{{form.nickname.value|default_if_none:''}}"></div>
+        <div>설명<textarea name="desc" maxLength="100" cols="30" rows="10">{{form.desc.value|default_if_none:''}}</textarea>
         <div>파일
-            <input type="file" name="image">
+            <input type="file" id="image" name="image">
+        </div>
+        <div>
+            <img src="{{form.image.value.url|default_if_none:''}}" id="preview" alt="" width="234" height="234">
+            {% comment %} //수정 width: height 정하기 {% endcomment %}
         </div>
         <div>
             <button type="submit">저장</button>
         </div>
     </form>
 </body>
+<script>
+    function readImage(input) {
+        if(input.files && input.files[0]) {
+            //사진인지 검사해 return false;
+            const reader = new FileReader()
+            reader.onload = e => {
+                document.getElementById("preview").src = e.target.result
+            }
+            reader.readAsDataURL(input.files[0])
+        }
+    }
+    document.getElementById("image").addEventListener('change', (e) => {
+        readImage(e.target);
+    });
+</script>
 </html>

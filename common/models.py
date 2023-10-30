@@ -17,7 +17,7 @@ class TopMenu(models.Model):
 class Profile(models.Model):
     nickname = models.CharField(max_length=10)
     desc = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=ImageUpload('poster'))
+    image = models.ImageField(upload_to=ImageUpload('profile'))
 
     class Meta:
         managed = True
