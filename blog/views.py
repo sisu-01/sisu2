@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -24,6 +25,17 @@ class OpenGraph():
     image: str
 
 def index(request):
+    """
+    마이그레이션용
+    temp = BlogComment.objects.all()
+    for i in temp:
+        if len(i.password) < 30 and not i.is_authenticated:
+            i.password = make_password(i.password)
+            i.save()
+        if i.is_authenticated:
+            i.password = ""
+            i.save()
+    """
     context = {
         'template': 'blog/blog_index.html',
         'og': asdict(OpenGraph('블로그', '블로그임둥~ 엌~!', None)),
@@ -205,6 +217,8 @@ def create_cmt(request):
         if form.is_valid():
             cmt = form.save(commit=False)
             cmt.is_authenticated = request.user.is_authenticated
+            if not request.user.is_authenticated:
+                cmt.password = make_password(cmt.password)
             cmt.insert_date = timezone.now()
             cmt.insert_ip = get_client_ip(request)
             cmt.save()
@@ -227,7 +241,7 @@ def delete_cmt(request):
             if cmt.is_authenticated:
                 res = Response(False, '왜 로그인 댓글을 지우시려고;;', None)
             else:
-                if cmt.password != param['password']:
+                if not check_password(param['password'],cmt.password):
                     res = Response(False, '비번이 다름;;', None)
                 else:
                     cmt.delete()
