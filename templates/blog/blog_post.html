@@ -1,7 +1,8 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'ckeditor5/content-styles.css' %}" type="text/css">
 <div class="bbb">
-    <h6><a href="{% url 'blog:post_list' post.tree_id %}">{{post.tree}}</a></h6>
+    <a href="{% url 'blog:post_list' post.tree_id %}"><h6>{{post.tree}}</h6></a>
+    <div class="float-end"><button id="copy-url" class="float-end">링크복사</button></div>
 </div>
 <div class="bbb">
     <h1>{{post.title}}</h1>
@@ -145,6 +146,7 @@
         </script>
     </h2>
 </div>
+<input type="text" id="ShareUrl" class="d-none">
 <script>
     const postId = {{post.id}};
     const COMMENT_FORM = document.getElementById("comment-form");
@@ -278,5 +280,16 @@
             }
         })
         .catch((error) => console.log("error:", error));
+    }
+
+    document.getElementById("copy-url").onclick = function(e){
+        var obShareUrl = document.getElementById("ShareUrl");
+        obShareUrl.className = "test";
+        obShareUrl.value = "{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{% url 'blog:get_post' post.id %}" // 현재 URL 을 세팅해 줍니다.
+        obShareUrl.select(); // 해당 값이 선택되도록 select() 합니다
+        document.execCommand("copy"); // 클립보드에 복사합니다.
+        obShareUrl.blur(); // 선된것을 다시 선택안된것으로 바꿈니다.
+        obShareUrl.className = "d-none";
+        alert("URL이 클립보드에 복사되었습니다");
     }
 </script>
