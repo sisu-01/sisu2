@@ -78,6 +78,28 @@
     </form>
     {% endif %}
 </div>
+<div class="bbb">
+    <div class="aaa">
+        <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
+    </div>
+    <div class="aaa">
+        {% for i in '01234'|make_list %}
+        {% comment %} {% url 'blog:get_post' i %} {% endcomment %}
+            <a href="#">
+                <div class="bbb">
+                    <span class="small-span">tisdffsdaasdfasdfkjasdfhjklasdfhjklasfdhjasdfhjasdfhjasdflhtle</span>
+                    <small>yyyy-mm-dd</small>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    <h2>
+        <div class="d-flex justify-content-center gap-5 aaa">
+                <button type="button">&lt;</button>
+                <button type="button">&gt;</button>
+        </div>
+    </h2>
+</div>
 <script>
     const postId = {{post.id}};
     const COMMENT_FORM = document.getElementById("comment-form");
