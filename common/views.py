@@ -16,3 +16,9 @@ class CustomAuthView(auth_views.LoginView):
             self.request.session.modified = True
 
         return super().form_valid(form)
+    
+def config(request):
+    return render(request, 'common/config.html')
+
+def profile(request):
+    return render(request, 'common/profile.html')
