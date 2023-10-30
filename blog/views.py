@@ -182,9 +182,10 @@ def ckeditor_upload_image(request):
 @login_required(login_url='common:login')
 def delete_post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
+    tree = post.tree_id
     post.delete()
     #messages.success(request, '삭제 완료')
-    return redirect('blog:post_list', id=post.id)
+    return redirect('blog:post_list', id=tree)
 
 @require_http_methods("POST")
 def get_cmt(request):
