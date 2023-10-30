@@ -7,6 +7,16 @@
     <title>Document</title>
 </head>
 <body>
-    프로필 설정임
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div>닉넴<input type="text" name="nickname" maxLength="10" required=""></div>
+        <div>설명<textarea name="desc" maxLength="100" cols="30" rows="10"></textarea>
+        <div>파일
+            <input type="file" name="image">
+        </div>
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
 </body>
 </html>
