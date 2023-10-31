@@ -15,7 +15,7 @@
 {% if user.is_authenticated %}
 <div class="bbb">
     <a href="{% url 'blog:update_post' post.id %}">update</a>
-    <a href="{% url 'blog:delete_post' post.id %}">delete</a>
+    <a href="#" id="post-delete-button">delete</a>
     공개여부:{{post.is_public}}
 </div>
 {% endif %}
@@ -148,6 +148,13 @@
 </div>
 <input type="text" id="ShareUrl" class="d-none">
 <script>
+    {% if user.is_authenticated %}
+    document.getElementById("post-delete-button").addEventListener("click", () => {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = "{% url 'blog:delete_post' post.id %}";
+        }
+    });
+    {% endif %}
     const postId = {{post.id}};
     const COMMENT_FORM = document.getElementById("comment-form");
     COMMENT_FORM.addEventListener("submit", (e) => {
