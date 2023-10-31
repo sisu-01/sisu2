@@ -1,7 +1,7 @@
 {% load i18n %}
 {% spaceless %}
-<div class="col-6 col-lg-3"><button type="button" id="refreshCaptcha">🎲</button><img src="{{ image }}" id="captcha_image" alt="captcha"/></div>
 <div class="col-6 col-lg-3">{% include "django/forms/widgets/multiwidget.html" %}</div>
+<div class="col-6 col-lg-3"><button type="button" id="refreshCaptcha">🎲</button><img src="{{ image }}" id="captcha_image" alt="captcha"/></div>
 {% endspaceless %}
 <style>
     #id_captcha_1 {
