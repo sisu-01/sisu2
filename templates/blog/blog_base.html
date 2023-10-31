@@ -48,9 +48,6 @@
                     </div>
                     <div class="bbb">
                         <ul class="aaa">
-                            {% if user.is_authenticated %}
-                            <a href="{% url 'blog:set_tree' %}">트리설정</a>
-                            {% endif %}
                             <li><a href="{% url 'blog:post_list' 'all' %}">전체보기🔮</a></li>
                             {% getTree as menus %}
                             {% for node in menus %} 

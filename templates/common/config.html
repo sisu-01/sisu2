@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
+    {% if user.is_authenticated %}
     <a href="{% url 'common:profile' %}">프로필 설정</a>
+    <a href="{% url 'blog:set_tree' %}">트리설정</a>
+    {% endif %}
 </body>
 </html>
