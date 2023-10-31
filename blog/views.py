@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.db.models import Q
 from common.utils import get_client_ip, Response
 from .models import BlogTree, BlogPost, BlogComment
 from .forms import TreeForm, PostForm, CommentForm
@@ -45,7 +46,20 @@ def index(request):
 def get_post_list(request, id):
     page = int(request.GET.get('page',1))
 
-    if id == 'all':
+    if id == 'search':
+        kt = request.GET.get('kt')
+        kw = request.GET.get('kw')
+        
+        if kt == 'search_title_content':
+            search = Q(title__icontains=kw)|Q(content__icontains=kw)
+        elif kt == 'search_title':
+            search = Q(title__icontains=kw)
+        elif kt == 'search_content':
+            search = Q(content__icontains=kw)
+
+        tree_title = '검색: '+kw
+        post_list = BlogPost.objects.filter(search).order_by('-insert_date')
+    elif id == 'all':
         tree_title = '전체보기'
         post_list = BlogPost.objects.all().order_by('-insert_date')
     elif id == 'None':

@@ -33,7 +33,7 @@
                     </div>
                     {% endif %}
                     <div class="bbb">
-                        검색창
+                        <button type="button" id="search-modal-button">검색</button>
                     </div>
                     <div class="d-lg-none bbb">
                         <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
@@ -79,4 +79,34 @@
         </div>
     </div>
 </main>
+<!-- 검색 모달 -->
+<div class="modal modal-sm fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    블로그 검색
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                </div>
+                <div>
+                    <form method="get_post" action="{% url 'blog:post_list' 'search' %}">
+                        <select name="kt" id="">
+                            <option value="search_title_content" selected>제목+내용</option>
+                            <option value="search_title">제목</option>
+                            <option value="search_content">내용</option>
+                        </select>
+                        <input type="text" name="kw" placeholder="검색어를 입력하세요.">
+                        <button type="submit">검색</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const SEARCH_MODAL = new bootstrap.Modal(document.getElementById("searchModal"));
+    document.getElementById("search-modal-button").addEventListener("click", () => {
+        SEARCH_MODAL.show();
+    })
+</script>
 {% endblock %}
