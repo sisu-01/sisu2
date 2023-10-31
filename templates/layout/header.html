@@ -10,12 +10,12 @@
                 헤더 열기
             </button>
             <div class="collapse navbar-collapse gap-3 aaa" id="navbarSupportedContent">
-                {% top_menu as context %}
-                {% for menu in context %}
                 <div class="bbb">
-                    <h1><a href="{% url menu.url %}">{{menu}}</a></h1>
+                    <h1><a href="{% url 'blog:index' %}">1</a></h1>
                 </div>
-                {% endfor %}
+                <div class="bbb">
+                    <h1><a href="{% url 'movie:index' %}">2</a></h1>
+                </div>
                 {% if user.is_authenticated %}
                 <div class="bbb">
                     <h1><a href="{% url 'common:logout' %}?next={{request.get_full_path|urlencode}}">logout</a></h1>
