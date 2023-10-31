@@ -10,10 +10,17 @@ Blog Base 4형제
 """
 @register.simple_tag
 def getProfile():
-    return Profile.objects.get(id=1)
+    try:
+        profile = Profile.objects.get(id=1)
+    except:
+        profile = None
+    return profile
 @register.simple_tag
 def getRecentPost():
-    post = BlogPost.objects.filter().latest('id')
+    try: 
+        post = BlogPost.objects.filter().latest('id')
+    except:
+        post = None
     return post
 @register.simple_tag
 def getRecentComment():
@@ -21,7 +28,10 @@ def getRecentComment():
     return cmt_list
 @register.simple_tag
 def getRecentMovie():
-    movie = Movie.objects.filter().latest('id')
+    try:
+        movie = Movie.objects.filter().latest('id')
+    except:
+        movie = None
     return movie
 
 @register.simple_tag
