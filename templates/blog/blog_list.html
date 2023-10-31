@@ -27,8 +27,8 @@
     </div>
     <div class="pagination aaa d-flex justify-content-center">
         {% if slicing >= 1 %}
-            <a href="?page=1"><button>맨처음</button></a>
-            <a href="?page={{ slicing }}"><button>&lt;</button></a>
+            <a href="?page=1{{get_url}}"><button>맨처음</button></a>
+            <a href="?page={{ slicing }}{{get_url}}"><button>&lt;</button></a>
         {% else %}
             맨처음
             &lt;
@@ -37,12 +37,12 @@
             {% if post_list.number == page %}
             <h4><b>{{page}}</b></h4>
             {% else %}
-            <a href="?page={{page}}"><button>{{page}}</button></a>
+            <a href="?page={{page}}{{get_url}}"><button>{{page}}</button></a>
             {% endif %}
         {% endfor %}
         {% if slicing|add:page_btn|add:1 <= post_list.paginator.num_pages %}
-            <a href="?page={{ slicing|add:page_btn|add:1 }}"><button>&gt;</button></a>
-            <a href="?page={{ post_list.paginator.num_pages }}"><button>마지막</button></a>
+            <a href="?page={{ slicing|add:page_btn|add:1 }}{{get_url}}"><button>&gt;</button></a>
+            <a href="?page={{ post_list.paginator.num_pages }}{{get_url}}"><button>마지막</button></a>
         {% else %}
             &gt;
             마지막

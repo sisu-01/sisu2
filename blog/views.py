@@ -45,7 +45,7 @@ def index(request):
 
 def get_post_list(request, id):
     page = int(request.GET.get('page',1))
-
+    get_url = ''
     if id == 'search':
         kt = request.GET.get('kt')
         kw = request.GET.get('kw')
@@ -59,6 +59,7 @@ def get_post_list(request, id):
 
         tree_title = '검색: '+kw
         post_list = BlogPost.objects.filter(search).order_by('-insert_date')
+        get_url = '&kt='+kt+'&kw='+kw
     elif id == 'all':
         tree_title = '전체보기'
         post_list = BlogPost.objects.all().order_by('-insert_date')
@@ -86,6 +87,7 @@ def get_post_list(request, id):
         'slicing': slicing,
         'page_btn': page_btn,
         'tree_title': tree_title,
+        'get_url': get_url,
         'template': 'blog/blog_list.html',
         'og': asdict(OpenGraph('블로그 목록', '무슨 글을 봐야하지;;', None)),
     }
