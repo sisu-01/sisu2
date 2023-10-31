@@ -16,7 +16,7 @@
             <div class="prifile d-none d-lg-block bbb">
                 {% getProfile as profile %}
                 <div class="aaa">
-                    <img src="{{profile.image.url}}" style="width:100%; border-radius: 50%;">
+                    <img src="{{profile.image.url}}" style="width:100%; border-radius: 50%;" onerror="src='/static/images/profile_404.jpg'">
                 </div>
                 <div class="aaa">
                     {{profile.nickname}}
