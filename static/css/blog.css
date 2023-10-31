@@ -1,3 +1,16 @@
+.movie-box {
+    border: 1px solid gray;
+    border-radius: 5%;
+    padding: 10px;
+    background-color: white;
+}
+.movie {
+    display: block;
+    /* inherit = 부모 상속 */
+    border-radius: inherit;
+    width: 100%;
+}
+
 .post-wrapper {
     display: flex;
 }

@@ -63,13 +63,29 @@
                 {% comment %} //수정 개발 할 것들 {% endcomment %}
                 <div class="current d-none d-lg-block aaa">
                     <div class="bbb">
-                        최근 작성 글
+                        <span>최근 작성 글</span>
+                        {% getRecentPost as rc_post %}
+                        <div class="aaa">
+                            <a href="{% url 'blog:get_post' rc_post.id %}"><span class="small-span">{{rc_post.title}}</span></a>
+                        </div>
                     </div>
                     <div class="bbb">
                         최근 달린 댓글
+                        {% getRecentComment as rc_cmt %}
+                        {% for cmt in rc_cmt %}
+                        <div class="aaa">
+                            <a href="{% url 'blog:get_post' cmt.post_id %}#comment-wrapper"><span class="small-span">{{cmt.content}}</span></a>
+                        </div>
+                        {% endfor %}
                     </div>
                     <div class="bbb">
-                        최근 본 영화
+                        <span>최근 본 영화</span>
+                        {% getRecentMovie as rc_movie %}
+                        <a href="{% url 'movie:index' %}#{{rc_movie.id}}">
+                            <div class="movie-box">
+                                <img src="{{rc_movie.thumbnail.url}}" class="movie" alt="{{rc_movoie.title}}" onerror="src='/static/images/movie_404.jpg'">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

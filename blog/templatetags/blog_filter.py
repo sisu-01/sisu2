@@ -1,12 +1,28 @@
 from django import template
-from blog.models import BlogTree
+from blog.models import BlogTree, BlogPost, BlogComment
+from movie.models import Movie
 from common.models import Profile
 
 register = template.Library()
 
+"""
+Blog Base 4형제
+"""
 @register.simple_tag
 def getProfile():
     return Profile.objects.get(id=1)
+@register.simple_tag
+def getRecentPost():
+    post = BlogPost.objects.filter().latest('id')
+    return post
+@register.simple_tag
+def getRecentComment():
+    cmt_list = BlogComment.objects.filter().order_by('-id')[:2]
+    return cmt_list
+@register.simple_tag
+def getRecentMovie():
+    movie = Movie.objects.filter().latest('id')
+    return movie
 
 @register.simple_tag
 def getTree():
