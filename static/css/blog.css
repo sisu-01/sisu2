@@ -41,6 +41,7 @@
     height:100%;
     object-fit:cover;
 }
+
 .small-span {    
     display: -webkit-box;
     overflow: hidden;
@@ -48,4 +49,16 @@
     -webkit-box-orient: vertical;
     word-break: normal;
     word-wrap: break-word;
+}
+.prev-true > button {
+    display: block!important;
+}
+.prev-false  > span {
+    display: block!important;
+}
+.next-true > button {
+    display: block!important;
+}
+.next-false > span {
+    display: block!important;
 }

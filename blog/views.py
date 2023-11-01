@@ -124,12 +124,37 @@ def get_post(request, id):
         """
         form = CommentForm(user=request.user)
 
-        #small_list = BlogPost.objects.filter()
+        # prev_list는 현재 post도 포함하기 때문에,
+        # next_list보다 인덱싱을 1 많게 한다.
+        prev_list = list(BlogPost.objects.filter(id__gte=id).order_by('id')[:4])[::-1]
+        if 3 < len(prev_list):
+            has_prev = True
+            prev_info = prev_list.pop(0)
+        else:
+            has_prev = False
+            prev_info = None
+
+        next_list = list(BlogPost.objects.filter(id__lt=id).order_by('-id')[:3])
+        if 2 < len(next_list):
+            has_next = True
+            next_info = next_list.pop()
+        else:
+            has_next = False
+            next_info = None
+        
+        small_list = prev_list+next_list
+        small = {
+            'list': small_list,
+            'has_prev': has_prev,
+            'prev_info': prev_info,
+            'has_next': has_next,
+            'next_info': next_info,
+        }
 
         context = {
             'post': post,
             'cmt_list': cmt_list,
-            #'small_list': small_list,
+            'small': small,
             'form': form,
             'template': 'blog/blog_post.html',
             'og': asdict(OpenGraph(post.title, post.content[:60], post.thumbnail)),

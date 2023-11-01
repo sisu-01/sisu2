@@ -83,21 +83,37 @@
     <div class="aaa">
         <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
     </div>
+    prev 페이지 시작 글: <input type="text" id="prev-info" value="{{small.prev_info}}">
     <div class="aaa">
-        {% for i in small_list %}
+        {% for post in small.list %}
         {% comment %} {% url 'blog:get_post' i %} {% endcomment %}
-            <a href="#">
+            <a href="{% url 'blog:get_post' post.id %}">
                 <div class="bbb">
-                    <span class="small-span">tisdffsdaasdfasdfkjasdfhjklasdfhjklasfdhjasdfhjasdfhjasdflhtle</span>
-                    <small>yyyy-mm-dd</small>
+                    <span class="small-span">{{post.title}}</span>
+                    <small>{{post.insert_date}}</small>
                 </div>
             </a>
         {% endfor %}
     </div>
+    next 페이지 시작 글: <input type="text" id="next-info" value="{{small.next_info}}">
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
-                <button type="button" id="prev">&lt;</button>
-                <button type="button" id="next">&gt;</button>
+        {% if small.has_prev %}
+            <div class="prev-true">
+        {% else %}
+            <div class="prev-false">
+        {% endif %}
+                <span id="prev-false" class="d-none">&lt;</span>
+                <button type="button" id="prev-true" class="d-none">&lt;</button>
+            </div>
+        {% if small.has_next %}
+            <div class="next-true">
+        {% else %}
+            <div class="next-false">
+        {% endif %}
+                <span id="next-false" class="d-none">&gt;</span>
+                <button type="button" id="next-true" class="d-none">&gt;</button>
+            </div>
         </div>
         <script>
             document.getElementById("prev").addEventListener("click", () => {
@@ -138,7 +154,6 @@
                             mess += key+": "+data.data[key]+"\n";
                         }
                         alert(data.message+"\n"+mess);
-                        //fetch들 data.status 실패하고 data.data 에서 key 받아오는거 뭔지 정리 좀 해라.
                     }
                 })
                 .catch((error) => console.log("error:", error));
