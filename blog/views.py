@@ -136,11 +136,11 @@ def get_post(request, id):
         add_next = 2 - prev_length
         add_next = int((abs(add_next) + add_next )/2) #음수만 0으로
         next_list = list(BlogPost.objects.filter(tree=tree, id__lte=id).order_by('-id')[:4+add_next])
-        if 3 < len(next_list):
+        if 3 < len(next_list) and 5 < len(next_list)+prev_length:
             has_next = True
             next_info = next_list.pop()
         small_list = list(BlogPost.objects.filter(tree=tree, id__gte=next_list[-1].id).order_by('id')[:6])[::-1]
-        if 2 < prev_length:
+        if 2 < prev_length and 5 < len(small_list):
             has_prev = True
             prev_info = small_list.pop(0)
         small = {
