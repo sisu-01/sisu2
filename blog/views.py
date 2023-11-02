@@ -124,25 +124,25 @@ def get_post(request, id):
         """
         form = CommentForm(user=request.user)
 
-        # prev_list는 현재 post도 포함하기 때문에,
-        # next_list보다 인덱싱을 1 많게 한다.
-        prev_list = list(BlogPost.objects.filter(id__gte=id).order_by('id')[:4])[::-1]
-        if 3 < len(prev_list):
-            has_prev = True
-            prev_info = prev_list.pop(0)
-        else:
-            has_prev = False
-            prev_info = None
-
-        next_list = list(BlogPost.objects.filter(id__lt=id).order_by('-id')[:3])
-        if 2 < len(next_list):
+        """
+        엘레강스 고져스 메뷸러스 엑셀런트 5개 그리고 prev next 존재 여부 판정 알고리즘 캭
+        """
+        tree = post.tree
+        has_prev=False
+        prev_info=None
+        has_next=False
+        next_info=None
+        prev_length = len(BlogPost.objects.filter(tree=tree, id__gt=id))
+        add_next = 2 - prev_length
+        add_next = int((abs(add_next) + add_next )/2) #음수만 0으로
+        next_list = list(BlogPost.objects.filter(tree=tree, id__lte=id).order_by('-id')[:4+add_next])
+        if 3 < len(next_list):
             has_next = True
             next_info = next_list.pop()
-        else:
-            has_next = False
-            next_info = None
-        
-        small_list = prev_list+next_list
+        small_list = list(BlogPost.objects.filter(tree=tree, id__gte=next_list[-1].id).order_by('id')[:6])[::-1]
+        if 2 < prev_length:
+            has_prev = True
+            prev_info = small_list.pop(0)
         small = {
             'list': small_list,
             'has_prev': has_prev,
