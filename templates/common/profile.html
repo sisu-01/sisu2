@@ -14,8 +14,9 @@
         <div>파일
             <input type="file" id="image" name="image">
         </div>
+        270x270으로 업로드 하쇼잉
         <div>
-            <img src="{{form.image.value.url|default_if_none:''}}" id="preview" alt="" width="234" height="234">
+            <img src="{{form.image.value.url|default_if_none:''}}" id="preview" alt="" width="270" height="270">
             {% comment %} //수정 width: height 정하기 {% endcomment %}
         </div>
         <div>
