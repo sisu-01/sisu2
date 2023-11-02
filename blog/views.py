@@ -299,6 +299,44 @@ def delete_cmt(request):
         #//172번 댓글이 없다고 에러를 뿜으면 어카냐..
     return JsonResponse(asdict(res))
 
+@require_http_methods("POST")
+def prev_list(request):
+    try:
+        param = json.loads(request.body)
+        small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__gte=param['startInfo']).values('id', 'title', 'insert_date')[:6])[::-1]
+        if len(small_list) < 6:
+            has_prev = False
+            prev_info = None
+        else:
+            has_prev = True
+            prev_info = small_list.pop(0)['id']
+        next_info = BlogPost.objects.filter(tree=param['treeId'], id__lt=param['startInfo']).order_by('-id')[:1][0].id
+        result = {
+            'list': small_list,
+            'has_prev': has_prev,
+            'prev_info': prev_info,
+            'has_next': True,
+            'next_info': next_info,
+        }
+        res = Response(True, 'zz', result)
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
+
+@require_http_methods("POST")
+def next_list(request):
+    try:
+        param = json.loads(request.body)
+        if param['cendType'] == 'prev':
+            small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__gte=param['startInfo'])[:6])[::-1]
+        elif param['cendType'] == 'next':
+            small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__lte=param['startInfo']).order_by('-id')[:6])
+        print(small_list)
+        res = Response(True, 'zz', None)
+    except Exception as e:
+        res = Response(False, str(e), None)
+    return JsonResponse(asdict(res))
+
 @login_required(login_url='common:login')
 def tree(request):
     context = {}

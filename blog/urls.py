@@ -15,6 +15,8 @@ urlpatterns = [
     path('get_cmt/', views.get_cmt, name='get_cmt'),
     path('create_cmt/', views.create_cmt, name='create_cmt'),
     path('delete_cmt/', views.delete_cmt, name='delete_cmt'),
+    path('prev_list/', views.prev_list, name='prev_list'),
+    path('next_list/', views.next_list, name='next_list'),
 
     path('tree/', views.tree, name='set_tree'),
     path('get_tree/', views.get_tree, name='get_tree'),

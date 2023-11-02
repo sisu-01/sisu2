@@ -83,18 +83,20 @@
     <div class="aaa">
         <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
     </div>
-    prev 페이지 시작 글: <input type="text" id="prev-info" value="{{small.prev_info}}">
-    <div class="aaa">
-        {% for p in small.list %}
-            <a href="{% url 'blog:get_post' p.id %}">
-                <div class="bbb" {% if p.id == post.id %}style="background-color: yellow;"{% endif%}>
-                    <span class="small-span">{{p.title}}</span>
-                    <small>{{p.insert_date}}</small>
-                </div>
-            </a>
-        {% endfor %}
+    prev 페이지 시작 글: <input type="text" id="prev-info" value="{{small.prev_info.id}}">
+    <div id="small-wrapper" class="aaa">
+        <div id="small0" class="bbb">
+            {% for p in small.list %}
+                <a href="{% url 'blog:get_post' p.id %}">
+                    <div class="aaa {% if p.id == post.id %}bg-info{% endif%}">
+                        <span class="small-span">{{p.title}}</span>
+                        <small>{{p.insert_date}}</small>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
     </div>
-    next 페이지 시작 글: <input type="text" id="next-info" value="{{small.next_info}}">
+    next 페이지 시작 글: <input type="text" id="next-info" value="{{small.next_info.id}}">
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
             <div id="prev-btn-wrapper" class="prev {% if small.has_prev %}active{% endif %}">
@@ -106,49 +108,6 @@
                 <button type="button" id="next-btn" class="d-none">&gt;</button>
             </div>
         </div>
-        <script>
-            document.getElementById("prev-btn").addEventListener("click", () => {
-                test("prev");
-            });
-            document.getElementById("next-btn").addEventListener("click", () => {
-                test("next");
-            });
-            function test(cend) {
-                let URL;
-                if(cend==="prev"){
-                    URL = "pr";
-                }else if(cend==="next"){
-                    URL = "nx";
-                }
-                console.log(URL);
-                const OPTIONS = {
-                    method: "POST",
-                    mode: "same-origin",
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}",
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: 'zz',
-                    }),
-                }
-                fetch(URL, OPTIONS)
-                .then(response => response.json())
-                .then(data => {
-                    if(data.status){
-                        refreshComment();
-                        //alert(data.message);
-                    }else{
-                        let mess = "";
-                        for(key in data.data){
-                            mess += key+": "+data.data[key]+"\n";
-                        }
-                        alert(data.message+"\n"+mess);
-                    }
-                })
-                .catch((error) => console.log("error:", error));
-            }
-        </script>
     </h2>
 </div>
 <input type="text" id="ShareUrl" class="d-none">
@@ -160,7 +119,10 @@
         }
     });
     {% endif %}
-    const postId = {{post.id}};
+    const POST_URL = "{% url 'blog:get_post' 0 %}".replace("0", "");
+    const POST_ID = {{post.id}};
+    const TREE_ID = {{post.tree.id}};
+    const SMALL_WRAPPER = document.getElementById("small-wrapper");
     const COMMENT_FORM = document.getElementById("comment-form");
     COMMENT_FORM.addEventListener("submit", (e) => {
         e.preventDefault();//submit 멈춰!
@@ -213,7 +175,7 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                postId: postId,
+                postId: POST_ID,
             }),
         }
         fetch(URL, OPTIONS)
@@ -292,6 +254,79 @@
             }
         })
         .catch((error) => console.log("error:", error));
+    }
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+        getPrevList();
+    });
+    document.getElementById("next-btn").addEventListener("click", () => {
+        console.log("zz");
+        //test("next");
+    });
+    function getPrevList(CEND_TYPE) {
+        const START_INFO = document.getElementById("prev-info").value;
+        const URL = "{% url 'blog:prev_list' %}";
+        const OPTIONS = {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                startInfo: START_INFO,
+                treeId: TREE_ID,
+            }),
+        }
+        fetch(URL, OPTIONS)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                makeList(data.data);
+                //alert(data.message);
+            }else{
+                let mess = "";
+                for(key in data.data){
+                    mess += key+": "+data.data[key]+"\n";
+                }
+                alert(data.message+"\n"+mess);
+            }
+        })
+        .catch((error) => console.log("error:", error));
+    }
+    function makeList(d) {
+        //수정 small0 말고 -1 -2 1 2 추가할거야 ㅇㅋ?
+        let text = `<div id="small0" class="bbb">`;
+        d.list.forEach((e) => {
+            let bg = "";
+            if(POST_ID === e.id){
+                bg = "bg-info";
+            }
+            text += `
+                <a href="${POST_URL}${e.id}">
+                    <div class="aaa ${bg}">
+                        <span class="small-span">${e.title}</span>
+                        <small>${e.insert_date}</small>
+                    </div>
+                </a>`;
+        });
+        //수정 insert_date format은 movie 참고
+        text += `</div>`;
+        SMALL_WRAPPER.innerHTML = text;
+        
+        document.getElementById("prev-info").value = d.prev_info;
+        document.getElementById("next-info").value = d.next_info;
+        if(d.has_prev){
+            document.getElementById("prev-btn-wrapper").classList.add("active");
+        }else{
+            document.getElementById("prev-btn-wrapper").classList.remove("active");
+        }
+        if(d.has_next){
+            document.getElementById("next-btn-wrapper").classList.add("active");
+        }else{
+            document.getElementById("next-btn-wrapper").classList.remove("active");
+        }
+        //수정 document.get 들 const로 박아버려;
     }
 
     document.getElementById("copy-url").onclick = function(e){
