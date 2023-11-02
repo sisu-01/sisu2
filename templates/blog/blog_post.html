@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'ckeditor5/content-styles.css' %}" type="text/css">
 <div class="bbb">
-    <a href="{% url 'blog:post_list' post.tree_id %}"><h6>{{post.tree}}</h6></a>
+    <a href="{% url 'blog:post_list' post.tree_id %}">{{post.tree}}</a>
     <div class="float-end"><button id="copy-url" class="float-end">링크복사</button></div>
 </div>
 <div class="bbb">
@@ -121,7 +121,7 @@
     {% endif %}
     const POST_URL = "{% url 'blog:get_post' 0 %}".replace("0", "");
     const POST_ID = {{post.id}};
-    const TREE_ID = {{post.tree.id}};
+    const TREE_ID = {% if post.tree.id %}{{post.tree.id}}{% else %}null{% endif %};
     const COMMENT_FORM = document.getElementById("comment-form");
     COMMENT_FORM.addEventListener("submit", (e) => {
         e.preventDefault();//submit 멈춰!
