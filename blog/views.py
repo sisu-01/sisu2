@@ -132,14 +132,20 @@ def get_post(request, id):
         prev_info=None
         has_next=False
         next_info=None
-        prev_length = len(BlogPost.objects.filter(tree=tree, id__gt=id))
+
+        if request.user.is_authenticated:
+            blog_post = BlogPost.objects
+        else:
+            blog_post = BlogPost.objects.filter(is_public=1)
+
+        prev_length = len(blog_post.filter(tree=tree, id__gt=id))
         add_next = 2 - prev_length
         add_next = int((abs(add_next) + add_next )/2) #음수만 0으로
-        next_list = list(BlogPost.objects.filter(tree=tree, id__lte=id).order_by('-id')[:4+add_next])
+        next_list = list(blog_post.filter(tree=tree, id__lte=id).order_by('-id')[:4+add_next])
         if 3 < len(next_list) and 5 < len(next_list)+prev_length:
             has_next = True
             next_info = next_list.pop()
-        small_list = list(BlogPost.objects.filter(tree=tree, id__gte=next_list[-1].id).order_by('id')[:6])[::-1]
+        small_list = list(blog_post.filter(tree=tree, id__gte=next_list[-1].id).order_by('id')[:6])[::-1]
         if 2 < prev_length and 5 < len(small_list):
             has_prev = True
             prev_info = small_list.pop(0)
@@ -307,14 +313,20 @@ def delete_cmt(request):
 def prev_list(request):
     try:
         param = json.loads(request.body)
-        small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__gte=param['startInfo']).values('id', 'title', 'insert_date')[:6])[::-1]
+
+        if request.user.is_authenticated:
+            blog_post = BlogPost.objects
+        else:
+            blog_post = BlogPost.objects.filter(is_public=1)
+
+        small_list = list(blog_post.filter(tree=param['treeId'], id__gte=param['startInfo']).values('id', 'title', 'insert_date')[:6])[::-1]
         if len(small_list) < 6:
             has_prev = False
             prev_info = None
         else:
             has_prev = True
             prev_info = small_list.pop(0)['id']
-        next_info = BlogPost.objects.filter(tree=param['treeId'], id__lt=param['startInfo']).order_by('-id')[:1][0].id
+        next_info = blog_post.filter(tree=param['treeId'], id__lt=param['startInfo']).order_by('-id')[:1][0].id
         result = {
             'list': small_list,
             'has_prev': has_prev,
@@ -331,14 +343,20 @@ def prev_list(request):
 def next_list(request):
     try:
         param = json.loads(request.body)
-        small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__lte=param['startInfo']).values('id', 'title', 'insert_date').order_by('-id')[:6])
+
+        if request.user.is_authenticated:
+            blog_post = BlogPost.objects
+        else:
+            blog_post = BlogPost.objects.filter(is_public=1)
+        
+        small_list = list(blog_post.filter(tree=param['treeId'], id__lte=param['startInfo']).values('id', 'title', 'insert_date').order_by('-id')[:6])
         if len(small_list) < 6:
             has_next = False
             next_info = None
         else:
             has_next = True
             next_info = small_list.pop()['id']
-        prev_info = BlogPost.objects.filter(tree=param['treeId'], id__gt=param['startInfo']).order_by('id')[:1][0].id
+        prev_info = blog_post.filter(tree=param['treeId'], id__gt=param['startInfo']).order_by('id')[:1][0].id
         result = {
             'list': small_list,
             'has_prev': True,
