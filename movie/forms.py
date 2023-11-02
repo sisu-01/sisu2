@@ -25,7 +25,7 @@ class MovieForm(forms.ModelForm):
         if(self.poster):
             import copy
             thumbnail = copy.copy(self.poster)
-            temp = self.rescale(thumbnail, 240, 385)
+            temp = self.rescale(thumbnail, 240, 369)
             instance.thumbnail = temp
         if commit:
             instance.save()
