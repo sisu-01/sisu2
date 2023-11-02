@@ -83,7 +83,7 @@
     <div class="aaa">
         <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
     </div>
-    prev 페이지 시작 글: <input type="text" id="prev-info" value="{{small.prev_info.id}}">
+    <input type="hidden" id="prev-info" value="{{small.prev_info.id}}">
     <div id="small-wrapper" class="aaa">
         <div id="small0" class="bbb">
             {% for p in small.list %}
@@ -96,7 +96,7 @@
             {% endfor %}
         </div>
     </div>
-    next 페이지 시작 글: <input type="text" id="next-info" value="{{small.next_info.id}}">
+    <input type="hidden" id="next-info" value="{{small.next_info.id}}">
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
             <div id="prev-btn-wrapper" class="prev {% if small.has_prev %}active{% endif %}">
