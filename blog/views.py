@@ -173,7 +173,11 @@ def create_post(request):
             post.save()
             #messages.success(request, '등록 완료')
             return redirect('blog:get_post', id=post.id)
-    context = {}
+    else:
+        form = PostForm()
+    context = {
+        'form': form,
+    }
     return render(request, 'blog/blog_form.html', context)
 
 @login_required(login_url='common:login')
