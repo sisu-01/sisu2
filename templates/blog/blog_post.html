@@ -85,12 +85,11 @@
     </div>
     prev 페이지 시작 글: <input type="text" id="prev-info" value="{{small.prev_info}}">
     <div class="aaa">
-        {% for post in small.list %}
-        {% comment %} {% url 'blog:get_post' i %} {% endcomment %}
-            <a href="{% url 'blog:get_post' post.id %}">
-                <div class="bbb">
-                    <span class="small-span">{{post.title}}</span>
-                    <small>{{post.insert_date}}</small>
+        {% for p in small.list %}
+            <a href="{% url 'blog:get_post' p.id %}">
+                <div class="bbb" {% if p.id == post.id %}style="background-color: yellow;"{% endif%}>
+                    <span class="small-span">{{p.title}}</span>
+                    <small>{{p.insert_date}}</small>
                 </div>
             </a>
         {% endfor %}
