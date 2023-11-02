@@ -97,28 +97,20 @@
     next 페이지 시작 글: <input type="text" id="next-info" value="{{small.next_info}}">
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
-        {% if small.has_prev %}
-            <div class="prev-true">
-        {% else %}
-            <div class="prev-false">
-        {% endif %}
+            <div id="prev-btn-wrapper" class="prev {% if small.has_prev %}active{% endif %}">
                 <span id="prev-false" class="d-none">&lt;</span>
-                <button type="button" id="prev-true" class="d-none">&lt;</button>
+                <button type="button" id="prev-btn" class="d-none">&lt;</button>
             </div>
-        {% if small.has_next %}
-            <div class="next-true">
-        {% else %}
-            <div class="next-false">
-        {% endif %}
+            <div id="next-btn-wrapper" class="next {% if small.has_next %}active{% endif %}">
                 <span id="next-false" class="d-none">&gt;</span>
-                <button type="button" id="next-true" class="d-none">&gt;</button>
+                <button type="button" id="next-btn" class="d-none">&gt;</button>
             </div>
         </div>
         <script>
-            document.getElementById("prev").addEventListener("click", () => {
+            document.getElementById("prev-btn").addEventListener("click", () => {
                 test("prev");
             });
-            document.getElementById("next").addEventListener("click", () => {
+            document.getElementById("next-btn").addEventListener("click", () => {
                 test("next");
             });
             function test(cend) {
@@ -137,8 +129,7 @@
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        id: id,
-                        password: password,
+                        id: 'zz',
                     }),
                 }
                 fetch(URL, OPTIONS)

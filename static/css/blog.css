@@ -50,15 +50,15 @@
     word-break: normal;
     word-wrap: break-word;
 }
-.prev-true > button {
+.prev:not(.active)  > span {
     display: block!important;
 }
-.prev-false  > span {
+.prev.active > button {
     display: block!important;
 }
-.next-true > button {
+.next:not(.active) > span {
     display: block!important;
 }
-.next-false > span {
+.next.active > button {
     display: block!important;
 }
