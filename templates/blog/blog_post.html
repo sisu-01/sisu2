@@ -257,15 +257,21 @@
     }
 
     document.getElementById("prev-btn").addEventListener("click", () => {
-        getPrevList();
+        getSmallList("prev");
     });
     document.getElementById("next-btn").addEventListener("click", () => {
-        console.log("zz");
-        //test("next");
+        getSmallList("next");
     });
-    function getPrevList(CEND_TYPE) {
-        const START_INFO = document.getElementById("prev-info").value;
-        const URL = "{% url 'blog:prev_list' %}";
+    function getSmallList(CEND) {
+        let start_info;
+        let url;
+        if(CEND==="prev"){
+            start_info = document.getElementById("prev-info").value;
+            url = "{% url 'blog:prev_list' %}";
+        }else if (CEND==="next"){
+            start_info = document.getElementById("next-info").value;
+            url = "{% url 'blog:next_list' %}";
+        }
         const OPTIONS = {
             method: "POST",
             mode: "same-origin",
@@ -274,16 +280,15 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                startInfo: START_INFO,
+                startInfo: start_info,
                 treeId: TREE_ID,
             }),
         }
-        fetch(URL, OPTIONS)
+        fetch(url, OPTIONS)
         .then(response => response.json())
         .then(data => {
             if(data.status){
                 makeList(data.data);
-                //alert(data.message);
             }else{
                 let mess = "";
                 for(key in data.data){
