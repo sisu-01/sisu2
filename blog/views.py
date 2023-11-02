@@ -324,35 +324,22 @@ def prev_list(request):
     return JsonResponse(asdict(res))
 
 @require_http_methods("POST")
-def nextz_list(request):
-    try:
-        param = json.loads(request.body)
-        if param['cendType'] == 'prev':
-            small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__gte=param['startInfo'])[:6])[::-1]
-        elif param['cendType'] == 'next':
-            small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__lte=param['startInfo']).order_by('-id')[:6])
-        print(small_list)
-        res = Response(True, 'zz', None)
-    except Exception as e:
-        res = Response(False, str(e), None)
-    return JsonResponse(asdict(res))
-@require_http_methods("POST")
 def next_list(request):
     try:
         param = json.loads(request.body)
-        small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__gte=param['startInfo']).values('id', 'title', 'insert_date')[:6])[::-1]
+        small_list = list(BlogPost.objects.filter(tree=param['treeId'], id__lte=param['startInfo']).values('id', 'title', 'insert_date').order_by('-id')[:6])
         if len(small_list) < 6:
-            has_prev = False
-            prev_info = None
+            has_next = False
+            next_info = None
         else:
-            has_prev = True
-            prev_info = small_list.pop(0)['id']
-        next_info = BlogPost.objects.filter(tree=param['treeId'], id__lt=param['startInfo']).order_by('-id')[:1][0].id
+            has_next = True
+            next_info = small_list.pop()['id']
+        prev_info = BlogPost.objects.filter(tree=param['treeId'], id__gt=param['startInfo']).order_by('id')[:1][0].id
         result = {
             'list': small_list,
-            'has_prev': has_prev,
+            'has_prev': True,
             'prev_info': prev_info,
-            'has_next': True,
+            'has_next': has_next,
             'next_info': next_info,
         }
         res = Response(True, 'zz', result)
