@@ -90,7 +90,7 @@
                 <a href="{% url 'blog:get_post' p.id %}">
                     <div class="aaa {% if p.id == post.id %}bg-info{% endif%}">
                         <span class="small-span">{{p.title}}</span>
-                        <small>{{p.insert_date}}</small>
+                        <small>{{p.insert_date|date:'Y.m.d (D)'}}</small>
                     </div>
                 </a>
             {% endfor %}
@@ -299,10 +299,37 @@
         })
         .catch((error) => console.log("error:", error));
     }
+    function dateFormat(date){
+        let d = new Date(date);
+        year = d.getFullYear();
+        month = '' + (d.getMonth() + 1);
+        day = '' + d.getDate();
+        hour = '' + d.getHours();
+        min = '' + d.getMinutes();
+        if (month.length < 2)
+            month = '0'+month;
+        if (day.length < 2)
+            day = '0'+day;
+        if (hour.length < 2)
+            hour = '0'+hour;
+        if (min.length < 2)
+            min = '0'+min;
+        const days = [
+            '일',
+            '월',
+            '화',
+            '수',
+            '목',
+            '금',
+            '토',
+          ];
+        return [year, month, day].join('.')+' ('+days[d.getDay()]+'요일)';
+    }
     function makeList(d) {
         //수정 small0 말고 -1 -2 1 2 추가할거야 ㅇㅋ?
         let text = `<div id="small0" class="bbb">`;
         d.list.forEach((e) => {
+            const tempDate = dateFormat(e.insert_date);
             let bg = "";
             if(POST_ID === e.id){
                 bg = "bg-info";
@@ -311,11 +338,10 @@
                 <a href="${POST_URL}${e.id}">
                     <div class="aaa ${bg}">
                         <span class="small-span">${e.title}</span>
-                        <small>${e.insert_date}</small>
+                        <small>${tempDate}</small>
                     </div>
                 </a>`;
         });
-        //수정 insert_date format은 movie 참고
         text += `</div>`;
         SMALL_WRAPPER.innerHTML = text;
         
@@ -331,7 +357,6 @@
         }else{
             document.getElementById("next-btn-wrapper").classList.remove("active");
         }
-        //수정 document.get 들 const로 박아버려;
     }
 
     document.getElementById("copy-url").onclick = function(e){
