@@ -68,7 +68,7 @@
                         <div class="paper">
                             <div class="front">
                                 <div class="thumbnail-box">
-                                    <img src="{{movie.thumbnail.url}}" class="thumbnail lazy" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                    <img src="{{movie.thumbnail.url}}" class="thumbnail lazy" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.png' %}'">
                                 </div>
                             </div>
                             <div class="back">
@@ -241,7 +241,7 @@
                         <div class="paper">
                             <div class="front">
                                 <div class="thumbnail-box">
-                                    <img src="{% get_media_prefix %}${MOVIE.thumbnail}" class="thumbnail lazy" alt="${MOVIE.title}" onerror="src='{% static 'images/movie_404.jpg' %}'">
+                                    <img src="{% get_media_prefix %}${MOVIE.thumbnail}" class="thumbnail lazy" alt="${MOVIE.title}" onerror="src='{% static 'images/movie_404.png' %}'">
                                 </div>
                             </div>
                             <div class="back">
