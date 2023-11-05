@@ -12,7 +12,7 @@
         <div>닉넴<input type="text" name="nickname" maxLength="10" required="" value="{{form.nickname.value|default_if_none:''}}"></div>
         <div>설명<textarea name="desc" maxLength="100" cols="30" rows="10">{{form.desc.value|default_if_none:''}}</textarea>
         <div>파일
-            <input type="file" id="image" name="image">
+            <input type="file" id="image" name="image" accept="image/*">
         </div>
         270x270으로 업로드 하쇼잉
         <div>
