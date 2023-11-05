@@ -1,1 +1,14 @@
-<h1>Hello Blog!</h1>
+{% load blog_filter %}
+<div class="bbb">
+    <h1>Hello Blog!</h1>
+</div>
+<div class="bbb">
+    <ul class="aaa">
+        <li><a href="{% url 'blog:post_list' 'all' %}">전체보기🔮</a></li>
+        {% getTree as menus %}
+        {% for node in menus %} 
+            {% include 'blog/tree.html' %}
+        {% endfor %}
+        <li><a href="{% url 'blog:post_list' 'None' %}">고아들😢</a></li>
+    </ul>
+</div>
