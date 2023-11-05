@@ -16,7 +16,7 @@
             <div class="prifile d-none d-lg-block bbb">
                 {% getProfile as profile %}
                 <div class="aaa">
-                    <img src="{{profile.image.url}}" style="width:100%; border-radius: 50%;" onerror="src='/static/images/profile_404.png'">
+                    <img src="{{profile.image.url}}" alt="프로필 사진" style="width:100%; border-radius: 50%;" onerror="src='/static/images/profile_404.png'">
                 </div>
                 <div class="aaa">
                     {{profile.nickname}}
@@ -103,7 +103,7 @@
     </div>
 </main>
 <!-- 검색 모달 -->
-<div class="modal modal-sm fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+<div class="modal modal-sm fade" id="searchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -112,8 +112,8 @@
                     <button type="button" data-bs-dismiss="modal" aria-label="Close">닫기</button>
                 </div>
                 <div>
-                    <form method="get_post" action="{% url 'blog:post_list' 'search' %}">
-                        <select name="kt" id="">
+                    <form method="GET" action="{% url 'blog:post_list' 'search' %}">
+                        <select name="kt">
                             <option value="search_title_content" selected>제목+내용</option>
                             <option value="search_title">제목</option>
                             <option value="search_content">내용</option>

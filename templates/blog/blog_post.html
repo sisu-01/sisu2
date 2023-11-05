@@ -32,12 +32,12 @@
                 {% if cmt.is_authenticated %}
                 (주인이다!)
                 {% endif %}
-                <br/>
+                <br>
                 <span>내용:{{cmt.content}}</span>
                 {% if user.is_authenticated %}
-                <button class="delete-button" post-id="{{cmt.id}}">수퍼x</button>
+                <button class="delete-button" value="{{cmt.id}}">수퍼x</button>
                 {% elif not user.is_authenticated and not cmt.is_authenticated %}
-                <button type="button" class="modal-button" modal-id="{{cmt.id}}">삭제</button>
+                <button type="button" class="modal-button" value="{{cmt.id}}">삭제</button>
                 {% endif %}
             </div>
         {% endfor %}
@@ -46,12 +46,12 @@
 <div class="bbb">
     {% if user.is_authenticated %}
     <form id="comment-form" class="d-flex">
-        <input type="hidden" name="post" required="" value="{{post.id}}">
+        <input type="hidden" name="post" value="{{post.id}}">
         <textarea class="w-100" name="content" cols="35" rows="4"></textarea>
         <button type="submit">등록</button>
     </form>
     {% else %}
-    <div class="modal modal-sm fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal modal-sm fade" id="exampleModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -59,16 +59,21 @@
                         <button type="button" data-bs-dismiss="modal" aria-label="Close">닫기</button>
                     </div>
                     <div>
-                        <input type="hidden" id="modal-id" required="" value="" readOnly>
-                        비밀번호: <input type="text" id="modal-password" maxlength="20"required="">
-                        <button class="modal-delete" post-id="{{cmt.id}}">확인</button>
+                        <input type="hidden" id="modal-id" value="" readOnly>
+                        비밀번호: <input type="text" id="modal-password" maxlength="20" required="">
+                        <button class="modal-delete" value="{{cmt.id}}">확인</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <style>
+        #id_captcha_1 {
+            width: 100%;
+        }
+    </style>
     <form id="comment-form" class="row aaa">
-        <input type="hidden" name="post" required="" value="{{post.id}}">
+        <input type="hidden" name="post" value="{{post.id}}">
         <div class="col-6 col-lg-3"><input type="text" class="w-100" name="nickname" maxlength="12" placeholder="닉네임" required=""></div>
         <div class="col-6 col-lg-3"><input type="text" class="w-100" name="password" maxlength="20" placeholder="비밀번호" required=""></div>
         {{form.captcha}}
@@ -97,6 +102,7 @@
         </div>
     </div>
     <input type="hidden" id="next-info" value="{{small.next_info.id}}">
+    <!-- //수정 div는 h2 안에 못 들어가신답니다. -->
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
             <div id="prev-btn-wrapper" class="prev {% if small.has_prev %}active{% endif %}">
@@ -149,7 +155,7 @@
         MODAL_BUTTON.forEach(btn => {
             btn.addEventListener("click", (e) => {
                 MODAL_FORM.show();
-                MODAL_ID.value = e.target.getAttribute("modal-id");
+                MODAL_ID.value = e.target.value;
                 MODAL_PASSWORD.value = "";
             });
         });
@@ -157,7 +163,7 @@
         const DELETE_BUTTONS = document.querySelectorAll(".delete-button");
         DELETE_BUTTONS.forEach(btn => {
             btn.addEventListener("click", () => 
-                deleteComment(btn.getAttribute("post-id"))
+                deleteComment(btn.value)
             );
         });
     }

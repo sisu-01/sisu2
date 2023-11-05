@@ -253,11 +253,11 @@ def get_cmt(request):
             comment += f'<span>이름:{i["nickname"]}</span>'
             if i['is_authenticated']:
                 comment += ' (주인이다!)'
-            comment += f'<br/><span>내용:{i["content"]}</span>'
+            comment += f'<br><span>내용:{i["content"]}</span>'
             if request.user.is_authenticated:
                 comment += f' <button class="delete-button" post-id="{str(i["id"])}">수퍼x</button>'
             elif not request.user.is_authenticated and not i['is_authenticated']:
-                comment += f' <button type="button" class="modal-button" modal-id="{str(i["id"])}">삭제</button>'
+                comment += f' <button type="button" class="modal-button" value="{str(i["id"])}">삭제</button>'
             comment += '</div>'
         res = Response(True, '성공', comment)
     except Exception as e:

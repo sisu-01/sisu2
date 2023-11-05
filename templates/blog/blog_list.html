@@ -26,6 +26,7 @@
     {% endfor %}
     </div>
     <div class="pagination aaa d-flex justify-content-center">
+        <!-- //수정 button이 a 안에 있으면 안돼요.. bootstrap은 예쁜 li 안에 a 넣더라 -->
         {% if slicing >= 1 %}
             <a href="?page=1{{get_url}}"><button>맨처음</button></a>
             <a href="?page={{ slicing }}{{get_url}}"><button>&lt;</button></a>
