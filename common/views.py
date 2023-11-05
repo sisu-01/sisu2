@@ -6,7 +6,13 @@ from .models import Profile
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    context = {
+        'og': {
+            'title': '첫 화면',
+            'desc': '성장하는 사이트',
+        }
+    }
+    return render(request, 'index.html', context)
 
 class CustomAuthView(auth_views.LoginView):
     form_class = LoginForm
