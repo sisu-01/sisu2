@@ -31,7 +31,7 @@
 {% block content %}
 <main class="container-xxl bbb">
     <div class="row aaa">
-        <aside class="sisu-aside col-12 col-lg bbb">
+        <aside class="sisu-aside col-12 col-lg bbb no-padding">
             <div class="large-sticky aaa">
                 <div class="mobile-wrapper bbb">
                     {% if user.is_authenticated %}
@@ -57,7 +57,7 @@
             </div>
         </aside>
         <div class="col-12 col-lg-9 bbb">
-            <div class="aaa">
+            <div class="row aaa">
                 <h1>Hello Movie!</h1>
             </div>
             <div id="movie-wrapper" class="row aaa">
