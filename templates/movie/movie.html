@@ -4,28 +4,6 @@
 
 {% block meta %}
 <link href="{% static 'css/movie.css' %}" rel="stylesheet">
-<script>
-    //이미지 레이지 로딩
-    //수정 버그있다.
-    {% comment %} document.addEventListener("DOMContentLoaded", function() {
-        const options = {
-            threshold: 0.01 //1%
-        };
-        const callback = (entries, observer) => {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    let image = entry.target;
-                    image.src = image.dataset.src;
-                    observer.unobserve(entry.target);
-                }
-            });
-        }
-        const observer = new IntersectionObserver(callback, options);
-        document.querySelectorAll(".lazy").forEach(function(image) {
-            observer.observe(image);
-        });
-    }); {% endcomment %}
-</script>
 {% endblock %}
 
 {% block content %}
@@ -68,7 +46,7 @@
                         <div class="paper">
                             <div class="front">
                                 <div class="thumbnail-box">
-                                    <img src="{{movie.thumbnail.url}}" class="thumbnail lazy" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.png' %}'">
+                                    <img data-src="{{movie.thumbnail.url}}" class="thumbnail lazy" alt="{{movie.title}}" onerror="src='{% static 'images/movie_404.png' %}'">
                                 </div>
                             </div>
                             <div class="back">
@@ -357,6 +335,25 @@
         .catch((error) => console.log("error:", error));
     }
     {% endif %}
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const options = {
+            threshold: 0.01 //1%
+        };
+        const callback = (entries, observer) => {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    let image = entry.target;
+                    image.src = image.dataset.src;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }
+        const observer = new IntersectionObserver(callback, options);
+        document.querySelectorAll(".lazy").forEach(function(image) {
+            observer.observe(image);
+        });
+    });
     //수정 현이에게 js 관리 어케 하는지 물어보기
 </script>
 {% endblock %}
