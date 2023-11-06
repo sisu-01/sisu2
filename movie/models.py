@@ -10,7 +10,7 @@ class Movie(models.Model):
     format  = models.CharField(max_length=20)
     date    = models.DateField()
     weekday = models.IntegerField()
-    poster  = models.ImageField(upload_to=ImageUpload('poster'))
+    poster  = models.ImageField(upload_to=ImageUpload('poster'), max_length=250)
     thumbnail = models.ImageField(upload_to=ImageUpload('thumbnail'))
     insert_date = models.DateTimeField()
     insert_ip = models.CharField(max_length=40)
