@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
+from django.conf import settings
 from .forms import LoginForm, ProfileForm
 from .models import Profile
+from pathlib import Path
+import os
 
 # Create your views here.
 def index(request):
@@ -32,12 +35,18 @@ def config(request):
 def profile(request):
     try:
         profile = Profile.objects.get(id=1)
+        old_image = str(profile.image)
     except:
         profile = None
+        old_image = None
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            pf = form.save(commit=False)
+            pf.save()
+            if(old_image != None and old_image != str(pf.image)):
+                if os.path.isfile(Path(settings.MEDIA_ROOT, old_image)):
+                    os.remove(Path(settings.MEDIA_ROOT, old_image))
             return redirect('/')
     else:
         form = ProfileForm(instance=profile)
