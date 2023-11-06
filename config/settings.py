@@ -182,6 +182,12 @@ MEDIA_URL = '/media/'
 #os path join 은 무슨 차이일까?
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# 여기 설정된된 메모리 사이즈보다 작으면 InMemoryUploadedFile,
+# 크면 TemporaryUploadedFile로 업로드 하는데,
+# Temp로 하면 에러가 나..
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-FILE_UPLOAD_MAX_MEMORY_SIZE
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760 # Default: 2621440 (i.e. 2.5 MB).
+
 
 # 기본 기본 키 필드 유형
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
