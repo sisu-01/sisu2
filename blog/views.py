@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect, get_object_or_404
 #from django.contrib import messages
+from django.utils.html import strip_tags
 from django.utils import timezone
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -156,14 +157,13 @@ def get_post(request, id):
             'has_next': has_next,
             'next_info': next_info,
         }
-
         context = {
             'post': post,
             'cmt_list': cmt_list,
             'small': small,
             'form': form,
             'template': 'blog/blog_post.html',
-            'og': asdict(OpenGraph(post.title, post.content[:60], post.thumbnail)),
+            'og': asdict(OpenGraph(post.title, strip_tags(post.content)[:60], post.thumbnail)),
         }
         return render(request, base_template, context)
 
