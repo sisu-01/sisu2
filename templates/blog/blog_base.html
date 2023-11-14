@@ -46,7 +46,7 @@
                         <h5 id="offcanvasExampleLabel">블로그 메뉴 목록</h5>
                         <button type="button" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasExample" aria-label="Close">닫기</button>
                     </div>
-                    <div class="bbb">
+                    <div class="bbb" style="overflow-y: auto;">
                         <ul class="aaa">
                             <li><a href="{% url 'blog:post_list' 'all' %}">전체보기🔮</a></li>
                             {% getTree as menus %}
