@@ -60,6 +60,19 @@
                 {% comment %} //수정 개발 할 것들 {% endcomment %}
                 <div class="current d-none d-lg-block aaa">
                     <div class="bbb">
+                        <span>최근 본 영화</span>
+                        {% getRecentMovie as rc_movie %}
+                        {% if rc_movie %}
+                        <a href="{% url 'movie:index' %}#{{rc_movie.id}}">
+                            <div class="movie-box">
+                                <img src="{{rc_movie.thumbnail.url}}" class="movie" alt="{{rc_movoie.title}}" onerror="src='/static/images/movie_404.png'">
+                            </div>
+                        </a>
+                        {% else %}
+                        영화가 없어요..
+                        {% endif %}
+                    </div>
+                    <div class="bbb">
                         <span>최근 작성 글</span>
                         {% getRecentPost as rc_post %}
                         {% if rc_post %}
@@ -80,19 +93,6 @@
                             <a href="{% url 'blog:get_post' cmt.post_id %}#comment-wrapper"><span class="small-span">{{cmt.content}}</span></a>
                         </div>
                         {% endfor %}
-                    </div>
-                    <div class="bbb">
-                        <span>최근 본 영화</span>
-                        {% getRecentMovie as rc_movie %}
-                        {% if rc_movie %}
-                        <a href="{% url 'movie:index' %}#{{rc_movie.id}}">
-                            <div class="movie-box">
-                                <img src="{{rc_movie.thumbnail.url}}" class="movie" alt="{{rc_movoie.title}}" onerror="src='/static/images/movie_404.png'">
-                            </div>
-                        </a>
-                        {% else %}
-                        영화가 없어요..
-                        {% endif %}
                     </div>
                 </div>
             </div>
