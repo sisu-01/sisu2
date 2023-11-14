@@ -50,18 +50,16 @@
                                 </div>
                             </div>
                             <div class="back">
-                                <div>{{movie.format}}</div>
-                                <hr>
-                                <div>{{movie.title}}</div>
-                                <div>{{movie.title_en}}</div>
-                                <hr>
-                                <div>{{movie.brand}}&nbsp;{{movie.location}}</div>
+                                <div class="border-bottom border-dark">{{movie.format}}</div>
+                                <div class="title">{{movie.title}}</div>
+                                <div class="title border-bottom border-dark">{{movie.title_en}}</div>
+                                <div class="location">{{movie.brand}}&nbsp;{{movie.location}}</div>
                                 <div>{{movie.date|date:'Y.m.d'}}({{movie.weekday|weekday}})</div>
                                 <div>
                                     <a href="{{movie.poster.url}}" target="_blank">원본</a>
                                 {% if user.is_authenticated %}
-                                    <button onClick="getMovie('{{movie.id}}')">수정</button>
-                                    <button onClick="deleteMovie('{{movie.id}}')">삭제</button>
+                                    <button class="movie-btn" onClick="getMovie('{{movie.id}}')">수정</button>
+                                    <button class="movie-btn" onClick="deleteMovie('{{movie.id}}')">삭제</button>
                                 {% endif %}
                                 </div>
                             </div>
@@ -223,12 +221,10 @@
                                 </div>
                             </div>
                             <div class="back">
-                                <div>${MOVIE.format}</div>
-                                <hr>
-                                <div>${MOVIE.title}</div>
-                                <div>${MOVIE.title_en}</div>
-                                <hr>
-                                <div>${MOVIE.brand}&nbsp;${MOVIE.location}</div>
+                                <div class="border-bottom border-dark">${MOVIE.format}</div>
+                                <div class="title">${MOVIE.title}</div>
+                                <div class="title border-bottom border-dark">${MOVIE.title_en}</div>
+                                <div class="location">${MOVIE.brand}&nbsp;${MOVIE.location}</div>
                                 <div>${DATE}(${WEEKDAY[MOVIE.weekday]})</div>
                                 <div>
                                     <a href="{% get_media_prefix %}${MOVIE.poster}" target="_blank">원본</a>

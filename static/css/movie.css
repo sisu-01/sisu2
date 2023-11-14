@@ -98,6 +98,26 @@
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
+.title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: normal;
+    word-wrap: break-word;
+}
+.location {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: normal;
+    word-wrap: break-word;
+}
+.movie-btn {
+    padding: 0px;
+    margin: 0px;
+}
 /* 내가 만든 모달 검은 배경 */
 .hide {
     transition: opacity 0.5s linear;
