@@ -88,7 +88,7 @@
     <div class="aaa">
         <h6><a href="{% url 'blog:post_list' post.tree_id %}">이 블로그 {{post.tree}} 메뉴 글</a></h6>
     </div>
-    <input type="hidden" id="prev-info" value="{{small.prev_info.id}}">
+    
     <div id="small-wrapper" class="aaa">
         <div id="small0" class="bbb">
             {% for p in small.list %}
@@ -101,7 +101,7 @@
             {% endfor %}
         </div>
     </div>
-    <input type="hidden" id="next-info" value="{{small.next_info.id}}">
+    
     <!-- //수정 div는 h2 안에 못 들어가신답니다. -->
     <h2>
         <div class="d-flex justify-content-center gap-5 aaa">
@@ -261,12 +261,13 @@
         .catch((error) => console.log("error:", error));
     }
 
-    let focusSmall = 0;
-    let focusJson = {
-        "small0": {},
-    };
-    focusJson["small"+focusSmall]["has_prev"] = {% if small.has_prev %}true{% else %}false{% endif %};
-    focusJson["small"+focusSmall]["has_next"] = {% if small.has_next %}true{% else %}false{% endif %};
+    let focus = 0;
+    let focusJson = {};
+    focusJson["small"+focus] = {};
+    focusJson["small"+focus]["has_prev"] = {% if small.has_prev %}true{% else %}false{% endif %};
+    focusJson["small"+focus]["prev_info"] = "{{small.prev_info}}";
+    focusJson["small"+focus]["has_next"] = {% if small.has_next %}true{% else %}false{% endif %};
+    focusJson["small"+focus]["next_info"] = "{{small.next_info}}";
     
     document.getElementById("prev-btn").addEventListener("click", () => {
         getSmallList("prev");
@@ -282,11 +283,11 @@
         let url;
         let focusAdd;
         if(CEND==="prev"){
-            start_info = document.getElementById("prev-info").value;
+            start_info = focusJson["small"+focus]["prev_info"];
             url = "{% url 'blog:prev_list' %}";
             focusAdd = -1;
         }else if (CEND==="next"){
-            start_info = document.getElementById("next-info").value;
+            start_info = focusJson["small"+focus]["next_info"];
             url = "{% url 'blog:next_list' %}";
             focusAdd = 1;
         }
@@ -320,29 +321,29 @@
     function test(CEND){
         //수정 중복 줄여라.
         if(CEND==="prev"){
-            const FOCUS = focusSmall-1;
-            const IS_EXIST = document.getElementById("small"+FOCUS);
+            const FOCUSZ = focus-1;
+            const IS_EXIST = document.getElementById("small"+FOCUSZ);
             if(IS_EXIST){
-                document.getElementById("small"+focusSmall).classList.add("d-none");
-                focusSmall = FOCUS;
-                document.getElementById("small"+focusSmall).classList.remove("d-none");
+                document.getElementById("small"+focus).classList.add("d-none");
+                focus = FOCUSZ;
+                document.getElementById("small"+focus).classList.remove("d-none");
             }else{
                 //없다.. 새로 만들어.
                 return false;
             }
         }else if(CEND==="next"){
-            const FOCUS = focusSmall+1;
-            const IS_EXIST = document.getElementById("small"+FOCUS);
+            const FOCUSZ = focus+1;
+            const IS_EXIST = document.getElementById("small"+FOCUSZ);
             if(IS_EXIST){
-                document.getElementById("small"+focusSmall).classList.add("d-none");
-                focusSmall = FOCUS;
-                document.getElementById("small"+focusSmall).classList.remove("d-none");
+                document.getElementById("small"+focus).classList.add("d-none");
+                focus = FOCUSZ;
+                document.getElementById("small"+focus).classList.remove("d-none");
             }else{
                 //없다.. 새로 만들어.
                 return false;
             }
         }
-        smallBtnCheck(focusJson["small"+focusSmall]["has_prev"], focusJson["small"+focusSmall]["has_next"]);
+        smallBtnCheck(focusJson["small"+focus]["has_prev"], focusJson["small"+focus]["has_next"]);
 
         return true;
     }
@@ -373,10 +374,10 @@
         return [year, month, day].join('.')+' ('+days[d.getDay()]+'요일)';
     }
     function makeList(d, focusAdd) {
-        const OLD_FOCUS = document.getElementById("small"+focusSmall);
-        focusSmall = focusSmall+focusAdd;
+        const OLD_FOCUSZ = document.getElementById("small"+focus);
+        focus = focus+focusAdd;
 
-        let text = `<div id="small${focusSmall}" class="bbb">`;
+        let text = `<div id="small${focus}" class="bbb">`;
         d.list.forEach((e) => {
             const INSRET_DATE = dateFormat(e.insert_date);
             let bg = "";
@@ -396,17 +397,19 @@
         if(focusAdd < 0){
             document.getElementById("small-wrapper").insertAdjacentHTML("afterbegin", text);
         }else{
-            OLD_FOCUS.insertAdjacentHTML("afterend", text);
+            OLD_FOCUSZ.insertAdjacentHTML("afterend", text);
         }
-        OLD_FOCUS.classList.add("d-none");
+        OLD_FOCUSZ.classList.add("d-none");
         
-        document.getElementById("prev-info").value = d.prev_info;
-        document.getElementById("next-info").value = d.next_info;
+        
+        
         smallBtnCheck(d.has_prev, d.has_next);
 
-        focusJson["small"+focusSmall] = {};
-        focusJson["small"+focusSmall]["has_prev"] = d.has_prev;
-        focusJson["small"+focusSmall]["has_next"] = d.has_next;
+        focusJson["small"+focus] = {};
+        focusJson["small"+focus]["has_prev"] = d.has_prev;
+        focusJson["small"+focus]["prev_info"] = d.prev_info;
+        focusJson["small"+focus]["has_next"] = d.has_next;
+        focusJson["small"+focus]["next_info"] = d.next_info;
     }
 
     function smallBtnCheck(P, N){
