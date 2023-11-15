@@ -265,9 +265,9 @@
     let focusJson = {};
     focusJson["small"+focus] = {};
     focusJson["small"+focus]["has_prev"] = {% if small.has_prev %}true{% else %}false{% endif %};
-    focusJson["small"+focus]["prev_info"] = "{{small.prev_info}}";
+    focusJson["small"+focus]["prev_info"] = "{{small.prev_info.id}}";
     focusJson["small"+focus]["has_next"] = {% if small.has_next %}true{% else %}false{% endif %};
-    focusJson["small"+focus]["next_info"] = "{{small.next_info}}";
+    focusJson["small"+focus]["next_info"] = "{{small.next_info.id}}";
     
     document.getElementById("prev-btn").addEventListener("click", () => {
         getSmallList("prev");
