@@ -172,6 +172,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # Media 파일 (Movie, Thumbnail, Blog)
 # https://docs.djangoproject.com/en/4.2/topics/files/
