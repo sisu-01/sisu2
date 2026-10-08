@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    image: sisu2:latest
+    container_name: sisu2
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
