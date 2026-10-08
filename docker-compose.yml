@@ -3,6 +3,8 @@ services:
     build: .
     image: sisu2:latest
     container_name: sisu2
+    env_file:
+      - sisu2_prod.env
     ports:
       - "8000:8000"
     restart: unless-stopped
