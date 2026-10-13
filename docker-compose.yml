@@ -1,7 +1,6 @@
 services:
   web:
-    build: .
-    image: sisu2:latest
+    image: 968053968288.dkr.ecr.ap-southeast-2.amazonaws.com/sisu2:latest
     container_name: sisu2
     env_file:
       - sisu2_prod.env
