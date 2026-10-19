@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -195,3 +196,29 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760 # Default: 2621440 (i.e. 2.5 MB).
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
+AWS_S3_REGION_NAME = os.environ["AWS_S3_REGION_NAME"]
+
+# 미디어 파일의 동일한 이름 충돌을 방지
+AWS_S3_FILE_OVERWRITE = False
+
+STORAGES = {
+    # ImageField, FileField 등 일반 파일 저장
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "location": "media",
+            "querystring_auth": False,
+        },
+    },
+
+    # collectstatic으로 수집하는 정적 파일 저장
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "location": "static",
+            "querystring_auth": False,
+        },
+    },
+}

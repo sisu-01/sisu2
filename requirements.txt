@@ -5,3 +5,4 @@ mysqlclient
 beautifulsoup4
 django-simple-captcha
 Pillow==12.3.0
+django-storages[s3]
