@@ -1,5 +1,8 @@
 services:
   web:
+    build:
+      context: .          # Dockerfile이 있는 디렉토리 경로 (현재 폴더)
+      dockerfile: Dockerfile
     image: 968053968288.dkr.ecr.ap-southeast-2.amazonaws.com/sisu2:latest
     container_name: sisu2
     env_file:
