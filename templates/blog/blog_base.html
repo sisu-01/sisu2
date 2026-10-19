@@ -16,7 +16,7 @@
             <div class="prifile d-none d-lg-block bbb">
                 {% getProfile as profile %}
                 <div class="aaa">
-                    <img src="{{profile.image.url}}" alt="프로필 사진" style="width:100%; border-radius: 50%;" onerror="src='/static/images/profile_404.png'">
+                    <img src="{{profile.image.url}}" alt="프로필 사진" style="width:100%; border-radius: 50%;" onerror="src='{% static 'images/profile_404.png' %}'">
                 </div>
                 <div class="aaa">
                     {{profile.nickname}}
@@ -65,7 +65,7 @@
                         {% if rc_movie %}
                         <a href="{% url 'movie:index' %}#{{rc_movie.id}}">
                             <div class="movie-box">
-                                <img src="{{rc_movie.thumbnail.url}}" class="movie" alt="{{rc_movoie.title}}" onerror="src='/static/images/movie_404.png'">
+                                <img src="{{rc_movie.thumbnail.url}}" class="movie" alt="{{rc_movoie.title}}" onerror="src='{% static 'images/movie_404.png' %}'">
                             </div>
                         </a>
                         {% else %}
